@@ -98,8 +98,10 @@ app.delete("/api/peer/:id", (req, res) => {
 });
 
 app.put("/api/server_settings/:id", (req, res) => {
-	const id = req.params.id;
+	const id = req.params.id.slice(5, req.params.id.length);
 	const data = req.body.data;
+
+	server_config[id] = data;
 
 	saveServerConfig();
 
