@@ -1,5 +1,6 @@
 button {
 	outline: none !important;
+	box-shadow: none !important;
 }
 
 .editBtn,
@@ -13,5 +14,5 @@ button {
 }
 
 .saveBtn {
-	color: #28a745;
+	color: #28a745 !important;
 }

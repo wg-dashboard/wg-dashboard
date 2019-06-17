@@ -1,132 +1,166 @@
 {% extends "base.njk" %}
 
 {% block content %}
-<div class="container">
-	<p class="display-4">Dashboard</p>
+<div class="container animated fadeIn">
+	<div class="card my-3 rounded-0">
+		<div class="card-body">
+			<p class="display-4 m-0">Dashboard</p>
+		</div>
+	</div>
 
 	<div class="row">
-		<div id="server_settings" class="row">
 
-			<div class="col-12 mb-2 h3">Server settings</div>
+		<div class="col-12 mb-3">
+			<div class="card rounded-0">
+				<div class="card-body">
+					<div class="h4 card-title d-flex justify-content-between">
+						<p>Server settings</p>
+						<span class="text-right">
+							<i id="server_settings" class="far fa-edit text-dark editBtn"></i>
+						</span>
+					</div>
 
-			<div class="col-8">
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<span class="input-group-text">IP</span>
+					<div class="card-text">
+
+						<div class="row">
+							<div class="col-4">
+								<div class="md-form">
+									<input type="text" id="ip_address" class="form-control" value="{{ ip_address }}" disabled>
+									<label for="ip_address">IP</label>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<input type="text" id="port" class="form-control" value="{{ port }}" disabled>
+									<label for="port">Port</label>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<input type="text" id="cidr" class="form-control" value="{{ cidr }}" disabled>
+									<label for="cidr">CIDR</label>
+								</div>
+							</div>
+
+
+							<div class="col-6">
+								<div class="md-form">
+									<input type="text" id="private_key" class="form-control" value="{{ private_key }}" disabled>
+									<label for="private_key">Private Key</label>
+								</div>
+							</div>
+
+							<div class="col-6">
+								<div class="md-form">
+									<input type="text" id="network_adapter" class="form-control" value="{{ network_adapter }}" disabled>
+									<label for="network_adapter">Network Adapter</label>
+								</div>
+							</div>
+						</div>
+
 					</div>
-					<input type="text" class="form-control" placeholder="" value="{{ ip_address }}" disabled>
-					<div class="input-group-append">
-						<button id="ip_address" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
-					</div>
+
 				</div>
 			</div>
-			<div class="col-4">
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<span class="input-group-text">CIDR</span>
-					</div>
-					<input type="text" class="form-control" placeholder="{{ cidr }}" disabled>
-					<div class="input-group-append">
-						<button id="cidr" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-8">
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<span class="input-group-text">Private Key</span>
-					</div>
-					<input type="text" class="form-control" placeholder="{{ private_key }}" disabled>
-					<div class="input-group-append">
-						<button id="private_key" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
-					</div>
-				</div>
-			</div>
-			<div class="col-4">
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<span class="input-group-text">Port</span>
-					</div>
-					<input type="text" class="form-control" placeholder="{{ port }}" disabled>
-					<div class="input-group-append">
-						<button id="port" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-12">
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<span class="input-group-text">Network Adapter</span>
-					</div>
-					<input type="text" class="form-control" placeholder="{{ network_adapter }}" disabled>
-					<div class="input-group-append" class="editBtn">
-						<button id="network_adapter" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
-					</div>
-				</div>
-			</div>
-
 		</div>
 
-		<hr class="w-100">
+		<div class="col-12 mb-3">
+			<div class="card rounded-0">
+				<div class="card-body">
+					<div class="h4 card-title">
+						<p>Peers</p>
+					</div>
 
-		<div class="col-12 mb-2 h3">Peers</div>
+					<div class="card-text">
 
-		<table class="table">
-			<thead class="thead-dark">
-				<tr class="text-center">
-					<th scope="col">config</th>
-					<th scope="col">active</th>
-					<th scope="col">device</th>
-					<th scope="col">public key</th>
-					<th scope="col">allowed ips</th>
-					<th scope="col">edit</th>
-					<th scope="col">delete</th>
-				</tr>
-			</thead>
+						<div class="row">
+							<table class="table">
+								<thead class="bg-dark white-text">
+									<tr class="text-center">
+										<th scope="col">QR Code</th>
+										<th scope="col">Download</th>
+										<th scope="col">Active</th>
+										<th scope="col">Device</th>
+										<th scope="col">Public key</th>
+										<th scope="col">Allowed IP's</th>
+										<th scope="col">Edit</th>
+										<th scope="col">Delete</th>
+									</tr>
+								</thead>
 
-			<tbody id="peers">
-				{% for client in clients %}
-				<tr class="text-center p-2" id="{{ client.id }}">
-					<td>
-						<a href="/api/download/{{ client.id }}" class="btn btn-success"><i class="fa fa-download"></i></a>
-					</td>
-					<td scope="row">
-						{% if client.active %}
-						<button class="btn btn-success w-100 activeBtn" disabled>
-							<i class="fas fa-check"></i>
-						</button>
-						{% else %}
-						<button class="btn btn-danger w-100 activeBtn" disabled>
-							<i class="fas fa-times"></i>
-						</button>
-						{% endif %}
-					</td>
-					<td><input class="btn w-100 border-dark" name="device" value="{{ client.device }}" disabled></input></td>
-					<td><input class="btn w-100 border-dark" name="public_key" value="{{ client.public_key }}" disabled></input></td>
-					<td><input class="btn w-100 border-dark" name="allowed_ips" value="{{ client.allowed_ips }}" disabled></input></td>
-					<td>
-						<button class="btn btn-dark w-100 editBtn">
-							<i class="far fa-edit"></i>
-						</button>
-					</td>
-					<td>
-						<button class="btn btn-danger w-100 deleteBtn">
-							<i class="fas fa-trash"></i>
-						</button>
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-			<tr class="p-2">
-				<th class="text-center" colspan="6">
-					<button class="btn btn-success" onclick="createNewPeer()">
-						<i class="fa fa-user-plus"></i> Add Peer
-					</button>
-				</th>
-			</tr>
-		</table>
+								<tbody id="peers">
+									{% for client in clients %}
+									<tr class="text-center p-2" id="{{ client.id }}">
+										<td>
+											<div class="my-auto">
+												<button class="btn btn-dark btn-sm">
+													<i class="fas fa-qrcode fa-lg"></i>
+												</button>
+											</div>
+										</td>
+										<td>
+											<div class="my-auto">
+												<button onclick="window.location='/api/download/{{ client.id }}';" class="btn btn-dark btn-sm">
+													<i class="fa fa-download fa-lg"></i>
+												</button>
+											</div>
+										</td>
+										<td>
+											{% if client.active %}
+											<button class="btn btn-success btn-sm activeBtn" disabled>
+												<i class="fas fa-check fa-lg"></i>
+											</button>
+											{% else %}
+											<button class="btn btn-danger btn-sm activeBtn" disabled>
+												<i class="fas fa-times fa-lg"></i>
+											</button>
+											{% endif %}
+										</td>
+										<td>
+											<div class="md-form m-0">
+												<input type="text" class="form-control" name="device" value="{{ client.device }}" disabled></input>
+											</div>
+										</td>
+										<td>
+											<div class="md-form m-0">
+												<input type="text" class="form-control" name="public_key" value="{{ client.public_key }}" disabled></input>
+											</div>
+										</td>
+										<td>
+											<div class="md-form m-0">
+												<input type="text" class="form-control" name="allowed_ips" value="{{ client.allowed_ips }}" disabled></input>
+											</div>
+										</td>
+										<td>
+											<button class="btn btn-dark btn-sm editBtn">
+												<i class="far fa-edit fa-lg"></i>
+											</button>
+										</td>
+										<td>
+											<button class="btn btn-danger btn-sm deleteBtn">
+												<i class="fas fa-trash fa-lg"></i>
+											</button>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+								<tr class="p-2">
+									<td class="text-center" colspan="8">
+										<button class="btn btn-success btn-lg mt-5" onclick="createNewPeer()">
+											<i class="fa fa-user-plus"></i> Add Peer
+										</button>
+									</td>
+								</tr>
+							</table>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

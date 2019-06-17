@@ -4,7 +4,7 @@ $(document).ready(() => {
 			const tableRow = $(e.currentTarget).parent().parent();
 
 			$(e.currentTarget)
-				.html(`<i class="far fa-save"></i>`)
+				.html(`<i class="far fa-save fa-lg"></i>`)
 				.removeClass("editBtn")
 				.addClass("saveBtn")
 
@@ -14,6 +14,7 @@ $(document).ready(() => {
 
 			tableRow
 				.find("input")
+				.css("color", "#4285F4")
 				.attr("disabled", false);
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
 			const tableRow = $(e.currentTarget).parent().parent();
@@ -24,7 +25,7 @@ $(document).ready(() => {
 			});
 
 			const active = tableRow.find(".activeBtn");
-			console.log(active.hasClass("btn-danger"));
+			// console.log(active.hasClass("btn-danger"));
 			if (active.hasClass("btn-danger")) {
 				data["active"] = false;
 			} else {
@@ -47,6 +48,7 @@ $(document).ready(() => {
 
 				tableRow
 					.find("input")
+					.css("color", "#212529")
 					.attr("disabled", true);
 
 				tableRow
@@ -86,41 +88,57 @@ $(document).ready(() => {
 		}
 	});
 
-	$("#server_settings").on("click", "button", (e) => {
+	$("#server_settings").on("click", (e) => {
 		if ($(e.currentTarget).hasClass("editBtn")) {
 			$(e.currentTarget)
-				.html(`<i class="far fa-save"></i>`)
 				.removeClass("editBtn")
+				.removeClass("fa-edit")
 				.addClass("saveBtn")
-				.parent()
-				.parent()
-				.find("input")
-				.attr("disabled", false);
+				.addClass("fa-save");
+			$("#ip_address").attr("disabled", false).css("color", "#4285F4");
+			$("#port").attr("disabled", false).css("color", "#4285F4");
+			$("#cidr").attr("disabled", false).css("color", "#4285F4");
+			$("#private_key").attr("disabled", false).css("color", "#4285F4");
+			$("#network_adapter").attr("disabled", false).css("color", "#4285F4");
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
 
-			let id = e.currentTarget.id;
-			let input = $(e.currentTarget).parent().parent().find("input");
-			let data = $(e.currentTarget).parent().parent().find("input").val();
+			let ip_address = $("#ip_address").val();
+			let port = $("#port").val();
+			let cidr = $("#cidr").val();
+			let private_key = $("#private_key").val();
+			let network_adapter = $("#network_adapter").val();
 
 			const req = $.ajax({
-				url: `/api/server_settings/${id}`,
+				url: `/api/server_settings/save`,
 				method: "PUT",
-				data: JSON.stringify({data: data}),
+				data: JSON.stringify(
+					{
+						ip_address: ip_address,
+						port: port,
+						cidr: cidr,
+						private_key: private_key,
+						network_adapter: network_adapter,
+					}
+				),
 				contentType: "application/json; charset=utf-8",
 				dataType: "json"
 			});
 
 			req.then(function( data ) {
 				$(e.currentTarget)
-					.html(`<i class="far fa-edit"></i>`)
+					.removeClass("fa-save")
 					.removeClass("saveBtn")
+					.addClass("fa-edit")
 					.addClass("editBtn");
-				input
-					.attr("disabled", true);
+				$("#ip_address").attr("disabled", false).css("color", "#212529");
+				$("#port").attr("disabled", false).css("color", "#212529");
+				$("#cidr").attr("disabled", false).css("color", "#212529");
+				$("#private_key").attr("disabled", false).css("color", "#212529");
+				$("#network_adapter").attr("disabled", false).css("color", "#212529");
 			});
 
 			req.catch(function( data ) {
-				alert("could not save data");
+				alert("could not save data, no empty fields allowed");
 			});
 		}
 	});
@@ -133,32 +151,57 @@ function createNewPeer() {
 		method: "POST",
 		contentType: "application/json; charset=utf-8",
 		dataType: "json"
-	})
+	});
 
 	req.then(function( data ) {
-		$("#peers").append(`<tr class="text-center p-2" id=${data.id}>
+		$("#peers").append(`
+		<tr class="text-center p-2" id="${data.id}">
 			<td>
-				<a href="/api/download/${data.id}" class="btn btn-success" disabled><i class="fa fa-download"></i></a>
-			</td>
-			<th scope="row">
-				<button class="btn btn-success w-100" disabled>
-					<i class="fas fa-check"></i>
-				</button>
-			</th>
-			<td><input class="btn w-100 border-dark" name="device"></input></td>
-			<td><input class="btn w-100 border-dark" name="public_key"></input></td>
-			<td><input class="btn w-100 border-dark" name="allowed_ips"></input></td>
-			<td>
-				<button class="btn btn-dark w-100 saveBtn">
-					<i class="far fa-save"></i>
-				</button>
+				<div class="my-auto">
+					<button class="btn btn-dark btn-sm">
+						<i class="fas fa-qrcode fa-lg"></i>
+					</button>
+				</div>
 			</td>
 			<td>
-				<button class="btn btn-danger w-100 deleteBtn">
-					<i class="fas fa-trash"></i>
+				<div class="my-auto">
+					<button onclick="window.location='/api/download/${data.id}';" class="btn btn-dark btn-sm">
+						<i class="fa fa-download fa-lg"></i>
+					</button>
+				</div>
+			</td>
+			<td>
+				<button class="btn btn-success btn-sm activeBtn">
+					<i class="fas fa-check fa-lg"></i>
 				</button>
 			</td>
-		</tr>`);
+			<td>
+				<div class="md-form m-0">
+					<input type="text" class="form-control" name="device" value=""></input>
+				</div>
+			</td>
+			<td>
+				<div class="md-form m-0">
+					<input type="text" class="form-control" name="public_key" value=""></input>
+				</div>
+			</td>
+			<td>
+				<div class="md-form m-0">
+					<input type="text" class="form-control" name="allowed_ips" value=""></input>
+				</div>
+			</td>
+			<td>
+				<button class="btn btn-dark btn-sm saveBtn">
+					<i class="far fa-save fa-lg"></i>
+				</button>
+			</td>
+			<td>
+				<button class="btn btn-danger btn-sm deleteBtn">
+					<i class="fas fa-trash fa-lg"></i>
+				</button>
+			</td>
+		</tr>
+		`);
 	});
 
 	req.catch(function( data ) {

@@ -130,17 +130,16 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.put("/api/server_settings/:id", (req, res) => {
-		const id = req.params.id;
+	app.put("/api/server_settings/save", (req, res) => {
+		// const id = req.params.id;
 
-		if (!id) {
-			res.sendStatus(400);
-			return;
-		}
+		// if (!id) {
+		// 	res.sendStatus(400);
+		// 	return;
+		// }
+		// const data = req.body.data;
 
-		const data = req.body.data;
-
-		if (!data) {
+		if (!req.body) {
 			// TODO: replace sendStatus with json sending functions
 			// res.sendStatus(400);
 			res.status(400).send({
@@ -150,12 +149,16 @@ exports.initServer = (state, cb) => {
 			return;
 		}
 
-		if (!((state.server_config[id] || state.server_config[id] === ""))) {
-			res.sendStatus(404);
-			return;
-		}
+		// if (!((state.server_config[id] || state.server_config[id] === ""))) {
+		// 	res.sendStatus(404);
+		// 	return;
+		// }
 
-		state.server_config[id] = data;
+		state.server_config.ip_address = req.body.ip_address;
+		state.server_config.port = req.body.port;
+		state.server_config.cidr = req.body.cidr;
+		state.server_config.private_key = req.body.private_key;
+		state.server_config.network_adapter = req.body.network_adapter;
 
 		dataManager.saveServerConfig(state.server_config, (err) => {
 			if (err) {

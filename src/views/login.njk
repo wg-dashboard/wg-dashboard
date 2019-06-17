@@ -1,29 +1,27 @@
 {% extends "base.njk" %}
 
 {% block content %}
-<div class="container">
+<div class="container animated fadeIn">
 
 	<div class="card w-50 mx-auto mt-5">
 		<div class="card-body">
-			<h5 class="card-title">Wireguard Dashboard</h5>
+			<h5 class="card-title h2">Wireguard Dashboard</h5>
 			<p class="card-text">
 
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<span class="input-group-text" id="basic-addon1">username</span>
-					</div>
-					<input type="text" class="form-control" placeholder="admin">
+				<div class="md-form">
+					<input type="text" id="user" class="form-control">
+					<label for="user">Username</label>
 				</div>
 
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<span class="input-group-text" id="basic-addon1">password</span>
-					</div>
-					<input type="text" class="form-control" placeholder="admin">
+				<div class="md-form">
+					<input type="text" id="pass" class="form-control">
+					<label for="pass">Password</label>
 				</div>
 
 			</p>
-			<a href="/" class="btn btn-dark">Dashboard</a>
+			<div class="text-right">
+				<a href="/" class="btn btn-outline-dark btn-lg">Login</a>
+			</div>
 		</div>
 	</div>
 </div>

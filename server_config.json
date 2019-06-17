@@ -1,16 +1,16 @@
 {
-  "private_key": "abcdef",
+  "private_key": "abcd",
   "ip_address": "127.0.0.1",
-  "cidr": "25",
-  "port": "124",
-  "network_adapter": "eth0",
+  "cidr": "24",
+  "port": "3000",
+  "network_adapter": "en0",
   "peers": [
     {
       "id": 0,
       "device": "home-pc",
       "public_key": "abcdef",
       "allowed_ips": "0.0.0.0/8",
-      "active": false
+      "active": true
     }
   ]
 }
