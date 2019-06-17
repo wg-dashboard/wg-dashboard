@@ -89,7 +89,9 @@
 			<tbody id="peers">
 				{% for client in clients %}
 				<tr class="text-center p-2" id="{{ client.id }}">
-					<td><div class="btn btn-success"><i class="fa fa-download"></i></div></td>
+					<td>
+						<a href="/api/download/{{ client.id }}" class="btn btn-success"><i class="fa fa-download"></i></a>
+					</td>
 					<td scope="row">
 						{% if client.active %}
 						<button class="btn btn-success w-100 activeBtn" disabled>
