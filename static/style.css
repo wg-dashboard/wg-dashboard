@@ -1,0 +1,17 @@
+button {
+	outline: none !important;
+}
+
+.editBtn,
+.saveBtn {
+	min-width: 60px;
+	justify-content: center;
+}
+
+.editBtn {
+	color: #fff;
+}
+
+.saveBtn {
+	color: #28a745;
+}

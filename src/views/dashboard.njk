@@ -3,71 +3,70 @@
 {% block content %}
 <div class="container">
 	<p class="display-4">Dashboard</p>
-	<a href="/" class="btn btn-warning mb-2">Back</a>
 
 	<div class="row">
-		<div class="col-8">
-			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-					<span class="input-group-text">IP</span>
-				</div>
-				<input type="text" class="form-control" placeholder="" value="{{ ip_address }}" disabled>
-				<div class="input-group-append">
-					<span class="input-group-text bg-dark"><i class="far fa-edit text-white"></i></span>
-				</div>
-			</div>
-		</div>
-		<div class="col-4">
-			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-					<span class="input-group-text">CIDR</span>
-				</div>
-				<input type="text" class="form-control" placeholder="{{ cidr }}" disabled>
-				<div class="input-group-append">
-					<span class="input-group-text bg-dark"><i class="far fa-edit text-white"></i></span>
-				</div>
-			</div>
-		</div>
+		<div id="server_settings" class="row">
 
-		<div class="col-8">
-			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-					<span class="input-group-text">Private Key</span>
-				</div>
-				<input type="text" class="form-control" placeholder="{{ private_key }}" disabled>
-				<div class="input-group-append">
-					<span class="input-group-text bg-dark"><i class="far fa-edit text-white"></i></span>
-				</div>
-			</div>
-		</div>
-		<div class="col-4">
-			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-					<span class="input-group-text">Port</span>
-				</div>
-				<input type="text" class="form-control" placeholder="{{ port }}" disabled>
-				<div class="input-group-append">
-					<span class="input-group-text bg-dark"><i class="far fa-edit text-white"></i></span>
-				</div>
-			</div>
-		</div>
+			<div class="col-12 mb-2 h3">Server settings</div>
 
-		<div class="col-12">
-			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-					<span class="input-group-text">Network Adapter</span>
-				</div>
-				<input type="text" class="form-control" placeholder="{{ network_adapter }}" disabled>
-				<div class="input-group-append" class="editBtn">
-					<span class="input-group-text bg-dark"><i class="far fa-edit text-white"></i></span>
+			<div class="col-8">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">IP</span>
+					</div>
+					<input type="text" class="form-control" placeholder="" value="{{ ip_address }}" disabled>
+					<div class="input-group-append">
+						<button id="edit_ip_address" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
+					</div>
 				</div>
 			</div>
-		</div>
+			<div class="col-4">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">CIDR</span>
+					</div>
+					<input type="text" class="form-control" placeholder="{{ cidr }}" disabled>
+					<div class="input-group-append">
+						<button id="edit_cidr" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
+					</div>
+				</div>
+			</div>
 
-		<div class="text-right w-100 px-3">
-			<button class="btn btn-success w-25">
-				SAVE
-			</button>
+			<div class="col-8">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Private Key</span>
+					</div>
+					<input type="text" class="form-control" placeholder="{{ private_key }}" disabled>
+					<div class="input-group-append">
+						<button id="edit_private_key" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
+					</div>
+				</div>
+			</div>
+			<div class="col-4">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Port</span>
+					</div>
+					<input type="text" class="form-control" placeholder="{{ port }}" disabled>
+					<div class="input-group-append">
+						<button id="edit_port" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-12">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Network Adapter</span>
+					</div>
+					<input type="text" class="form-control" placeholder="{{ network_adapter }}" disabled>
+					<div class="input-group-append" class="editBtn">
+						<button id="edit_network_adapter" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 		<hr class="w-100">
