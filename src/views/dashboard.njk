@@ -16,7 +16,7 @@
 					</div>
 					<input type="text" class="form-control" placeholder="" value="{{ ip_address }}" disabled>
 					<div class="input-group-append">
-						<button id="edit_ip_address" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
+						<button id="ip_address" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
 					</div>
 				</div>
 			</div>
@@ -27,7 +27,7 @@
 					</div>
 					<input type="text" class="form-control" placeholder="{{ cidr }}" disabled>
 					<div class="input-group-append">
-						<button id="edit_cidr" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
+						<button id="cidr" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
 					</div>
 				</div>
 			</div>
@@ -39,7 +39,7 @@
 					</div>
 					<input type="text" class="form-control" placeholder="{{ private_key }}" disabled>
 					<div class="input-group-append">
-						<button id="edit_private_key" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
+						<button id="private_key" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
 					</div>
 				</div>
 			</div>
@@ -50,7 +50,7 @@
 					</div>
 					<input type="text" class="form-control" placeholder="{{ port }}" disabled>
 					<div class="input-group-append">
-						<button id="edit_port" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
+						<button id="port" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
 					</div>
 				</div>
 			</div>
@@ -62,7 +62,7 @@
 					</div>
 					<input type="text" class="form-control" placeholder="{{ network_adapter }}" disabled>
 					<div class="input-group-append" class="editBtn">
-						<button id="edit_network_adapter" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
+						<button id="network_adapter" class="input-group-text bg-dark editBtn"><i class="far fa-edit text-white"></i></button>
 					</div>
 				</div>
 			</div>
@@ -92,11 +92,11 @@
 					<td><div class="btn btn-success"><i class="fa fa-download"></i></div></td>
 					<td scope="row">
 						{% if client.active %}
-						<button class="btn btn-success w-100">
+						<button class="btn btn-success w-100 activeBtn" disabled>
 							<i class="fas fa-check"></i>
 						</button>
 						{% else %}
-						<button class="btn btn-danger w-100">
+						<button class="btn btn-danger w-100 activeBtn" disabled>
 							<i class="fas fa-times"></i>
 						</button>
 						{% endif %}

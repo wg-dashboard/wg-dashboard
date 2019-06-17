@@ -9,6 +9,10 @@ $(document).ready(() => {
 				.addClass("saveBtn")
 
 			tableRow
+				.find(".activeBtn")
+				.attr("disabled", false);
+
+			tableRow
 				.find("input")
 				.attr("disabled", false);
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
@@ -18,6 +22,14 @@ $(document).ready(() => {
 			tableRow.find("input").each(function () {
 				data[this.name] = this.value;
 			});
+
+			const active = tableRow.find(".activeBtn");
+			console.log(active.hasClass("btn-danger"));
+			if (active.hasClass("btn-danger")) {
+				data["active"] = false;
+			} else {
+				data["active"] = true;
+			}
 
 			const req = $.ajax({
 				url: `/api/peer/${tableRow[0].id}`,
@@ -35,6 +47,10 @@ $(document).ready(() => {
 
 				tableRow
 					.find("input")
+					.attr("disabled", true);
+
+				tableRow
+					.find(".activeBtn")
 					.attr("disabled", true);
 			});
 
@@ -60,6 +76,12 @@ $(document).ready(() => {
 				req.catch(function( data ) {
 					alert("could not delete user");
 				});
+			}
+		} else if ($(e.currentTarget).hasClass("activeBtn")) {
+			if ($(e.currentTarget).hasClass("btn-danger")) {
+				$(e.currentTarget).removeClass("btn-danger").addClass("btn-success").html(`<i class="fas fa-check"></i>`);
+			} else {
+				$(e.currentTarget).removeClass("btn-success").addClass("btn-danger").html(`<i class="fas fa-times"></i>`);
 			}
 		}
 	});

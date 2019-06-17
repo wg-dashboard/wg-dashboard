@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const app = express();
 const nunjucks = require("nunjucks");
 const fs = require("fs");
+const stream = require("stream");
 
 const server_config = require("./server_config.json");
 
@@ -51,6 +52,7 @@ app.post("/api/peer", (req, res) => {
 		device: "",
 		allowed_ips: "",
 		public_key: "",
+		active: true,
 	})
 
 	saveServerConfig();
@@ -68,8 +70,9 @@ app.put("/api/peer/:id", (req, res) => {
 
 	if (item) {
 		item.device = req.body.device;
-		item.allowed_ips = req.body.allowed_ips,
-		item.public_key = req.body.public_key,
+		item.allowed_ips = req.body.allowed_ips;
+		item.public_key = req.body.public_key;
+		item.active = req.body.active;
 		saveServerConfig();
 
 		res.send({
@@ -79,8 +82,6 @@ app.put("/api/peer/:id", (req, res) => {
 		res.sendStatus(500);
 	}
 });
-
-
 
 app.delete("/api/peer/:id", (req, res) => {
 	const id = req.params.id;
@@ -98,16 +99,47 @@ app.delete("/api/peer/:id", (req, res) => {
 });
 
 app.put("/api/server_settings/:id", (req, res) => {
-	const id = req.params.id.slice(5, req.params.id.length);
+	const id = req.params.id;
 	const data = req.body.data;
 
-	server_config[id] = data;
+	if (server_config[id] || server_config[id] === "") {
+		server_config[id] = data;
 
-	saveServerConfig();
+		saveServerConfig();
 
-	res.send({
-		msg: "OK",
-	});
+		res.send({
+			msg: "OK",
+		});
+	} else {
+		res.sendStatus(500);
+	}
+});
+
+app.get("/api/download/:id", (req, res) => {
+	const id = req.params.id;
+
+	const item = server_config.peers.find(el => parseInt(el.id, 10) === parseInt(id, 10));
+
+	if (item) {
+		const client_config = nunjucks.render("templates/config_client.njk", {
+			server_public_key: server_config.public_key,
+			server_port: server_config.port,
+			allowed_ips: item.allowed_ips,
+			ip_address: server_config.ip_address,
+
+			server_endpoint: server_config.ip_address
+		});
+
+		var readStream = new stream.PassThrough();
+		readStream.end(client_config);
+
+		res.set("Content-disposition", "attachment; filename=client_config_" + id + ".conf");
+		res.set("Content-Type", "text/plain");
+
+		readStream.pipe(res);
+	} else {
+		res.sendStatus(500);
+	}
 });
 
 app.listen(config.port, () => {
@@ -115,5 +147,7 @@ app.listen(config.port, () => {
 });
 
 function saveServerConfig() {
-	fs.writeFileSync("./src/server_config.json", JSON.stringify(server_config));
+	fs.writeFile("./src/server_config.json", JSON.stringify(server_config, null, 2), (err) => {
+		if (err) console.error(err);
+	});
 }
