@@ -1,16 +1,16 @@
 {
   "private_key": "abcdef",
   "ip_address": "127.0.0.1",
-  "cidr": "24",
+  "cidr": "25",
   "port": "124",
   "network_adapter": "eth0",
   "peers": [
     {
       "id": 0,
-      "device": "vtii-pc",
+      "device": "home-pc",
       "public_key": "abcdef",
       "allowed_ips": "0.0.0.0/8",
-      "active": true
+      "active": false
     }
   ]
 }

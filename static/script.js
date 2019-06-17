@@ -137,10 +137,12 @@ function createNewPeer() {
 
 	req.then(function( data ) {
 		$("#peers").append(`<tr class="text-center p-2" id=${data.id}>
-			<td><div class="btn btn-success" disabled><i class="fa fa-download"></i></div></td>
+			<td>
+				<a href="/api/download/${data.id}" class="btn btn-success" disabled><i class="fa fa-download"></i></a>
+			</td>
 			<th scope="row">
-				<button class="btn btn-danger w-100">
-					<i class="fas fa-times"></i>
+				<button class="btn btn-success w-100" disabled>
+					<i class="fas fa-check"></i>
 				</button>
 			</th>
 			<td><input class="btn w-100 border-dark" name="device"></input></td>
