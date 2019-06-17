@@ -77,6 +77,7 @@
 		<table class="table">
 			<thead class="thead-dark">
 				<tr class="text-center">
+					<th scope="col">config</th>
 					<th scope="col">active</th>
 					<th scope="col">device</th>
 					<th scope="col">public key</th>
@@ -88,7 +89,8 @@
 			<tbody id="peers">
 				{% for client in clients %}
 				<tr class="text-center p-2" id="{{ client.id }}">
-					<th scope="row">
+					<td><div class="btn btn-success"><i class="fa fa-download"></i></div></td>
+					<td scope="row">
 						{% if client.active %}
 						<button class="btn btn-success w-100">
 							<i class="fas fa-check"></i>
@@ -98,10 +100,10 @@
 							<i class="fas fa-times"></i>
 						</button>
 						{% endif %}
-					</th>
-					<td><input class="btn w-100 border-dark" value="{{ client.device }}" disabled></input></td>
-					<td><input class="btn w-100 border-dark" value="{{ client.public_key }}" disabled></input></td>
-					<td><input class="btn w-100 border-dark" value="{{ client.allowed_ips }}" disabled></input></td>
+					</td>
+					<td><input class="btn w-100 border-dark" name="device" value="{{ client.device }}" disabled></input></td>
+					<td><input class="btn w-100 border-dark" name="public_key" value="{{ client.public_key }}" disabled></input></td>
+					<td><input class="btn w-100 border-dark" name="allowed_ips" value="{{ client.allowed_ips }}" disabled></input></td>
 					<td>
 						<button class="btn btn-dark w-100 editBtn">
 							<i class="far fa-edit"></i>

@@ -11,6 +11,8 @@ const config = {
 
 app.use(morgan("dev"));
 app.use("/static", express.static("static"));
+
+app.use(express.json());
 // app.use(express.urlencoded({
 // 	extended: true,
 // }));
@@ -40,9 +42,7 @@ app.get("/dashboard", (req, res) => {
 });
 
 app.post("/api/createpeer", (req, res) => {
-	server_config.peers.push({
-		device: "new_device_"
-	});
+	console.log("request:", req.body);
 });
 
 app.listen(config.port, () => {
