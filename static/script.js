@@ -25,7 +25,7 @@ $(document).ready(() => {
 				data: JSON.stringify(data),
 				contentType: "application/json; charset=utf-8",
 				dataType: "json"
-			})
+			});
 
 			req.then(function( data ) {
 				$(e.currentTarget)
@@ -77,37 +77,31 @@ $(document).ready(() => {
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
 
 			let id = e.currentTarget.id;
+			let input = $(e.currentTarget).parent().parent().find("input");
 			let data = $(e.currentTarget).parent().parent().find("input").val();
 
-			console.log(id, data);
+			const req = $.ajax({
+				url: `/api/server_settings/${id}`,
+				method: "PUT",
+				data: JSON.stringify({data: data}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json"
+			});
 
-			// const tableRow = $(e.currentTarget).parent().parent();
-			// const data = {id: tableRow[0].id};
+			req.then(function( data ) {
+				$(e.currentTarget)
+					.html(`<i class="far fa-edit"></i>`)
+					.removeClass("saveBtn")
+					.addClass("editBtn");
+				input
+					.attr("disabled", true);
+			});
 
-			// tableRow.find("input").each(function () {
-			// 	data[this.name] = this.value;
-			// });
-
-			// $.ajax({
-			// 	url: "/api/createpeer",
-			// 	method: "POST",
-			// 	data: JSON.stringify(data),
-			// 	contentType: "application/json; charset=utf-8",
-			// 	dataType: "json",
-			// }).done(function() {
-			// 	$(e.currentTarget)
-			// 		.html(`<i class="far fa-edit"></i>`)
-			// 		.removeClass("saveBtn")
-			// 		.addClass("editBtn");
-
-			// 	tableRow
-			// 		.find("input")
-			// 		.attr("disabled", true);
-			// });
+			req.catch(function( data ) {
+				alert("could not save data");
+			});
 		}
 	});
-
-
 });
 
 
@@ -146,4 +140,4 @@ function createNewPeer() {
 	req.catch(function( data ) {
 		alert("could not save user");
 	});
-}
+};

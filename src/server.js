@@ -76,6 +76,8 @@ app.put("/api/peer/:id", (req, res) => {
 	}
 });
 
+
+
 app.delete("/api/peer/:id", (req, res) => {
 	const id = req.params.id;
 
@@ -88,6 +90,18 @@ app.delete("/api/peer/:id", (req, res) => {
 	} else {
 		res.sendStatus(500);
 	}
+});
+
+app.put("/api/server_settings/:id", (req, res) => {
+	const id = req.params.id;
+	const data = req.body.data;
+
+	console.log("SETTINGS", id);
+	console.log("DAAATA", data);
+
+	res.send({
+		msg: "OK",
+	});
 });
 
 app.listen(config.port, () => {
