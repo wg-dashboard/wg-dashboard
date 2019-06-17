@@ -7,7 +7,7 @@ const server_config = require("./server_config.json");
 
 const config = {
 	port: 3000,
-}
+};
 
 app.use(morgan("dev"));
 app.use("/static", express.static("static"));
@@ -74,6 +74,8 @@ app.put("/api/peer/:id", (req, res) => {
 	});
 });
 
+
+
 app.delete("/api/peer/:id", (req, res) => {
 	const id = req.params.id;
 
@@ -81,6 +83,18 @@ app.delete("/api/peer/:id", (req, res) => {
 	server_config.peers.splice(itemIndex, 1);
 
 	res.sendStatus(200);
+});
+
+app.put("/api/server_settings/:id", (req, res) => {
+	const id = req.params.id;
+	const data = req.body.data;
+
+	console.log("SETTINGS", id);
+	console.log("DAAATA", data);
+
+	res.send({
+		msg: "OK",
+	});
 });
 
 app.listen(config.port, () => {
