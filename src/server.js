@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 const nunjucks = require("nunjucks");
+const fs = require("fs");
 
 const server_config = require("./server_config.json");
 
@@ -52,6 +53,8 @@ app.post("/api/peer", (req, res) => {
 		public_key: "",
 	})
 
+	saveServerConfig();
+
 	res.send({
 		msg: "ok",
 		id,
@@ -67,6 +70,7 @@ app.put("/api/peer/:id", (req, res) => {
 		item.device = req.body.device;
 		item.allowed_ips = req.body.allowed_ips,
 		item.public_key = req.body.public_key,
+		saveServerConfig();
 
 		res.send({
 			msg: "ok",
@@ -85,6 +89,7 @@ app.delete("/api/peer/:id", (req, res) => {
 
 	if (itemIndex !== -1) {
 		server_config.peers.splice(itemIndex, 1);
+		saveServerConfig();
 
 		res.sendStatus(200);
 	} else {
@@ -96,8 +101,7 @@ app.put("/api/server_settings/:id", (req, res) => {
 	const id = req.params.id;
 	const data = req.body.data;
 
-	console.log("SETTINGS", id);
-	console.log("DAAATA", data);
+	saveServerConfig();
 
 	res.send({
 		msg: "OK",
@@ -107,3 +111,7 @@ app.put("/api/server_settings/:id", (req, res) => {
 app.listen(config.port, () => {
 	console.log(`Listening on port ${config.port}!`);
 });
+
+function saveServerConfig() {
+	fs.writeFileSync("./src/server_config.json", JSON.stringify(server_config));
+}
