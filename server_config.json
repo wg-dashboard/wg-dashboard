@@ -1,0 +1,11 @@
+{
+	"private_key": "",
+
+	"ip_address": "",
+	"cidr": 24,
+	"port": 58210,
+
+	"network_adapter": "eth0",
+
+	"clients": []
+}
