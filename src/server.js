@@ -6,16 +6,14 @@ const nunjucks = require("nunjucks");
 const server_config = require("./server_config.json");
 
 const config = {
-	port: 3000,
+	port: process.env.PORT || 3000,
+	outPath: process.env.OUT_PATH || "wireguard/wg0.conf",
 }
 
 app.use(morgan("dev"));
 app.use("/static", express.static("static"));
 
 app.use(express.json());
-// app.use(express.urlencoded({
-// 	extended: true,
-// }));
 
 const env = nunjucks.configure(
 	__dirname + "/views", {
@@ -64,23 +62,32 @@ app.put("/api/peer/:id", (req, res) => {
 	const id = req.params.id;
 
 	const item = server_config.peers.find(el => parseInt(el.id, 10) === parseInt(id, 10));
-	console.log(item);
-	item.device = req.body.device;
-	item.allowed_ips = req.body.allowed_ips,
-	item.public_key = req.body.public_key,
 
-	res.send({
-		msg: "ok",
-	});
+	if (item) {
+		item.device = req.body.device;
+		item.allowed_ips = req.body.allowed_ips,
+		item.public_key = req.body.public_key,
+
+		res.send({
+			msg: "ok",
+		});
+	} else {
+		res.sendStatus(500);
+	}
 });
 
 app.delete("/api/peer/:id", (req, res) => {
 	const id = req.params.id;
 
 	const itemIndex = server_config.peers.findIndex(el => parseInt(el.id, 10) === parseInt(id, 10));
-	server_config.peers.splice(itemIndex, 1);
 
-	res.sendStatus(200);
+	if (itemIndex !== -1) {
+		server_config.peers.splice(itemIndex, 1);
+
+		res.sendStatus(200);
+	} else {
+		res.sendStatus(500);
+	}
 });
 
 app.listen(config.port, () => {
