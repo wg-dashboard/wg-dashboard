@@ -89,11 +89,7 @@ app.put("/api/server_settings/:id", (req, res) => {
 	const id = req.params.id.slice(5, req.params.id.length);
 	const data = req.body.data;
 
-	console.log("SETTINGS", id);
-	console.log("DAAATA", data);
-	console.log("A",server_config);
 	server_config[id] = data;
-	console.log("B",server_config);
 
 	res.send({
 		msg: "OK",
