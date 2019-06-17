@@ -41,8 +41,46 @@ app.get("/dashboard", (req, res) => {
 	});
 });
 
-app.post("/api/createpeer", (req, res) => {
-	console.log("request:", req.body);
+app.post("/api/peer", (req, res) => {
+	const ids = server_config.peers.map((el) => {
+		return parseInt(el.id, 10);
+	});
+	const id = Math.max(...ids) + 1;
+
+	server_config.peers.push({
+		id,
+		device: "",
+		allowed_ips: "",
+		public_key: "",
+	})
+
+	res.send({
+		msg: "ok",
+		id,
+	});
+});
+
+app.put("/api/peer/:id", (req, res) => {
+	const id = req.params.id;
+
+	const item = server_config.peers.find(el => parseInt(el.id, 10) === parseInt(id, 10));
+	console.log(item);
+	item.device = req.body.device;
+	item.allowed_ips = req.body.allowed_ips,
+	item.public_key = req.body.public_key,
+
+	res.send({
+		msg: "ok",
+	});
+});
+
+app.delete("/api/peer/:id", (req, res) => {
+	const id = req.params.id;
+
+	const itemIndex = server_config.peers.findIndex(el => parseInt(el.id, 10) === parseInt(id, 10));
+	server_config.peers.splice(itemIndex, 1);
+
+	res.sendStatus(200);
 });
 
 app.listen(config.port, () => {
