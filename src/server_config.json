@@ -1,0 +1,17 @@
+{
+	"private_key": "",
+
+	"ip_address": "",
+	"cidr": 24,
+	"port": 58210,
+
+	"network_adapter": "eth0",
+
+	"peers": [{
+		"id": 0,
+		"device": "vtii-pc",
+		"public_key": "abcdef",
+		"allowed_ips": "0.0.0.0/8",
+		"active": false
+	}]
+}

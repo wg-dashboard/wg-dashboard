@@ -9,43 +9,58 @@
 		<div class="col-8">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
-					<span class="input-group-text">ip adresse</span>
+					<span class="input-group-text">IP</span>
 				</div>
-				<input type="text" class="form-control" placeholder="123.123.123">
+				<input type="text" class="form-control" placeholder="" value="{{ ip_address }}" disabled>
+				<div class="input-group-append">
+					<span class="input-group-text bg-dark"><i class="far fa-edit text-white"></i></span>
+				</div>
 			</div>
 		</div>
 		<div class="col-4">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
-					<span class="input-group-text">cidr</span>
+					<span class="input-group-text">CIDR</span>
 				</div>
-				<input type="text" class="form-control" placeholder="24">
+				<input type="text" class="form-control" placeholder="{{ cidr }}" disabled>
+				<div class="input-group-append">
+					<span class="input-group-text bg-dark"><i class="far fa-edit text-white"></i></span>
+				</div>
 			</div>
 		</div>
 
 		<div class="col-8">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
-					<span class="input-group-text">private key</span>
+					<span class="input-group-text">Private Key</span>
 				</div>
-				<input type="text" class="form-control" placeholder="2398jf9nin3fnu93f">
+				<input type="text" class="form-control" placeholder="{{ private_key }}" disabled>
+				<div class="input-group-append">
+					<span class="input-group-text bg-dark"><i class="far fa-edit text-white"></i></span>
+				</div>
 			</div>
 		</div>
 		<div class="col-4">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
-					<span class="input-group-text">port</span>
+					<span class="input-group-text">Port</span>
 				</div>
-				<input type="text" class="form-control" placeholder="1337">
+				<input type="text" class="form-control" placeholder="{{ port }}" disabled>
+				<div class="input-group-append">
+					<span class="input-group-text bg-dark"><i class="far fa-edit text-white"></i></span>
+				</div>
 			</div>
 		</div>
 
 		<div class="col-12">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
-					<span class="input-group-text">network adapter</span>
+					<span class="input-group-text">Network Adapter</span>
 				</div>
-				<input type="text" class="form-control" placeholder="en0">
+				<input type="text" class="form-control" placeholder="{{ network_adapter }}" disabled>
+				<div class="input-group-append" class="editBtn">
+					<span class="input-group-text bg-dark"><i class="far fa-edit text-white"></i></span>
+				</div>
 			</div>
 		</div>
 
@@ -57,61 +72,52 @@
 
 		<hr class="w-100">
 
-
-		<div class="col-12 mb-2 h3">Clients</div>
+		<div class="col-12 mb-2 h3">Peers</div>
 
 		<table class="table">
 			<thead class="thead-dark">
 				<tr class="text-center">
 					<th scope="col">active</th>
-					<th scope="col">device name</th>
+					<th scope="col">device</th>
 					<th scope="col">public key</th>
 					<th scope="col">allowed ips</th>
 					<th scope="col">edit</th>
 				</tr>
 			</thead>
 
-
-
-			<tbody>
-				<tr class="text-center p-2">
+			<tbody id="peers">
+				{% for client in clients %}
+				<tr class="text-center p-2" id="{{ client.id }}">
 					<th scope="row">
+						{% if client.active %}
+						<button class="btn btn-success w-100">
+							<i class="fas fa-check"></i>
+						</button>
+						{% else %}
 						<button class="btn btn-danger w-100">
 							<i class="fas fa-times"></i>
 						</button>
+						{% endif %}
 					</th>
-					<td class="p-0 pt-3">mac-home</td>
-					<td class="p-0 pt-3">3r03ijfm32tt23g4gdsf3</td>
-					<td class="p-0 pt-3">12.1.2.2.3.312.1.21.2</td>
+					<td><input class="btn w-100 border-dark" value="{{ client.device }}" disabled></input></td>
+					<td><input class="btn w-100 border-dark" value="{{ client.public_key }}" disabled></input></td>
+					<td><input class="btn w-100 border-dark" value="{{ client.allowed_ips }}" disabled></input></td>
 					<td>
-						<button class="btn btn-dark w-100">
+						<button class="btn btn-dark w-100 editBtn">
 							<i class="far fa-edit"></i>
 						</button>
 					</td>
 				</tr>
-
-				<tr class="text-center p-2">
-					<th scope="row">
-						<button class="btn btn-success w-100">
-							<i class="fas fa-check"></i>
-						</button>
-					</th>
-					<td class="p-0 pt-3">mac-work</td>
-					<td class="p-0 pt-3">3r03ijfm32tt23g4gdsf3</td>
-					<td class="p-0 pt-3">12.1.2.2.3.312.1.21.2</td>
-					<td>
-						<button class="btn btn-dark w-100">
-							{# <i class="far fa-edit"></i> #}
-							SAVE
-						</button>
-					</td>
-				</tr>
-
-
+				{% endfor %}
 			</tbody>
+			<tr class="p-2">
+				<th class="text-center" colspan="6">
+					<button class="btn btn-success" onclick="createNewPeer()">
+						<i class="fa fa-user-plus"></i> Add Peer
+					</button>
+				</th>
+			</tr>
 		</table>
-
-
 	</div>
 </div>
 {% endblock %}
