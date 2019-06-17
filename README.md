@@ -1,4 +1,4 @@
-# Wireguard-dashboard
+# Wireguard-Dashboard
 
 todo:
 * serverconfig
