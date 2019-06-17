@@ -1,0 +1,13 @@
+[Interface]
+Address = {{ ip_address }}/{{ cidr }}
+PrivateKey = {{ private_key }}
+ListenPort = {{ port }}
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o {{ network_adapter }} -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o {{ network_adapter }} -j MASQUERADE
+
+{% for device in clients -%}
+	[Peer]
+	# {{ device.device }}
+	PublicKey = {{ device.public_key }}
+	AllowedIPs = {{ device.allowed_ips | join(", ") }}
+{% endfor %}

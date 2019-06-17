@@ -1,0 +1,13 @@
+[Interface]
+Address = {{ ip_address }}
+DNS = {{ dns }}
+PrivateKey = {{ client_private_key }}
+
+[Peer]
+PublicKey = {{ server_public_key }}
+Endpoint = {{ server_endpoint }}:{{ server_port }}
+AllowedIPs = {{ server_allowed_ips }}
+
+# This is for if you're behind a NAT and
+# want the connection to be kept alive.
+PersistentKeepalive = 25
