@@ -1,0 +1,117 @@
+{% extends "base.njk" %}
+
+{% block content %}
+<div class="container">
+	<p class="display-4">Dashboard</p>
+	<a href="/" class="btn btn-warning mb-2">Back</a>
+
+	<div class="row">
+		<div class="col-8">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">ip adresse</span>
+				</div>
+				<input type="text" class="form-control" placeholder="123.123.123">
+			</div>
+		</div>
+		<div class="col-4">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">cidr</span>
+				</div>
+				<input type="text" class="form-control" placeholder="24">
+			</div>
+		</div>
+
+		<div class="col-8">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">private key</span>
+				</div>
+				<input type="text" class="form-control" placeholder="2398jf9nin3fnu93f">
+			</div>
+		</div>
+		<div class="col-4">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">port</span>
+				</div>
+				<input type="text" class="form-control" placeholder="1337">
+			</div>
+		</div>
+
+		<div class="col-12">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">network adapter</span>
+				</div>
+				<input type="text" class="form-control" placeholder="en0">
+			</div>
+		</div>
+
+		<div class="text-right w-100 px-3">
+			<button class="btn btn-success w-25">
+				SAVE
+			</button>
+		</div>
+
+		<hr class="w-100">
+
+
+		<div class="col-12 mb-2 h3">Clients</div>
+
+		<table class="table">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th scope="col">active</th>
+					<th scope="col">device name</th>
+					<th scope="col">public key</th>
+					<th scope="col">allowed ips</th>
+					<th scope="col">edit</th>
+				</tr>
+			</thead>
+
+
+
+			<tbody>
+				<tr class="text-center p-2">
+					<th scope="row">
+						<button class="btn btn-danger w-100">
+							<i class="fas fa-times"></i>
+						</button>
+					</th>
+					<td class="p-0 pt-3">mac-home</td>
+					<td class="p-0 pt-3">3r03ijfm32tt23g4gdsf3</td>
+					<td class="p-0 pt-3">12.1.2.2.3.312.1.21.2</td>
+					<td>
+						<button class="btn btn-dark w-100">
+							<i class="far fa-edit"></i>
+						</button>
+					</td>
+				</tr>
+
+				<tr class="text-center p-2">
+					<th scope="row">
+						<button class="btn btn-success w-100">
+							<i class="fas fa-check"></i>
+						</button>
+					</th>
+					<td class="p-0 pt-3">mac-work</td>
+					<td class="p-0 pt-3">3r03ijfm32tt23g4gdsf3</td>
+					<td class="p-0 pt-3">12.1.2.2.3.312.1.21.2</td>
+					<td>
+						<button class="btn btn-dark w-100">
+							{# <i class="far fa-edit"></i> #}
+							SAVE
+						</button>
+					</td>
+				</tr>
+
+
+			</tbody>
+		</table>
+
+
+	</div>
+</div>
+{% endblock %}

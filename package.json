@@ -1,10 +1,10 @@
 {
   "name": "wireguard-dashboard",
   "version": "1.0.0",
-  "description": "todo: * serverconfig   * public ip / vpn ip   * create keypair   * show only pub-key * client managemant",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "node-dev --respawn --no-notify ./src/server.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,10 @@
   "homepage": "https://github.com/daluf/wireguard-dashboard#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "morgan": "^1.9.1",
     "nunjucks": "^3.2.0"
+  },
+  "devDependencies": {
+    "node-dev": "^4.0.0"
   }
 }
