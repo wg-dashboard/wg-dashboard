@@ -42,21 +42,25 @@ $(document).ready(() => {
 				alert("could not save user");
 			});
 		} else if ($(e.currentTarget).hasClass("deleteBtn")) {
-			const tableRow = $(e.currentTarget).parent().parent();
+			const confirmation = confirm("Are you sure you want to delete this peer?");
 
-			const req = $.ajax({
-				url: `/api/peer/${tableRow[0].id}`,
-				method: "DELETE"
-			})
+			if (confirmation) {
+				const tableRow = $(e.currentTarget).parent().parent();
 
-			req.then(function( data ) {
-				tableRow
-					.remove();
-			});
+				const req = $.ajax({
+					url: `/api/peer/${tableRow[0].id}`,
+					method: "DELETE"
+				})
 
-			req.catch(function( data ) {
-				alert("could not delete user");
-			});
+				req.then(function( data ) {
+					tableRow
+						.remove();
+				});
+
+				req.catch(function( data ) {
+					alert("could not delete user");
+				});
+			}
 		}
 	});
 
