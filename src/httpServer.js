@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const nunjucks = require("nunjucks");
 
 const dataManager = require("./dataManager");
+const wireguardHelper = require("./wgHelper");
 
 exports.initServer = (state, cb) => {
 	const app = express();
@@ -27,7 +28,7 @@ exports.initServer = (state, cb) => {
 			ip_address: state.server_config.ip_address,
 			cidr: state.server_config.cidr,
 			port: state.server_config.port,
-			private_key: state.server_config.private_key,
+			public_key: state.server_config.public_key,
 			network_adapter: state.server_config.network_adapter,
 			clients: state.server_config.peers,
 		});
@@ -39,26 +40,37 @@ exports.initServer = (state, cb) => {
 		});
 		const id = Math.max(...ids) + 1;
 
-		state.server_config.peers.push({
-			id,
-			device: "",
-			allowed_ips: "",
-			public_key: "",
-			active: true,
-		})
-
-		dataManager.saveServerConfig(state.server_config, (err) => {
+		wireguardHelper.generateKeyPair((err, data) => {
 			if (err) {
-				console.error("POST /api/peer COULD_NOT_SAVE_SERVER_CONFIG", err);
+				console.error(err);
 				res.status(500).send({
-					msg: "COULD_NOT_SAVE_SERVER_CONFIG",
+					msg: "COULD_NOT_CREATE_KEYPAIR",
 				});
-				return;
 			}
 
-			res.send({
-				msg: "ok",
+			state.server_config.peers.push({
 				id,
+				device: "",
+				allowed_ips: "",
+				public_key: data.public_key,
+				private_key: data.private_key,
+				active: true,
+			});
+
+			dataManager.saveServerConfig(state.server_config, (err) => {
+				if (err) {
+					console.error("POST /api/peer COULD_NOT_SAVE_SERVER_CONFIG", err);
+					res.status(500).send({
+						msg: "COULD_NOT_SAVE_SERVER_CONFIG",
+					});
+					return;
+				}
+
+				res.status(201).send({
+					msg: "OK",
+					id,
+					public_key: data.public_key,
+				});
 			});
 		});
 	});
@@ -67,19 +79,39 @@ exports.initServer = (state, cb) => {
 		const id = req.params.id;
 
 		if (!id) {
-			res.sendStatus(400);
+			res.status(404).send({
+				msg: "NO_ID_PROVIDED_OR_FOUND",
+			});
 			return;
 		}
 
 		const item = state.server_config.peers.find(el => parseInt(el.id, 10) === parseInt(id, 10));
 
 		if (!item) {
-			res.sendStatus(404);
+			res.status(404).send({
+				msg: "PEER_NOT_FOUND",
+			});
+			return;
+		}
+
+		let validIPs = true;
+		const _allowedIPs = req.body.allowed_ips.replace(/ /g, "").split(",");
+		_allowedIPs.forEach((e) => {
+			const match = /^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))$/.test(e);
+			if (!match) {
+				validIPs = false;
+			}
+		});
+
+		if (!validIPs) {
+			res.status(500).send({
+				msg: "INVALID_IP_SETUP",
+			});
 			return;
 		}
 
 		item.device = req.body.device;
-		item.allowed_ips = req.body.allowed_ips;
+		item.allowed_ips = req.body.allowed_ips.replace(/ /g, "").split(",");
 		item.public_key = req.body.public_key;
 		item.active = req.body.active;
 
@@ -93,7 +125,7 @@ exports.initServer = (state, cb) => {
 			}
 
 			res.send({
-				msg: "ok",
+				msg: "OK",
 			});
 		});
 	});
@@ -102,14 +134,18 @@ exports.initServer = (state, cb) => {
 		const id = req.params.id;
 
 		if (!id) {
-			res.sendStatus(400);
+			res.status(404).send({
+				msg: "NO_ID_PROVIDED_OR_FOUND",
+			});
 			return;
 		}
 
 		const itemIndex = state.server_config.peers.findIndex(el => parseInt(el.id, 10) === parseInt(id, 10));
 
 		if (itemIndex === -1) {
-			res.sendStatus(404);
+			res.status(404).send({
+				msg: "PEER_NOT_FOUND",
+			});
 			return;
 		}
 
@@ -124,8 +160,8 @@ exports.initServer = (state, cb) => {
 				return;
 			}
 
-			res.status(201).send({
-				msg: "ok",
+			res.send({
+				msg: "OK",
 			});
 		});
 	});
@@ -169,8 +205,8 @@ exports.initServer = (state, cb) => {
 				return;
 			}
 
-			res.status(201).send({
-				msg: "ok",
+			res.send({
+				msg: "OK",
 			});
 		});
 	});
@@ -179,14 +215,18 @@ exports.initServer = (state, cb) => {
 		const id = req.params.id;
 
 		if (!id) {
-			res.sendStatus(400);
+			res.status(400).send({
+				msg: "NO_ID_PROVIDED_OR_FOUND",
+			});
 			return;
 		}
 
 		const item = state.server_config.peers.find(el => parseInt(el.id, 10) === parseInt(id, 10));
 
 		if (!item) {
-			res.sendStatus(404);
+			res.status(404).send({
+				msg: "PEER_NOT_FOUND",
+			});
 			return;
 		}
 
@@ -195,6 +235,7 @@ exports.initServer = (state, cb) => {
 			server_port: state.server_config.port,
 			allowed_ips: item.allowed_ips,
 			ip_address: state.server_config.ip_address,
+			client_private_key: item.private_key,
 			server_endpoint: state.server_config.ip_address,
 		}, (err, renderedConfig) => {
 			if (err) {

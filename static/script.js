@@ -48,7 +48,7 @@ $(document).ready(() => {
 
 				tableRow
 					.find("input")
-					.css("color", "#212529")
+					.css("color", "#495057")
 					.attr("disabled", true);
 
 				tableRow
@@ -57,7 +57,8 @@ $(document).ready(() => {
 			});
 
 			req.catch(function( data ) {
-				alert("could not save user");
+				const msg = data.responseJSON ? data.responseJSON.msg : "";
+				alert("could not save user: " + msg);
 			});
 		} else if ($(e.currentTarget).hasClass("deleteBtn")) {
 			const confirmation = confirm("Are you sure you want to delete this peer?");
@@ -76,7 +77,8 @@ $(document).ready(() => {
 				});
 
 				req.catch(function( data ) {
-					alert("could not delete user");
+					const msg = data.responseJSON ? data.responseJSON.msg : "";
+					alert("could not delete user: " + msg);
 				});
 			}
 		} else if ($(e.currentTarget).hasClass("activeBtn")) {
@@ -98,14 +100,13 @@ $(document).ready(() => {
 			$("#ip_address").attr("disabled", false).css("color", "#4285F4");
 			$("#port").attr("disabled", false).css("color", "#4285F4");
 			$("#cidr").attr("disabled", false).css("color", "#4285F4");
-			$("#private_key").attr("disabled", false).css("color", "#4285F4");
+			$("#public_key").attr("disabled", false).css("color", "#4285F4");
 			$("#network_adapter").attr("disabled", false).css("color", "#4285F4");
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
-
 			let ip_address = $("#ip_address").val();
 			let port = $("#port").val();
 			let cidr = $("#cidr").val();
-			let private_key = $("#private_key").val();
+			let public_key = $("#public_key").val();
 			let network_adapter = $("#network_adapter").val();
 
 			const req = $.ajax({
@@ -116,7 +117,7 @@ $(document).ready(() => {
 						ip_address: ip_address,
 						port: port,
 						cidr: cidr,
-						private_key: private_key,
+						public_key: public_key,
 						network_adapter: network_adapter,
 					}
 				),
@@ -130,15 +131,16 @@ $(document).ready(() => {
 					.removeClass("saveBtn")
 					.addClass("fa-edit")
 					.addClass("editBtn");
-				$("#ip_address").attr("disabled", false).css("color", "#212529");
-				$("#port").attr("disabled", false).css("color", "#212529");
-				$("#cidr").attr("disabled", false).css("color", "#212529");
-				$("#private_key").attr("disabled", false).css("color", "#212529");
-				$("#network_adapter").attr("disabled", false).css("color", "#212529");
+				$("#ip_address").attr("disabled", false).css("color", "#495057");
+				$("#port").attr("disabled", false).css("color", "#495057");
+				$("#cidr").attr("disabled", false).css("color", "#495057");
+				$("#public_key").attr("disabled", false).css("color", "#495057");
+				$("#network_adapter").attr("disabled", false).css("color", "#495057");
 			});
 
 			req.catch(function( data ) {
-				alert("could not save data, no empty fields allowed");
+				const msg = data.responseJSON ? data.responseJSON.msg : ""
+				alert("could not save data: " + msg);
 			});
 		}
 	});
@@ -182,7 +184,7 @@ function createNewPeer() {
 			</td>
 			<td>
 				<div class="md-form m-0">
-					<input type="text" class="form-control" name="public_key" value=""></input>
+					<input type="text" class="form-control" name="public_key" value="${data.public_key}"></input>
 				</div>
 			</td>
 			<td>
