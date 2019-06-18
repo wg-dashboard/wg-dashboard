@@ -56,7 +56,7 @@ exports.initServer = (state, cb) => {
 				return;
 			}
 
-			res.send({
+			res.status(201).send({
 				msg: "OK",
 				id,
 			});
@@ -148,7 +148,7 @@ exports.initServer = (state, cb) => {
 				return;
 			}
 
-			res.status(201).send({
+			res.send({
 				msg: "OK",
 			});
 		});
@@ -193,7 +193,7 @@ exports.initServer = (state, cb) => {
 				return;
 			}
 
-			res.status(201).send({
+			res.send({
 				msg: "OK",
 			});
 		});
