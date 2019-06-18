@@ -17,6 +17,10 @@ button {
 	color: #28a745 !important;
 }
 
+.logout, #server_settings {
+	cursor: pointer;
+}
+
 #qrcode {
 	height:300px;
 	margin-top:15px;

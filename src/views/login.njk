@@ -4,25 +4,27 @@
 <div class="container animated fadeIn">
 
 	<div class="card w-50 mx-auto mt-5">
-		<div class="card-body">
+
+		<form class="card-body" action="/login" method="post">
 			<h5 class="card-title h2">Wireguard Dashboard</h5>
-			<p class="card-text">
 
+			<div class="card-text">
 				<div class="md-form">
-					<input type="text" id="user" class="form-control">
-					<label for="user">Username</label>
+					<label for="username">Username</label>
+					<input type="text" id="username" name="username" class="form-control">
 				</div>
 
 				<div class="md-form">
-					<input type="text" id="pass" class="form-control">
-					<label for="pass">Password</label>
+					<label for="password">Password</label>
+					<input type="text" id="password" name="password" class="form-control">
 				</div>
-
-			</p>
-			<div class="text-right">
-				<a href="/" class="btn btn-outline-dark btn-lg">Login</a>
 			</div>
-		</div>
+
+			<div class="text-right">
+				<input type="submit" class="btn btn-outline-dark btn-lg" value="Login"></input>
+			</div>
+		</form>
+
 	</div>
 </div>
 {% endblock %}

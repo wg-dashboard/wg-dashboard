@@ -215,13 +215,13 @@ function makeQR(id) {
 	document.getElementById("qrcode").innerHTML = "";
 	const qrcode = new QRCode(document.getElementById("qrcode"));
 	let qrdata;
+
 	$.get(`/api/download/${id}`, (data) => {
 		qrdata = data;
-		console.log(qrdata);
 		makeCode(qrdata);
 	});
+
 	function makeCode(data) {
 		qrcode.makeCode(data);
 	};
-
 };

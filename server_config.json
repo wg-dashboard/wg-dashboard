@@ -1,54 +1,15 @@
 {
-  "private_key": "YEfEcVVgulcgJyWoe1V6LZAhaMUfTxxeRPHDi919e08=",
-  "public_key": "ZIaSc3yDLlk/WuwBmlEhxH7HDdCj3EnXYri6qHTpFDQ=",
-  "ip_address": "127.0.0.1",
+  "dashboard_user": "admin",
+  "dashboard_password": "admin",
+  "public_key": "WiMzfDh5Ihk8kMhA0X23hz6DselfkfATbqk3LRibu0w=",
+  "ip_address": "195.201.97.190",
   "cidr": "24",
-  "port": "3000",
-  "network_adapter": "en4",
+  "port": "58120",
+  "network_adapter": "eth0",
   "peers": [
     {
-      "id": 0,
-      "device": "vtii-pc",
-      "public_key": "",
-      "private_key": "",
-      "allowed_ips": [
-        "0.0.0.0/4"
-      ],
-      "active": true
-    },
-    {
-      "id": 2,
-      "device": "abc",
-      "allowed_ips": [
-        "1.2.3.4/8"
-      ],
-      "public_key": "",
-      "private_key": "",
-      "active": true
-    },
-    {
-      "id": 3,
-      "device": "asdas",
-      "allowed_ips": [
-        "5.4.3.2/2"
-      ],
-      "public_key": "",
-      "private_key": "",
-      "active": true
-    },
-    {
-      "id": 4,
-      "device": "",
-      "allowed_ips": [
-        "1.2.3.4/2"
-      ],
-      "public_key": "",
-      "private_key": "2IwkDsI+YWONB/y3brFLDDmsx+yXxPwxBgemhNLMa2Y=",
-      "active": true
-    },
-    {
       "id": 5,
-      "device": "",
+      "device": "test",
       "allowed_ips": [
         "0.0.0.0/24"
       ],

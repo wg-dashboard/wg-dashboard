@@ -1,6 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
 const nunjucks = require("nunjucks");
+const session = require("express-session");
+const bodyParser = require("body-parser");
 
 const dataManager = require("./dataManager");
 const wireguardHelper = require("./wgHelper");
@@ -12,6 +14,19 @@ exports.initServer = (state, cb) => {
 
 	app.use(express.json());
 
+	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnoprqstuvwxyz0123456789";
+	let session_secret = "";
+	for (let i = 0; i < 32; i++) {
+		session_secret += chars[Math.floor(Math.random() * chars.length)];
+	}
+	session_secret = session_secret.slice(7, 12) + "-" + session_secret.slice(18, 23) + "-" + session_secret.slice(26, 31);
+
+	app.use(session({
+		secret: session_secret,
+		resave: true,
+		saveUninitialized: true
+	}));
+
 	nunjucks.configure(__dirname + "/views", {
 		autoescape: true,
 		watch: false,
@@ -20,10 +35,33 @@ exports.initServer = (state, cb) => {
 	});
 
 	app.get("/login", (req, res) => { // main screen
-		res.render("login.njk", {});
+		res.render("login.njk");
+
+		if (req.query.username === state.server_config.dashboard_user && req.query.password === state.server_config.dashboard_password) {
+			req.session.admin = true;
+		}
 	});
 
-	app.get("/", (req, res) => {
+	app.post("/login", bodyParser.urlencoded({ extended: false }), (req, res) => {
+		if (req.body.username === state.server_config.dashboard_user && req.body.password === state.server_config.dashboard_password) {
+			req.session.admin = true;
+
+			res.redirect("/");
+		} else {
+			res.redirect("/login");
+		}
+	});
+
+	// Authentication and Authorization Middleware
+	var auth = function(req, res, next) {
+		if (req.session && req.session.admin) {
+			return next();
+		} else {
+			return res.redirect("/login");
+		}
+	};
+
+	app.get("/", auth, (req, res) => {
 		res.render("dashboard.njk", {
 			ip_address: state.server_config.ip_address,
 			cidr: state.server_config.cidr,
@@ -34,7 +72,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.post("/api/peer", (req, res) => {
+	app.post("/api/peer", auth, (req, res) => {
 		const ids = state.server_config.peers.map((el) => {
 			return parseInt(el.id, 10);
 		});
@@ -75,7 +113,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.put("/api/peer/:id", (req, res) => {
+	app.put("/api/peer/:id", auth, (req, res) => {
 		const id = req.params.id;
 
 		if (!id) {
@@ -130,7 +168,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.delete("/api/peer/:id", (req, res) => {
+	app.delete("/api/peer/:id", auth, (req, res) => {
 		const id = req.params.id;
 
 		if (!id) {
@@ -166,7 +204,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.put("/api/server_settings/save", (req, res) => {
+	app.put("/api/server_settings/save", auth, (req, res) => {
 		// const id = req.params.id;
 
 		// if (!id) {
@@ -211,7 +249,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.get("/api/download/:id", (req, res) => {
+	app.get("/api/download/:id", auth, (req, res) => {
 		const id = req.params.id;
 
 		if (!id) {
@@ -252,7 +290,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.get("/api/createwireguardconfig", (req, res) => {
+	app.get("/api/saveconfig", auth, (req, res) => {
 		dataManager.saveWireguardConfig(state, (err) => {
 			if (err) {
 				res.status(500).send({
@@ -265,6 +303,11 @@ exports.initServer = (state, cb) => {
 				msg: "OK",
 			});
 		});
+	});
+
+	app.get("/logout", (req, res) => {
+		req.session.admin = false;
+		res.redirect("/login");
 	});
 
 	app.listen(state.config.port, cb);

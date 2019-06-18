@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/daluf/wireguard-dashboard#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "express-session": "^1.16.2",
     "morgan": "^1.9.1",
     "nunjucks": "^3.2.0"
   },
