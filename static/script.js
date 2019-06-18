@@ -221,7 +221,7 @@ function createNewPeer() {
 };
 
 function makeQR(id, label) {
-	document.getElementById("exampleModalLabel").innerHTML = label;
+	document.getElementById("qrModalLabel").innerHTML = label;
 	document.getElementById("qrcode").innerHTML = "";
 	const qrcode = new QRCode(document.getElementById("qrcode"));
 
