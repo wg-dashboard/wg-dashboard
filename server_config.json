@@ -1,5 +1,6 @@
 {
-  "private_key": "abcd",
+  "private_key": "YEfEcVVgulcgJyWoe1V6LZAhaMUfTxxeRPHDi919e08=",
+  "public_key": "ZIaSc3yDLlk/WuwBmlEhxH7HDdCj3EnXYri6qHTpFDQ=",
   "ip_address": "127.0.0.1",
   "cidr": "24",
   "port": "3000",
@@ -8,7 +9,8 @@
     {
       "id": 0,
       "device": "vtii-pc",
-      "public_key": "abcdef",
+      "public_key": "",
+      "private_key": "",
       "allowed_ips": [
         "0.0.0.0/4"
       ],
@@ -20,7 +22,8 @@
       "allowed_ips": [
         "1.2.3.4/8"
       ],
-      "public_key": "yes",
+      "public_key": "",
+      "private_key": "",
       "active": true
     },
     {
@@ -29,7 +32,28 @@
       "allowed_ips": [
         "5.4.3.2/2"
       ],
-      "public_key": "dasdads",
+      "public_key": "",
+      "private_key": "",
+      "active": true
+    },
+    {
+      "id": 4,
+      "device": "",
+      "allowed_ips": [
+        "1.2.3.4/2"
+      ],
+      "public_key": "",
+      "private_key": "2IwkDsI+YWONB/y3brFLDDmsx+yXxPwxBgemhNLMa2Y=",
+      "active": true
+    },
+    {
+      "id": 5,
+      "device": "",
+      "allowed_ips": [
+        "0.0.0.0/24"
+      ],
+      "public_key": "W5ADCGpaF22Xt+MPEq/MfOStAD7Cn/GewcGqacpVaUU=",
+      "private_key": "4KF4KFA91fUeIagWzzSdjN5I28IjgvW8x+WhEQbvv3I=",
       "active": true
     }
   ]

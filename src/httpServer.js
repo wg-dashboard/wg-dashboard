@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const nunjucks = require("nunjucks");
 
 const dataManager = require("./dataManager");
+const wireguardHelper = require("./wgHelper");
 
 exports.initServer = (state, cb) => {
 	const app = express();
@@ -27,7 +28,7 @@ exports.initServer = (state, cb) => {
 			ip_address: state.server_config.ip_address,
 			cidr: state.server_config.cidr,
 			port: state.server_config.port,
-			private_key: state.server_config.private_key,
+			public_key: state.server_config.public_key,
 			network_adapter: state.server_config.network_adapter,
 			clients: state.server_config.peers,
 		});
@@ -39,26 +40,37 @@ exports.initServer = (state, cb) => {
 		});
 		const id = Math.max(...ids) + 1;
 
-		state.server_config.peers.push({
-			id,
-			device: "",
-			allowed_ips: "",
-			public_key: "",
-			active: true,
-		})
-
-		dataManager.saveServerConfig(state.server_config, (err) => {
+		wireguardHelper.generateKeyPair((err, data) => {
 			if (err) {
-				console.error("POST /api/peer COULD_NOT_SAVE_SERVER_CONFIG", err);
+				console.error(err);
 				res.status(500).send({
-					msg: "COULD_NOT_SAVE_SERVER_CONFIG",
+					msg: "COULD_NOT_CREATE_KEYPAIR",
 				});
-				return;
 			}
 
-			res.status(201).send({
-				msg: "OK",
+			state.server_config.peers.push({
 				id,
+				device: "",
+				allowed_ips: "",
+				public_key: data.public_key,
+				private_key: data.private_key,
+				active: true,
+			});
+
+			dataManager.saveServerConfig(state.server_config, (err) => {
+				if (err) {
+					console.error("POST /api/peer COULD_NOT_SAVE_SERVER_CONFIG", err);
+					res.status(500).send({
+						msg: "COULD_NOT_SAVE_SERVER_CONFIG",
+					});
+					return;
+				}
+
+				res.status(201).send({
+					msg: "OK",
+					id,
+					public_key: data.public_key,
+				});
 			});
 		});
 	});
@@ -223,6 +235,7 @@ exports.initServer = (state, cb) => {
 			server_port: state.server_config.port,
 			allowed_ips: item.allowed_ips,
 			ip_address: state.server_config.ip_address,
+			client_private_key: item.private_key,
 			server_endpoint: state.server_config.ip_address,
 		}, (err, renderedConfig) => {
 			if (err) {

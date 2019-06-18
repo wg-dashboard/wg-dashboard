@@ -100,14 +100,13 @@ $(document).ready(() => {
 			$("#ip_address").attr("disabled", false).css("color", "#4285F4");
 			$("#port").attr("disabled", false).css("color", "#4285F4");
 			$("#cidr").attr("disabled", false).css("color", "#4285F4");
-			$("#private_key").attr("disabled", false).css("color", "#4285F4");
+			$("#public_key").attr("disabled", false).css("color", "#4285F4");
 			$("#network_adapter").attr("disabled", false).css("color", "#4285F4");
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
-
 			let ip_address = $("#ip_address").val();
 			let port = $("#port").val();
 			let cidr = $("#cidr").val();
-			let private_key = $("#private_key").val();
+			let public_key = $("#public_key").val();
 			let network_adapter = $("#network_adapter").val();
 
 			const req = $.ajax({
@@ -118,7 +117,7 @@ $(document).ready(() => {
 						ip_address: ip_address,
 						port: port,
 						cidr: cidr,
-						private_key: private_key,
+						public_key: public_key,
 						network_adapter: network_adapter,
 					}
 				),
@@ -135,7 +134,7 @@ $(document).ready(() => {
 				$("#ip_address").attr("disabled", false).css("color", "#495057");
 				$("#port").attr("disabled", false).css("color", "#495057");
 				$("#cidr").attr("disabled", false).css("color", "#495057");
-				$("#private_key").attr("disabled", false).css("color", "#495057");
+				$("#public_key").attr("disabled", false).css("color", "#495057");
 				$("#network_adapter").attr("disabled", false).css("color", "#495057");
 			});
 
@@ -185,7 +184,7 @@ function createNewPeer() {
 			</td>
 			<td>
 				<div class="md-form m-0">
-					<input type="text" class="form-control" name="public_key" value=""></input>
+					<input type="text" class="form-control" name="public_key" value="${data.public_key}"></input>
 				</div>
 			</td>
 			<td>

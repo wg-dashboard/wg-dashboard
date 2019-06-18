@@ -1,5 +1,6 @@
 const dataManager = require("./dataManager");
 const httpServer = require("./httpServer");
+const wireguardHelper = require("./wgHelper");
 
 function main() {
 	const state = {
@@ -18,8 +19,10 @@ function main() {
 
 		state.server_config = server_config;
 
-		httpServer.initServer(state, () => {
-			console.log(`Listening on port ${state.config.port}!`);
+		wireguardHelper.checkServerKeys(state, (state) => {
+			httpServer.initServer(state, () => {
+				console.log(`Listening on port ${state.config.port}!`);
+			});
 		});
 	});
 }
