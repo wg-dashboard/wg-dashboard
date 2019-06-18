@@ -57,7 +57,7 @@ exports.initServer = (state, cb) => {
 			}
 
 			res.send({
-				msg: "ok",
+				msg: "OK",
 				id,
 			});
 		});
@@ -67,14 +67,18 @@ exports.initServer = (state, cb) => {
 		const id = req.params.id;
 
 		if (!id) {
-			res.sendStatus(400);
+			res.status(404).send({
+				msg: "NO_ID_PROVIDED_OR_FOUND",
+			});
 			return;
 		}
 
 		const item = state.server_config.peers.find(el => parseInt(el.id, 10) === parseInt(id, 10));
 
 		if (!item) {
-			res.sendStatus(404);
+			res.status(404).send({
+				msg: "PEER_NOT_FOUND",
+			});
 			return;
 		}
 
@@ -109,7 +113,7 @@ exports.initServer = (state, cb) => {
 			}
 
 			res.send({
-				msg: "ok",
+				msg: "OK",
 			});
 		});
 	});
@@ -118,14 +122,18 @@ exports.initServer = (state, cb) => {
 		const id = req.params.id;
 
 		if (!id) {
-			res.sendStatus(400);
+			res.status(404).send({
+				msg: "NO_ID_PROVIDED_OR_FOUND",
+			});
 			return;
 		}
 
 		const itemIndex = state.server_config.peers.findIndex(el => parseInt(el.id, 10) === parseInt(id, 10));
 
 		if (itemIndex === -1) {
-			res.sendStatus(404);
+			res.status(404).send({
+				msg: "PEER_NOT_FOUND",
+			});
 			return;
 		}
 
@@ -141,7 +149,7 @@ exports.initServer = (state, cb) => {
 			}
 
 			res.status(201).send({
-				msg: "ok",
+				msg: "OK",
 			});
 		});
 	});
@@ -186,7 +194,7 @@ exports.initServer = (state, cb) => {
 			}
 
 			res.status(201).send({
-				msg: "ok",
+				msg: "OK",
 			});
 		});
 	});
@@ -195,14 +203,18 @@ exports.initServer = (state, cb) => {
 		const id = req.params.id;
 
 		if (!id) {
-			res.sendStatus(400);
+			res.status(400).send({
+				msg: "NO_ID_PROVIDED_OR_FOUND",
+			});
 			return;
 		}
 
 		const item = state.server_config.peers.find(el => parseInt(el.id, 10) === parseInt(id, 10));
 
 		if (!item) {
-			res.sendStatus(404);
+			res.status(404).send({
+				msg: "PEER_NOT_FOUND",
+			});
 			return;
 		}
 
