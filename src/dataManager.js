@@ -8,8 +8,31 @@ exports.saveServerConfig = (server_config, cb) => {
 exports.loadServerConfig = (cb) => {
 	fs.readFile("server_config.json", (err, buffer) => {
 		if (err) {
-			cb(err);
-			return;
+			fs.stat("server_config.json", (err, stats) => {
+				if (err) {
+					const defaultSettings = {
+							dashboard_users: [],
+							dashboard_passwords: [],
+							public_key: "",
+							ip_address: "",
+							virtual_ip_address: "",
+							cidr: "",
+							port: "",
+							dns: "",
+							network_adapter: "",
+							peers: []
+						};
+
+					fs.writeFile("server_config.json", JSON.stringify(defaultSettings, null, 2), (err) => {
+						if (err) {
+							cb(err);
+							return;
+						}
+
+						cb();
+					});
+				}
+			});
 		}
 
 		let parsed;
