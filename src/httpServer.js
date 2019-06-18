@@ -78,8 +78,24 @@ exports.initServer = (state, cb) => {
 			return;
 		}
 
+		let validIPs = true;
+		const _allowedIPs = req.body.allowed_ips.replace(/ /g, "").split(",");
+		_allowedIPs.forEach((e) => {
+			const match = /^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))$/.test(e);
+			if (!match) {
+				validIPs = false;
+			}
+		});
+
+		if (!validIPs) {
+			res.status(500).send({
+				msg: "INVALID_IP_SETUP",
+			});
+			return;
+		}
+
 		item.device = req.body.device;
-		item.allowed_ips = req.body.allowed_ips;
+		item.allowed_ips = req.body.allowed_ips.replace(/ /g, "").split(",");
 		item.public_key = req.body.public_key;
 		item.active = req.body.active;
 

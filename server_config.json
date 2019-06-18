@@ -3,13 +3,33 @@
   "ip_address": "127.0.0.1",
   "cidr": "24",
   "port": "3000",
-  "network_adapter": "en0",
+  "network_adapter": "en4",
   "peers": [
     {
       "id": 0,
-      "device": "home-pc",
+      "device": "vtii-pc",
       "public_key": "abcdef",
-      "allowed_ips": "0.0.0.0/8",
+      "allowed_ips": [
+        "0.0.0.0/4"
+      ],
+      "active": true
+    },
+    {
+      "id": 2,
+      "device": "abc",
+      "allowed_ips": [
+        "1.2.3.4/8"
+      ],
+      "public_key": "yes",
+      "active": true
+    },
+    {
+      "id": 3,
+      "device": "asdas",
+      "allowed_ips": [
+        "5.4.3.2/2"
+      ],
+      "public_key": "dasdads",
       "active": true
     }
   ]

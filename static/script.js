@@ -48,7 +48,7 @@ $(document).ready(() => {
 
 				tableRow
 					.find("input")
-					.css("color", "#212529")
+					.css("color", "#495057")
 					.attr("disabled", true);
 
 				tableRow
@@ -57,7 +57,8 @@ $(document).ready(() => {
 			});
 
 			req.catch(function( data ) {
-				alert("could not save user");
+				const msg = data.responseJSON ? data.responseJSON.msg : ""
+				alert("could not save user: " + msg);
 			});
 		} else if ($(e.currentTarget).hasClass("deleteBtn")) {
 			const confirmation = confirm("Are you sure you want to delete this peer?");
@@ -130,11 +131,11 @@ $(document).ready(() => {
 					.removeClass("saveBtn")
 					.addClass("fa-edit")
 					.addClass("editBtn");
-				$("#ip_address").attr("disabled", false).css("color", "#212529");
-				$("#port").attr("disabled", false).css("color", "#212529");
-				$("#cidr").attr("disabled", false).css("color", "#212529");
-				$("#private_key").attr("disabled", false).css("color", "#212529");
-				$("#network_adapter").attr("disabled", false).css("color", "#212529");
+				$("#ip_address").attr("disabled", false).css("color", "#495057");
+				$("#port").attr("disabled", false).css("color", "#495057");
+				$("#cidr").attr("disabled", false).css("color", "#495057");
+				$("#private_key").attr("disabled", false).css("color", "#495057");
+				$("#network_adapter").attr("disabled", false).css("color", "#495057");
 			});
 
 			req.catch(function( data ) {
