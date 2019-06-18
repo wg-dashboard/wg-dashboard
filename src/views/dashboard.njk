@@ -109,7 +109,7 @@
 									<tr class="text-center p-2" id="{{ client.id }}">
 										<td>
 											<div class="my-auto">
-												<button onclick="makeQR({{ client.id }});" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#exampleModal">
+												<button onclick="makeQR({{ client.id }}, '{{ client.device }}');" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#qrModal">
 													<i class="fas fa-qrcode fa-lg"></i>
 												</button>
 											</div>
@@ -153,7 +153,7 @@
 											</div>
 										</td>
 										<td>
-											<button class="btn btn-dark btn-sm editBtn">
+											<button class="btn btn-dark btn-sm editBtn w-100">
 												<i class="far fa-edit fa-lg"></i>
 											</button>
 										</td>
@@ -182,12 +182,11 @@
 		</div>
 	</div>
 </div>
-{% for client in clients %}
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="qrModal" tabindex="-1" role="dialog" aria-labelledby="qrModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">{{ client.device }}</h5>
+			<h5 class="modal-title" id="qrModalLabel"></h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 			</button>
@@ -201,5 +200,4 @@
 		</div>
 	</div>
 </div>
-{% endfor %}
 {% endblock %}

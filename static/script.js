@@ -42,7 +42,7 @@ $(document).ready(() => {
 
 			req.then(function( data ) {
 				$(e.currentTarget)
-					.html(`<i class="far fa-edit"></i>`)
+					.html(`<i class="far fa-edit fa-lg"></i>`)
 					.removeClass("saveBtn")
 					.addClass("editBtn");
 
@@ -83,9 +83,9 @@ $(document).ready(() => {
 			}
 		} else if ($(e.currentTarget).hasClass("activeBtn")) {
 			if ($(e.currentTarget).hasClass("btn-danger")) {
-				$(e.currentTarget).removeClass("btn-danger").addClass("btn-success").html(`<i class="fas fa-check"></i>`);
+				$(e.currentTarget).removeClass("btn-danger").addClass("btn-success").html(`<i class="fas fa-check fa-lg"></i>`);
 			} else {
-				$(e.currentTarget).removeClass("btn-success").addClass("btn-danger").html(`<i class="fas fa-times"></i>`);
+				$(e.currentTarget).removeClass("btn-success").addClass("btn-danger").html(`<i class="fas fa-times fa-lg"></i>`);
 			}
 		}
 	});
@@ -253,14 +253,13 @@ function restartWG() {
 	});
 }
 
-function makeQR(id) {
+function makeQR(id, label) {
+	document.getElementById("qrModalLabel").innerHTML = label;
 	document.getElementById("qrcode").innerHTML = "";
 	const qrcode = new QRCode(document.getElementById("qrcode"));
-	let qrdata;
 
 	$.get(`/api/download/${id}`, (data) => {
-		qrdata = data;
-		makeCode(qrdata);
+		makeCode(data);
 	});
 
 	function makeCode(data) {
