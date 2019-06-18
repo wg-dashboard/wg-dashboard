@@ -20,9 +20,11 @@
 				<div class="card-body">
 					<div class="h4 card-title d-flex justify-content-between">
 						<p>Server settings</p>
-						<span class="text-right">
-							<i id="server_settings" class="far fa-edit text-dark editBtn"></i>
-						</span>
+						<div class="text-right">
+							<i id="server_settings" class="far fa-edit text-dark px-2 editBtn"></i>
+							<i id="server_settings_save" class="fas fa-file-download text-dark saveConfBtn" onclick="saveConfig();"></i>
+							<button class="btn btn-info" onclick="restartWG();">Restart WG</button>
+						</div>
 					</div>
 
 					<div class="card-text">

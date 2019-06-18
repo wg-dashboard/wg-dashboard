@@ -143,7 +143,7 @@ $(document).ready(() => {
 			});
 
 			req.catch(function( data ) {
-				const msg = data.responseJSON ? data.responseJSON.msg : ""
+				const msg = data.responseJSON ? data.responseJSON.msg : "";
 				alert("could not save data: " + msg);
 			});
 		}
@@ -198,7 +198,7 @@ function createNewPeer() {
 			</td>
 			<td>
 				<div class="md-form m-0">
-					<input type="text" class="form-control" name="virtual_ip" value="" disabled></input>
+					<input type="text" class="form-control" name="virtual_ip" value=""></input>
 				</div>
 			</td>
 			<td>
@@ -216,9 +216,42 @@ function createNewPeer() {
 	});
 
 	req.catch(function( data ) {
-		alert("could not save user");
+		const msg = data.responseJSON ? data.responseJSON.msg : "";
+		alert("could not save user: " + msg);
 	});
 };
+
+function saveConfig() {
+	const req = $.ajax({
+		url: `/api/saveconfig`,
+		method: "POST"
+	});
+
+	req.then(function( data ) {
+		alert("config saved successfully");
+	});
+
+	req.catch(function( data ) {
+		const msg = data.responseJSON ? data.responseJSON.msg : "";
+		alert("could not save config file: " + msg);
+	});
+}
+
+function restartWG() {
+	const req = $.ajax({
+		url: `/api/restartwg`,
+		method: "POST"
+	});
+
+	req.then(function( data ) {
+		alert("wireguard restarted successfully");
+	});
+
+	req.catch(function( data ) {
+		const msg = data.responseJSON ? data.responseJSON.msg : "";
+		alert("could not restart wireguard: " + msg);
+	});
+}
 
 function makeQR(id) {
 	document.getElementById("qrcode").innerHTML = "";

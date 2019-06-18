@@ -1,11 +1,12 @@
 {
-  "dashboard_user": "admin",
-  "dashboard_password": "admin",
-  "public_key": "4C+P2oHGQOEhRx85tQLVeXcHo87ccGNQcNV1iKd+als=",
-  "private_key": "kEEY9x2nT3BuehV9EzgrwzleD0yFhiZytYw51MbRc3U=",
+  "dashboard_users": [
+  ],
+  "dashboard_passwords": [
+  ],
+  "public_key": "FwHCrbx+1QdPgpYb3b1OzW/FPMnHwYt6q6mPq1DlJQY=",
   "ip_address": "195.201.97.190",
   "virtual_ip_address": "10.13.37.1",
-  "cidr": "32",
+  "cidr": "24",
   "port": "58120",
   "network_adapter": "eth0",
   "peers": [
@@ -13,7 +14,7 @@
       "id": 5,
       "device": "test",
       "allowed_ips": [
-        "0.0.0.0/32"
+        "0.0.0.0/0"
       ],
       "virtual_ip": "10.13.37.2",
       "public_key": "W5ADCGpaF22Xt+MPEq/MfOStAD7Cn/GewcGqacpVaUU=",
@@ -24,12 +25,13 @@
       "id": 6,
       "device": "nicht-vtii-pc",
       "allowed_ips": [
-        "0.0.0.0/32"
+        "0.0.0.0/0"
       ],
       "virtual_ip": "10.13.37.3",
       "public_key": "E1aaBppDjSPLhvfV8dGJqGwjX0czwzwwNpzEzOw6d24=",
       "private_key": "4Lg2u5Sj7429tRbdNoI5q82jlUySGyyom88BeZM++2Q=",
       "active": true
     }
-  ]
+  ],
+  "private_key": "CEt9G80Mj+SNgb4R9CeNEklVwEiCrhGwGTQD2tvqykg="
 }

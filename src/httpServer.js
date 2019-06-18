@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const nunjucks = require("nunjucks");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
 
 const dataManager = require("./dataManager");
 const wireguardHelper = require("./wgHelper");
@@ -35,21 +36,90 @@ exports.initServer = (state, cb) => {
 	});
 
 	app.get("/login", (req, res) => { // main screen
-		res.render("login.njk");
+		if (state.server_config.dashboard_users.length === 0 && state.server_config.dashboard_passwords.length === 0) {
+			res.redirect("/createuser");
+		}
 
-		if (req.query.username === state.server_config.dashboard_user && req.query.password === state.server_config.dashboard_password) {
-			req.session.admin = true;
+		res.render("login.njk");
+	});
+
+	app.get("/logout", (req, res) => {
+		req.session.admin = false;
+		res.redirect("/login");
+	});
+
+	app.get("/createuser", (req, res) => {
+		res.render("setup_user.njk");
+	})
+
+	app.post("/api/createuser", bodyParser.urlencoded({ extended: false }), (req, res) => {
+		if (req.body.username && req.body.password) {
+			if (state.server_config.dashboard_users.length === 0 && state.server_config.dashboard_passwords.length === 0 || req.session.admin) {
+				const saltRounds = 10;
+
+				bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+					if (err) {
+						res.status(500).send({
+							msg: err
+						});
+						return;
+					}
+
+					state.server_config.dashboard_users.push(req.body.username);
+					state.server_config.dashboard_passwords.push(hash);
+
+					dataManager.saveServerConfig(state.server_config, (err) => {
+						if (err) {
+							res.status(500).send({
+								msg: "COULD_NOT_SAVE_CONFIG"
+							});
+							return;
+						}
+
+						req.session.admin = true;
+						res.redirect("/");
+					});
+				});
+			} else {
+				res.status(401).send({
+					msg: "FIRST_ACCOUNT_ALREADY_EXISTS"
+				});
+			}
 		}
 	});
 
-	app.post("/login", bodyParser.urlencoded({ extended: false }), (req, res) => {
-		if (req.body.username === state.server_config.dashboard_user && req.body.password === state.server_config.dashboard_password) {
+	app.post("/api/login", bodyParser.urlencoded({ extended: false }), (req, res) => {
+
+		const userIndex = state.server_config.dashboard_users.findIndex(el => el === req.body.username);
+
+		if (userIndex !== -1) {
+			const pass = state.server_config.dashboard_passwords[userIndex];
+
+			bcrypt.compare(req.body.password, pass, function(err, hashCorrect) {
+				if (err) {
+					res.status(500).send({
+						msg: err
+					});
+					return;
+				}
+
+				if (hashCorrect) {
+					req.session.admin = true;
+					res.redirect("/");
+				} else {
+					res.redirect("/login");
+				}
+			});
+		} else {
+			res.redirect("/login");
+		}
+		/* if (req.body.username === state.server_config.dashboard_user && req.body.password === state.server_config.dashboard_password) {
 			req.session.admin = true;
 
 			res.redirect("/");
 		} else {
 			res.redirect("/login");
-		}
+		} */
 	});
 
 	// Authentication and Authorization Middleware
@@ -57,11 +127,16 @@ exports.initServer = (state, cb) => {
 		if (req.session && req.session.admin) {
 			return next();
 		} else {
+			if (state.server_config.dashboard_users.length === 0 && state.server_config.dashboard_passwords.length === 0) {
+				return res.redirect("/createuser");
+			}
 			return res.redirect("/login");
 		}
 	};
 
-	app.get("/", auth, (req, res) => {
+	app.use(auth);
+
+	app.get("/", (req, res) => {
 		res.render("dashboard.njk", {
 			ip_address: state.server_config.ip_address,
 			virtual_ip_address: state.server_config.virtual_ip_address,
@@ -73,7 +148,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.post("/api/peer", auth, (req, res) => {
+	app.post("/api/peer", (req, res) => {
 		const ids = state.server_config.peers.map((el) => {
 			return parseInt(el.id, 10);
 		});
@@ -115,7 +190,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.put("/api/peer/:id", auth, (req, res) => {
+	app.put("/api/peer/:id", (req, res) => {
 		const id = req.params.id;
 
 		if (!id) {
@@ -171,7 +246,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.delete("/api/peer/:id", auth, (req, res) => {
+	app.delete("/api/peer/:id", (req, res) => {
 		const id = req.params.id;
 
 		if (!id) {
@@ -207,7 +282,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.put("/api/server_settings/save", auth, (req, res) => {
+	app.put("/api/server_settings/save", (req, res) => {
 		// const id = req.params.id;
 
 		// if (!id) {
@@ -235,7 +310,6 @@ exports.initServer = (state, cb) => {
 		state.server_config.virtual_ip_address = req.body.virtual_ip_address;
 		state.server_config.port = req.body.port;
 		state.server_config.cidr = req.body.cidr;
-		state.server_config.private_key = req.body.private_key;
 		state.server_config.network_adapter = req.body.network_adapter;
 
 		dataManager.saveServerConfig(state.server_config, (err) => {
@@ -253,7 +327,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.get("/api/download/:id", auth, (req, res) => {
+	app.get("/api/download/:id", (req, res) => {
 		const id = req.params.id;
 
 		if (!id) {
@@ -296,7 +370,7 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.get("/api/saveconfig", auth, (req, res) => {
+	app.post("/api/saveconfig", (req, res) => {
 		dataManager.saveWireguardConfig(state, (err) => {
 			if (err) {
 				res.status(500).send({
@@ -311,9 +385,19 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.get("/logout", (req, res) => {
-		req.session.admin = false;
-		res.redirect("/login");
+	app.post("/api/restartwg", (req, res) => {
+		wireguardHelper.restartWireguard((err) => {
+			if (err) {
+				res.status(500).send({
+					msg: "COULD_NOT_RESTART_WIREGUARD",
+				});
+				return;
+			}
+
+			res.status(201).send({
+				msg: "OK",
+			});
+		});
 	});
 
 	app.listen(state.config.port, cb);

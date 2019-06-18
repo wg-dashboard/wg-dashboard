@@ -63,3 +63,15 @@ exports.generateKeyPair = (cb) => {
 		});
 	});
 }
+
+exports.restartWireguard = (cb) => {
+	child_process.exec("wg-quick down wg0; wg-quick up wg0", (err, stdout, stderr) => {
+		if (err || stderr) {
+			cb(err);
+			console.error(err, stderr);
+			return;
+		}
+
+		cb();
+	});
+}

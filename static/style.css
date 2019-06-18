@@ -17,7 +17,7 @@ button {
 	color: #28a745 !important;
 }
 
-.logout, #server_settings {
+.logout, #server_settings, .saveConfBtn {
 	cursor: pointer;
 }
 
