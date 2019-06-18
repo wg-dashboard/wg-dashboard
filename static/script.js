@@ -57,7 +57,7 @@ $(document).ready(() => {
 			});
 
 			req.catch(function( data ) {
-				const msg = data.responseJSON ? data.responseJSON.msg : ""
+				const msg = data.responseJSON ? data.responseJSON.msg : "";
 				alert("could not save user: " + msg);
 			});
 		} else if ($(e.currentTarget).hasClass("deleteBtn")) {
@@ -77,7 +77,8 @@ $(document).ready(() => {
 				});
 
 				req.catch(function( data ) {
-					alert("could not delete user");
+					const msg = data.responseJSON ? data.responseJSON.msg : "";
+					alert("could not delete user: " + msg);
 				});
 			}
 		} else if ($(e.currentTarget).hasClass("activeBtn")) {
@@ -139,7 +140,8 @@ $(document).ready(() => {
 			});
 
 			req.catch(function( data ) {
-				alert("could not save data, no empty fields allowed");
+				const msg = data.responseJSON ? data.responseJSON.msg : ""
+				alert("could not save data: " + msg);
 			});
 		}
 	});
