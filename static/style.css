@@ -16,3 +16,8 @@ button {
 .saveBtn {
 	color: #28a745 !important;
 }
+
+#qrcode {
+	height:300px;
+	margin-top:15px;
+}
