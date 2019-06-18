@@ -123,7 +123,7 @@ exports.initServer = (state, cb) => {
 	});
 
 	// Authentication and Authorization Middleware
-	var auth = function(req, res, next) {
+	let auth = function(req, res, next) {
 		if (req.session && req.session.admin) {
 			return next();
 		} else {
@@ -284,28 +284,13 @@ exports.initServer = (state, cb) => {
 	});
 
 	app.put("/api/server_settings/save", (req, res) => {
-		// const id = req.params.id;
-
-		// if (!id) {
-		// 	res.sendStatus(400);
-		// 	return;
-		// }
-		// const data = req.body.data;
-
 		if (!req.body) {
-			// TODO: replace sendStatus with json sending functions
-			// res.sendStatus(400);
 			res.status(400).send({
 				msg: "ERROR_INPUT_MISSING",
 				missing: "data",
 			});
 			return;
 		}
-
-		// if (!((state.server_config[id] || state.server_config[id] === ""))) {
-		// 	res.sendStatus(404);
-		// 	return;
-		// }
 
 		state.server_config.ip_address = req.body.ip_address;
 		state.server_config.virtual_ip_address = req.body.virtual_ip_address;

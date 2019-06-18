@@ -1,4 +1,5 @@
 $(document).ready(() => {
+	// edit peer
 	$("#peers").on("click", "button", (e) => {
 		if ($(e.currentTarget).hasClass("editBtn")) {
 			const tableRow = $(e.currentTarget).parent().parent();
@@ -25,7 +26,6 @@ $(document).ready(() => {
 			});
 
 			const active = tableRow.find(".activeBtn");
-			// console.log(active.hasClass("btn-danger"));
 			if (active.hasClass("btn-danger")) {
 				data["active"] = false;
 			} else {
@@ -90,6 +90,7 @@ $(document).ready(() => {
 		}
 	});
 
+	// edit server_settings
 	$("#server_settings").on("click", (e) => {
 		if ($(e.currentTarget).hasClass("editBtn")) {
 			$(e.currentTarget)
@@ -154,7 +155,7 @@ $(document).ready(() => {
 	});
 });
 
-
+// create a new peer
 function createNewPeer() {
 	const req = $.ajax({
 		url: "/api/peer",
@@ -225,6 +226,7 @@ function createNewPeer() {
 	});
 };
 
+// save serverconfig
 function saveConfig() {
 	const req = $.ajax({
 		url: `/api/saveconfig`,
@@ -239,8 +241,9 @@ function saveConfig() {
 		const msg = data.responseJSON ? data.responseJSON.msg : "";
 		alert("could not save config file: " + msg);
 	});
-}
+};
 
+// restart wireguard
 function restartWG() {
 	const req = $.ajax({
 		url: `/api/restartwg`,
@@ -255,8 +258,9 @@ function restartWG() {
 		const msg = data.responseJSON ? data.responseJSON.msg : "";
 		alert("could not restart wireguard: " + msg);
 	});
-}
+};
 
+// create a qr code of the peer
 function makeQR(id) {
 	document.getElementById("qrModalLabel").innerHTML = $(`#${id}`).find("input[name='device']").val();
 	document.getElementById("qrcode").innerHTML = "";
