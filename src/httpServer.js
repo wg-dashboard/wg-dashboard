@@ -142,6 +142,7 @@ exports.initServer = (state, cb) => {
 			virtual_ip_address: state.server_config.virtual_ip_address,
 			cidr: state.server_config.cidr,
 			port: state.server_config.port,
+			dns: state.server_config.dns,
 			public_key: state.server_config.public_key,
 			network_adapter: state.server_config.network_adapter,
 			clients: state.server_config.peers,
@@ -308,6 +309,7 @@ exports.initServer = (state, cb) => {
 
 		state.server_config.ip_address = req.body.ip_address;
 		state.server_config.virtual_ip_address = req.body.virtual_ip_address;
+		state.server_config.dns = req.body.dns;
 		state.server_config.port = req.body.port;
 		state.server_config.cidr = req.body.cidr;
 		state.server_config.network_adapter = req.body.network_adapter;
@@ -352,6 +354,7 @@ exports.initServer = (state, cb) => {
 			allowed_ips: item.allowed_ips,
 			client_ip_address: item.virtual_ip,
 			cidr: state.server_config.cidr,
+			dns: state.server_config.dns,
 			client_private_key: item.private_key,
 			server_endpoint: state.server_config.ip_address,
 			server_virtual_ip: state.server_config.virtual_ip_address,

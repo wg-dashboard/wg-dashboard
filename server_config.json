@@ -1,13 +1,18 @@
 {
   "dashboard_users": [
+    "admin",
+    "cucu"
   ],
   "dashboard_passwords": [
+    "$2b$10$PZDhjic6LX8gg9LPL0TIYuSstrW/9lnByNEW31xQ7sDcHOGMcbEf6",
+    "$2b$10$BasnjZNpY2X0x0e2nys8iemOFfAHTgj1AQismyTc0IWtevTSUeHXe"
   ],
   "public_key": "FwHCrbx+1QdPgpYb3b1OzW/FPMnHwYt6q6mPq1DlJQY=",
   "ip_address": "195.201.97.190",
   "virtual_ip_address": "10.13.37.1",
   "cidr": "24",
   "port": "58120",
+  "dns": "8.8.8.8",
   "network_adapter": "eth0",
   "peers": [
     {

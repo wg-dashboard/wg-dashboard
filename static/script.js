@@ -101,6 +101,7 @@ $(document).ready(() => {
 			$("#virtual_ip_address").attr("disabled", false).css("color", "#4285F4");
 			$("#port").attr("disabled", false).css("color", "#4285F4");
 			$("#cidr").attr("disabled", false).css("color", "#4285F4");
+			$("#dns").attr("disabled", false).css("color", "#4285F4");
 			$("#public_key").attr("disabled", false).css("color", "#4285F4");
 			$("#network_adapter").attr("disabled", false).css("color", "#4285F4");
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
@@ -108,6 +109,7 @@ $(document).ready(() => {
 			let virtual_ip_address = $("#virtual_ip_address").val();
 			let port = $("#port").val();
 			let cidr = $("#cidr").val();
+			let dns = $("#dns").val();
 			let public_key = $("#public_key").val();
 			let network_adapter = $("#network_adapter").val();
 
@@ -120,6 +122,7 @@ $(document).ready(() => {
 						virtual_ip_address: virtual_ip_address,
 						port: port,
 						cidr: cidr,
+						dns: dns,
 						public_key: public_key,
 						network_adapter: network_adapter,
 					}
@@ -137,6 +140,7 @@ $(document).ready(() => {
 				$("#ip_address").attr("disabled", false).css("color", "#495057");
 				$("#virtual_ip_address").attr("disabled", false).css("color", "#495057");
 				$("#port").attr("disabled", false).css("color", "#495057");
+				$("#dns").attr("disabled", false).css("color", "#495057");
 				$("#cidr").attr("disabled", false).css("color", "#495057");
 				$("#public_key").attr("disabled", false).css("color", "#495057");
 				$("#network_adapter").attr("disabled", false).css("color", "#495057");
@@ -164,20 +168,20 @@ function createNewPeer() {
 		<tr class="text-center p-2" id="${data.id}">
 			<td>
 				<div class="my-auto">
-					<button onclick="makeQR(${data.id});" class="btn btn-dark btn-sm">
+					<button onclick="makeQR(${data.id});" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#qrModal">
 						<i class="fas fa-qrcode fa-lg"></i>
 					</button>
 				</div>
 			</td>
 			<td>
 				<div class="my-auto">
-					<button onclick="window.location='/api/download/${data.id}';" class="btn btn-dark btn-sm">
+					<button onclick="window.location='/api/download/${data.id}';" class="btn btn-dark btn-sm" >
 						<i class="fa fa-download fa-lg"></i>
 					</button>
 				</div>
 			</td>
 			<td>
-				<button class="btn btn-success btn-sm activeBtn">
+				<button class="btn btn-success btn-sm activeBtn w-100">
 					<i class="fas fa-check fa-lg"></i>
 				</button>
 			</td>
@@ -202,7 +206,7 @@ function createNewPeer() {
 				</div>
 			</td>
 			<td>
-				<button class="btn btn-dark btn-sm saveBtn">
+				<button class="btn btn-dark btn-sm saveBtn w-100">
 					<i class="far fa-save fa-lg"></i>
 				</button>
 			</td>
@@ -253,16 +257,13 @@ function restartWG() {
 	});
 }
 
-function makeQR(id, label) {
-	document.getElementById("qrModalLabel").innerHTML = label;
+function makeQR(id) {
+	document.getElementById("qrModalLabel").innerHTML = $(`#${id}`).find("input[name='device']").val();
 	document.getElementById("qrcode").innerHTML = "";
+
 	const qrcode = new QRCode(document.getElementById("qrcode"));
 
 	$.get(`/api/download/${id}`, (data) => {
-		makeCode(data);
-	});
-
-	function makeCode(data) {
 		qrcode.makeCode(data);
-	};
+	});
 };

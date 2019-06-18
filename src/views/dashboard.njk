@@ -7,6 +7,7 @@
 			<div class="h4 card-title d-flex justify-content-between">
 				<p class="display-4 m-0">Dashboard</p>
 				<div class="text-right logout">
+					<i class="fas fa-user-plus" onclick="window.location='/createuser'"></i>
 					<i class="fas fa-door-open" onclick="window.location='/logout'"></i>
 				</div>
 			</div>
@@ -55,6 +56,13 @@
 								<div class="md-form">
 									<input type="text" id="virtual_ip_address" class="form-control" value="{{ virtual_ip_address }}" disabled>
 									<label for="ip_address">Virtual Address</label>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<input type="text" id="dns" class="form-control" value="{{ dns }}" disabled>
+									<label for="dns">DNS</label>
 								</div>
 							</div>
 
@@ -109,7 +117,7 @@
 									<tr class="text-center p-2" id="{{ client.id }}">
 										<td>
 											<div class="my-auto">
-												<button onclick="makeQR({{ client.id }}, '{{ client.device }}');" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#qrModal">
+												<button onclick="makeQR({{ client.id }});" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#qrModal">
 													<i class="fas fa-qrcode fa-lg"></i>
 												</button>
 											</div>
@@ -123,11 +131,11 @@
 										</td>
 										<td>
 											{% if client.active %}
-											<button class="btn btn-success btn-sm activeBtn" disabled>
+											<button class="btn btn-success btn-sm activeBtn w-100" disabled>
 												<i class="fas fa-check fa-lg"></i>
 											</button>
 											{% else %}
-											<button class="btn btn-danger btn-sm activeBtn" disabled>
+											<button class="btn btn-danger btn-sm activeBtn w-100" disabled>
 												<i class="fas fa-times fa-lg"></i>
 											</button>
 											{% endif %}
