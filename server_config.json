@@ -36,6 +36,17 @@
       "public_key": "E1aaBppDjSPLhvfV8dGJqGwjX0czwzwwNpzEzOw6d24=",
       "private_key": "4Lg2u5Sj7429tRbdNoI5q82jlUySGyyom88BeZM++2Q=",
       "active": true
+    },
+    {
+      "id": 7,
+      "device": "",
+      "allowed_ips": [
+        "0.0.0.0/0"
+      ],
+      "virtual_ip": "10.13.37.4",
+      "public_key": "P0AzK1QOf6gsMwyjUsYi3tmhFNtOvQlbbx+iS+9dMUo=",
+      "private_key": "eLqCJD1cczHy7CPVX0enYClR9q3MQyjloiPSREiKwFo=",
+      "active": true
     }
   ],
   "private_key": "CEt9G80Mj+SNgb4R9CeNEklVwEiCrhGwGTQD2tvqykg="

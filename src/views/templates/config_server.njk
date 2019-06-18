@@ -7,8 +7,10 @@ PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACC
 SaveConfig = false
 
 {% for device in peers -%}
+	{% if device.active -%}
 	[Peer]
 	# {{ device.device }}
 	PublicKey = {{ device.public_key }}
 	AllowedIPs = {{ device.virtual_ip }}/32
+	{%- endif %}
 {% endfor %}
