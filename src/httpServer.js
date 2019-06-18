@@ -252,5 +252,20 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
+	app.get("/api/createwireguardconfig", (req, res) => {
+		dataManager.saveWireguardConfig(state, (err) => {
+			if (err) {
+				res.status(500).send({
+					msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG",
+				});
+				return;
+			}
+
+			res.status(201).send({
+				msg: "OK",
+			});
+		});
+	});
+
 	app.listen(state.config.port, cb);
 }
