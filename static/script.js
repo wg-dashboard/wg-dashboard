@@ -98,12 +98,14 @@ $(document).ready(() => {
 				.addClass("saveBtn")
 				.addClass("fa-save");
 			$("#ip_address").attr("disabled", false).css("color", "#4285F4");
+			$("#virtual_ip_address").attr("disabled", false).css("color", "#4285F4");
 			$("#port").attr("disabled", false).css("color", "#4285F4");
 			$("#cidr").attr("disabled", false).css("color", "#4285F4");
 			$("#public_key").attr("disabled", false).css("color", "#4285F4");
 			$("#network_adapter").attr("disabled", false).css("color", "#4285F4");
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
 			let ip_address = $("#ip_address").val();
+			let virtual_ip_address = $("#virtual_ip_address").val();
 			let port = $("#port").val();
 			let cidr = $("#cidr").val();
 			let public_key = $("#public_key").val();
@@ -115,6 +117,7 @@ $(document).ready(() => {
 				data: JSON.stringify(
 					{
 						ip_address: ip_address,
+						virtual_ip_address: virtual_ip_address,
 						port: port,
 						cidr: cidr,
 						public_key: public_key,
@@ -132,6 +135,7 @@ $(document).ready(() => {
 					.addClass("fa-edit")
 					.addClass("editBtn");
 				$("#ip_address").attr("disabled", false).css("color", "#495057");
+				$("#virtual_ip_address").attr("disabled", false).css("color", "#495057");
 				$("#port").attr("disabled", false).css("color", "#495057");
 				$("#cidr").attr("disabled", false).css("color", "#495057");
 				$("#public_key").attr("disabled", false).css("color", "#495057");
@@ -160,7 +164,7 @@ function createNewPeer() {
 		<tr class="text-center p-2" id="${data.id}">
 			<td>
 				<div class="my-auto">
-					<button class="btn btn-dark btn-sm">
+					<button onclick="makeQR(${data.id});" class="btn btn-dark btn-sm">
 						<i class="fas fa-qrcode fa-lg"></i>
 					</button>
 				</div>

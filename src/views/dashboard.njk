@@ -49,15 +49,21 @@
 								</div>
 							</div>
 
+							<div class="col-4">
+								<div class="md-form">
+									<input type="text" id="virtual_ip_address" class="form-control" value="{{ virtual_ip_address }}" disabled>
+									<label for="ip_address">Virtual Address</label>
+								</div>
+							</div>
 
-							<div class="col-6">
+							<div class="col-8">
 								<div class="md-form">
 									<input type="text" id="public_key" class="form-control" value="{{ public_key }}" disabled>
 									<label for="public_key">Public Key</label>
 								</div>
 							</div>
 
-							<div class="col-6">
+							<div class="col-4">
 								<div class="md-form">
 									<input type="text" id="network_adapter" class="form-control" value="{{ network_adapter }}" disabled>
 									<label for="network_adapter">Network Adapter</label>
@@ -90,6 +96,7 @@
 										<th scope="col">Device</th>
 										<th scope="col">Public key</th>
 										<th scope="col">Allowed IP's</th>
+										<th scope="col">Virtual IP</th>
 										<th scope="col">Edit</th>
 										<th scope="col">Delete</th>
 									</tr>
@@ -136,6 +143,11 @@
 										<td>
 											<div class="md-form m-0">
 												<input type="text" class="form-control" name="allowed_ips" value="{{ client.allowed_ips }}" disabled></input>
+											</div>
+										</td>
+										<td>
+											<div class="md-form m-0">
+												<input type="text" class="form-control" name="virtual_ip" value="{{ client.virtual_ip }}" disabled></input>
 											</div>
 										</td>
 										<td>

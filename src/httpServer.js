@@ -64,6 +64,7 @@ exports.initServer = (state, cb) => {
 	app.get("/", auth, (req, res) => {
 		res.render("dashboard.njk", {
 			ip_address: state.server_config.ip_address,
+			virtual_ip_address: state.server_config.virtual_ip_address,
 			cidr: state.server_config.cidr,
 			port: state.server_config.port,
 			public_key: state.server_config.public_key,
@@ -90,6 +91,7 @@ exports.initServer = (state, cb) => {
 				id,
 				device: "",
 				allowed_ips: "",
+				virtual_ip: "",
 				public_key: data.public_key,
 				private_key: data.private_key,
 				active: true,
@@ -150,6 +152,7 @@ exports.initServer = (state, cb) => {
 
 		item.device = req.body.device;
 		item.allowed_ips = req.body.allowed_ips.replace(/ /g, "").split(",");
+		item.virtual_ip = req.body.virtual_ip;
 		item.public_key = req.body.public_key;
 		item.active = req.body.active;
 
@@ -229,6 +232,7 @@ exports.initServer = (state, cb) => {
 		// }
 
 		state.server_config.ip_address = req.body.ip_address;
+		state.server_config.virtual_ip_address = req.body.virtual_ip_address;
 		state.server_config.port = req.body.port;
 		state.server_config.cidr = req.body.cidr;
 		state.server_config.private_key = req.body.private_key;
@@ -272,9 +276,11 @@ exports.initServer = (state, cb) => {
 			server_public_key: state.server_config.public_key,
 			server_port: state.server_config.port,
 			allowed_ips: item.allowed_ips,
-			ip_address: state.server_config.ip_address,
+			client_ip_address: item.virtual_ip,
+			cidr: state.server_config.cidr,
 			client_private_key: item.private_key,
 			server_endpoint: state.server_config.ip_address,
+			server_virtual_ip: state.server_config.virtual_ip_address,
 		}, (err, renderedConfig) => {
 			if (err) {
 				console.error("/api/download/:id", id, item, err);

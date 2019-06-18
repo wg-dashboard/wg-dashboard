@@ -27,7 +27,7 @@ exports.loadServerConfig = (cb) => {
 
 exports.saveWireguardConfig = (state, cb) => {
 	const config = nunjucks.render("templates/config_server.njk", {
-		ip_address: state.server_config.ip_address,
+		virtual_ip_address: state.server_config.virtual_ip_address,
 		cidr: state.server_config.cidr,
 		private_key: state.server_config.private_key,
 		port: state.server_config.port,
