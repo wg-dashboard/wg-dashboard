@@ -24,7 +24,7 @@
 						<div class="text-right">
 							<i id="server_settings" class="far fa-edit text-dark px-2 editBtn"></i>
 							<i id="server_settings_save" class="fas fa-file-download text-dark saveConfBtn" onclick="saveConfig();"></i>
-							<button class="btn btn-info" onclick="restartWG();">Restart WG</button>
+							<button class="btn btn-danger" onclick="restartWG();">Restart WG</button>
 						</div>
 					</div>
 
@@ -66,17 +66,17 @@
 								</div>
 							</div>
 
-							<div class="col-8">
-								<div class="md-form">
-									<input type="text" id="public_key" class="form-control" value="{{ public_key }}" disabled>
-									<label for="public_key">Public Key</label>
-								</div>
-							</div>
-
 							<div class="col-4">
 								<div class="md-form">
 									<input type="text" id="network_adapter" class="form-control" value="{{ network_adapter }}" disabled>
 									<label for="network_adapter">Network Adapter</label>
+								</div>
+							</div>
+
+							<div class="col-8">
+								<div class="md-form">
+									<input type="text" id="public_key" class="form-control" value="{{ public_key }}" disabled>
+									<label for="public_key">Public Key</label>
 								</div>
 							</div>
 						</div>
