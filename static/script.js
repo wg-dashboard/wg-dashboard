@@ -197,6 +197,11 @@ function createNewPeer() {
 				</div>
 			</td>
 			<td>
+				<div class="md-form m-0">
+					<input type="text" class="form-control" name="virtual_ip" value="" disabled></input>
+				</div>
+			</td>
+			<td>
 				<button class="btn btn-dark btn-sm saveBtn">
 					<i class="far fa-save fa-lg"></i>
 				</button>
