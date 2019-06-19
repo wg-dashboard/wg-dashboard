@@ -14,11 +14,11 @@ exports.loadServerConfig = (cb) => {
 							users: [],
 							public_key: "",
 							ip_address: "",
-							virtual_ip_address: "",
-							cidr: "",
-							port: "",
-							dns: "",
-							network_adapter: "",
+							virtual_ip_address: "10.13.37.1",
+							cidr: "24",
+							port: "58210",
+							dns: "8.8.8.8",
+							network_adapter: "eth0",
 							allowed_ips: ["0.0.0.0/0"],
 							peers: []
 						};
