@@ -389,6 +389,23 @@ function saveAndRestart() {
 	});
 };
 
+// retreive wireguard service logs
+function retreiveLogs() {
+	const req = $.ajax({
+		url: `/api/getwireguardstatus`,
+		method: "POST"
+	});
+
+	req.then(function( res ) {
+		$("#logscode").html(res.data.replace(/\n/g, "<br />"));
+	});
+
+	req.catch(function( data ) {
+		const msg = data.responseJSON ? data.responseJSON.msg : "";
+		$("#logscode").html("could not get logs (error: " + msg + " )");
+	});
+};
+
 // create a qr code of the peer
 function makeQR(id) {
 	document.getElementById("qrModalLabel").innerHTML = $(`#${id}`).find("input[name='device']").val();

@@ -464,6 +464,22 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
+	app.post("/api/getwireguardstatus", (req, res) => {
+		wireguardHelper.wireguardStatus((err, stdout) => {
+			if (err) {
+				res.status(500).send({
+					msg: err.toString(),
+				});
+				return;
+			}
+
+			res.status(201).send({
+				msg: "OK",
+				data: stdout,
+			});
+		});
+	});
+
 	app.put("/api/user/edit/:id", (req, res) => {
 		const id = req.params.id;
 

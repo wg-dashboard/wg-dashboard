@@ -23,7 +23,7 @@
 						<div class="text-right">
 							<i id="server_settings" class="far fa-edit text-dark px-2 editBtn" title="Edit server settings"></i>
 							<button class="btn btn-danger btn-sm" onclick="saveAndRestart();" title="Save server settings as local file and restart the Wireguard Service">Regenerate Config and Restart Wireguard</button>
-							<button class="btn btn-success btn-sm" onclick="retreiveLogs();" title="View Wireguard Service Logs">Logs</button>
+							<button class="btn btn-success btn-sm" onclick="retreiveLogs();" title="View Wireguard Service Logs" data-toggle="modal" data-target="#logsModal">Logs</button>
 						</div>
 					</div>
 
@@ -277,6 +277,24 @@
 		</div>
 		<div class="modal-body d-flex justify-content-center">
 			<div id="qrcode"></div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="logsModal" tabindex="-1" role="dialog" aria-labelledby="logsModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="logsModalLabel"></h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body d-flex justify-content-center">
+			<div id="logscode"></div>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

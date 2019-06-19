@@ -89,7 +89,7 @@ exports.startWireguard = (cb) => {
 }
 
 exports.wireguardStatus = (cb) => {
-	child_process.exec("systemctl status wg-quick@wg0", (err, stdout, stderr) => {
+	child_process.exec("journalctl -u wg-quick@wg0.service -n 100", (err, stdout, stderr) => {
 		if (err || stderr) {
 			cb(err);
 			console.error(err, stderr);
