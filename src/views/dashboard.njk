@@ -224,12 +224,12 @@
 								{% for user in users %}
 								<tr class="text-center p-2" id="user_{{ user.id }}">
 									<td>
-										<div class="md-form m-0">
+										<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Username">
 											<input type="text" class="form-control" name="username" value="{{ user.username }}" disabled></input>
 										</div>
 									</td>
 									<td>
-										<div class="md-form m-0">
+										<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Password">
 											<input type="password" class="form-control" name="password" placeholder="(new password)" disabled></input>
 										</div>
 									</td>
