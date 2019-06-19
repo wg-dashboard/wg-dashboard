@@ -88,6 +88,24 @@
 		</div>
 
 		<div class="col-12 mb-3">
+			<div class="card my-3 rounded-0">
+				<div class="card-body col-3">
+					<div class="h4 card-title d-flex justify-content-between">
+						<p>Allowed IP's</p>
+						<div class="text-right">
+							<i id="allowed_ip_settings" class="far fa-edit text-dark px-2 editBtn"></i>
+						</div>
+					</div>
+
+					<div class="md-form" >
+						<input type="text" id="allowed_ips" class="form-control" value="{{ allowed_ips }}" disabled>
+						<label for="allowed_ips">Allowed IP's</label>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 mb-3">
 			<div class="card rounded-0">
 				<div class="card-body">
 					<div class="h4 card-title">
@@ -151,7 +169,7 @@
 									</td>
 									<td>
 										<div class="md-form m-0">
-											<input type="text" class="form-control" name="allowed_ips" value="{{ client.allowed_ips }}" disabled></input>
+											<input type="text" class="form-control" name="allowed_ips" value="{{ allowed_ips }}" disabled></input>
 										</div>
 									</td>
 									<td>

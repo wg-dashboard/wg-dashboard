@@ -138,13 +138,55 @@ $(document).ready(() => {
 					.removeClass("saveBtn")
 					.addClass("fa-edit")
 					.addClass("editBtn");
-				$("#ip_address").attr("disabled", false).css("color", "#495057");
-				$("#virtual_ip_address").attr("disabled", false).css("color", "#495057");
-				$("#port").attr("disabled", false).css("color", "#495057");
-				$("#dns").attr("disabled", false).css("color", "#495057");
-				$("#cidr").attr("disabled", false).css("color", "#495057");
-				$("#public_key").attr("disabled", false).css("color", "#495057");
-				$("#network_adapter").attr("disabled", false).css("color", "#495057");
+				$("#ip_address").attr("disabled", true).css("color", "#495057");
+				$("#virtual_ip_address").attr("disabled", true).css("color", "#495057");
+				$("#port").attr("disabled", true).css("color", "#495057");
+				$("#dns").attr("disabled", true).css("color", "#495057");
+				$("#cidr").attr("disabled", true).css("color", "#495057");
+				$("#public_key").attr("disabled", true).css("color", "#495057");
+				$("#network_adapter").attr("disabled", true).css("color", "#495057");
+			});
+
+			req.catch(function( data ) {
+				const msg = data.responseJSON ? data.responseJSON.msg : "";
+				alert("could not save data: " + msg);
+			});
+		}
+	});
+
+	// edit allowed_ips
+	$("#allowed_ip_settings").on("click", (e) => {
+		if ($(e.currentTarget).hasClass("editBtn")) {
+			$(e.currentTarget)
+				.removeClass("editBtn")
+				.removeClass("fa-edit")
+				.addClass("saveBtn")
+				.addClass("fa-save");
+			$("#allowed_ips").attr("disabled", false).css("color", "#4285F4");
+		} else if ($(e.currentTarget).hasClass("saveBtn")) {
+			let allowed_ips = $("#allowed_ips").val();
+
+			const req = $.ajax({
+				url: `/api/server_settings/save/allowed_ips`,
+				method: "PUT",
+				data: JSON.stringify(
+					{
+						allowed_ips: allowed_ips,
+					}
+				),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json"
+			});
+
+			req.then(function( data ) {
+				$(e.currentTarget)
+					.removeClass("fa-save")
+					.removeClass("saveBtn")
+					.addClass("fa-edit")
+					.addClass("editBtn");
+				$("#allowed_ips").attr("disabled", false).css("color", "#495057");
+
+				$("input[name='allowed_ips'").each((i, e) => { $(e).val(allowed_ips) });
 			});
 
 			req.catch(function( data ) {

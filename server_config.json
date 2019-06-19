@@ -8,19 +8,18 @@
     "$2b$10$BasnjZNpY2X0x0e2nys8iemOFfAHTgj1AQismyTc0IWtevTSUeHXe"
   ],
   "public_key": "FwHCrbx+1QdPgpYb3b1OzW/FPMnHwYt6q6mPq1DlJQY=",
-  "ip_address": "195.201.97.190",
   "virtual_ip_address": "10.13.37.1",
   "cidr": "24",
   "port": "58120",
   "dns": "8.8.8.8",
   "network_adapter": "eth0",
+  "allowed_ips": [
+    "0.0.0.0/0"
+  ],
   "peers": [
     {
       "id": 5,
       "device": "test",
-      "allowed_ips": [
-        "0.0.0.0/0"
-      ],
       "virtual_ip": "10.13.37.2",
       "public_key": "W5ADCGpaF22Xt+MPEq/MfOStAD7Cn/GewcGqacpVaUU=",
       "private_key": "4KF4KFA91fUeIagWzzSdjN5I28IjgvW8x+WhEQbvv3I=",
@@ -29,9 +28,6 @@
     {
       "id": 6,
       "device": "nicht-vtii-pc",
-      "allowed_ips": [
-        "0.0.0.0/0"
-      ],
       "virtual_ip": "10.13.37.3",
       "public_key": "E1aaBppDjSPLhvfV8dGJqGwjX0czwzwwNpzEzOw6d24=",
       "private_key": "4Lg2u5Sj7429tRbdNoI5q82jlUySGyyom88BeZM++2Q=",
@@ -40,14 +36,12 @@
     {
       "id": 7,
       "device": "",
-      "allowed_ips": [
-        "0.0.0.0/0"
-      ],
       "virtual_ip": "10.13.37.4",
       "public_key": "P0AzK1QOf6gsMwyjUsYi3tmhFNtOvQlbbx+iS+9dMUo=",
       "private_key": "eLqCJD1cczHy7CPVX0enYClR9q3MQyjloiPSREiKwFo=",
       "active": true
     }
   ],
-  "private_key": "CEt9G80Mj+SNgb4R9CeNEklVwEiCrhGwGTQD2tvqykg="
+  "private_key": "CEt9G80Mj+SNgb4R9CeNEklVwEiCrhGwGTQD2tvqykg=",
+  "ip_address": "195.201.97.190"
 }

@@ -143,6 +143,7 @@ exports.initServer = (state, cb) => {
 			cidr: state.server_config.cidr,
 			port: state.server_config.port,
 			dns: state.server_config.dns,
+			allowed_ips: state.server_config.allowed_ips,
 			public_key: state.server_config.public_key,
 			network_adapter: state.server_config.network_adapter,
 			clients: state.server_config.peers,
@@ -166,7 +167,6 @@ exports.initServer = (state, cb) => {
 			state.server_config.peers.push({
 				id,
 				device: "",
-				allowed_ips: "",
 				virtual_ip: "",
 				public_key: data.public_key,
 				private_key: data.private_key,
@@ -210,24 +210,8 @@ exports.initServer = (state, cb) => {
 			return;
 		}
 
-		let validIPs = true;
-		const _allowedIPs = req.body.allowed_ips.replace(/ /g, "").split(",");
-		_allowedIPs.forEach((e) => {
-			const match = /^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))$/.test(e);
-			if (!match) {
-				validIPs = false;
-			}
-		});
-
-		if (!validIPs) {
-			res.status(500).send({
-				msg: "INVALID_IP_SETUP",
-			});
-			return;
-		}
-
 		item.device = req.body.device;
-		item.allowed_ips = req.body.allowed_ips.replace(/ /g, "").split(",");
+		// item.allowed_ips = req.body.allowed_ips.replace(/ /g, "").split(",");
 		item.virtual_ip = req.body.virtual_ip;
 		item.public_key = req.body.public_key;
 		item.active = req.body.active;
@@ -271,6 +255,47 @@ exports.initServer = (state, cb) => {
 		dataManager.saveServerConfig(state.server_config, (err) => {
 			if (err) {
 				console.error("DELETE /api/peer/:id COULD_NOT_SAVE_SERVER_CONFIG", err);
+				res.status(500).send({
+					msg: "COULD_NOT_SAVE_SERVER_CONFIG",
+				});
+				return;
+			}
+
+			res.send({
+				msg: "OK",
+			});
+		});
+	});
+
+	app.put("/api/server_settings/save/allowed_ips", (req, res) => {
+		if (!req.body) {
+			res.status(400).send({
+				msg: "ERROR_INPUT_MISSING",
+				missing: "data",
+			});
+			return;
+		}
+
+		let validIPs = true;
+		const _allowedIPs = req.body.allowed_ips.replace(/ /g, "").split(",");
+		_allowedIPs.forEach((e) => {
+			const match = /^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))$/.test(e);
+			if (!match) {
+				validIPs = false;
+			}
+		});
+
+		if (!validIPs) {
+			res.status(500).send({
+				msg: "INVALID_IP_SETUP",
+			});
+			return;
+		}
+
+		state.server_config.allowed_ips = _allowedIPs;
+
+		dataManager.saveServerConfig(state.server_config, (err) => {
+			if (err) {
 				res.status(500).send({
 					msg: "COULD_NOT_SAVE_SERVER_CONFIG",
 				});
@@ -336,7 +361,7 @@ exports.initServer = (state, cb) => {
 		nunjucks.render("templates/config_client.njk", {
 			server_public_key: state.server_config.public_key,
 			server_port: state.server_config.port,
-			allowed_ips: item.allowed_ips,
+			allowed_ips: state.server_config.allowed_ips,
 			client_ip_address: item.virtual_ip,
 			cidr: state.server_config.cidr,
 			dns: state.server_config.dns,

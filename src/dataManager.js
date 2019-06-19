@@ -20,6 +20,7 @@ exports.loadServerConfig = (cb) => {
 							port: "",
 							dns: "",
 							network_adapter: "",
+							allowed_ips: ["0.0.0.0/0"],
 							peers: []
 						};
 
