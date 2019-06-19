@@ -31,10 +31,18 @@
     },
     {
       "id": 6,
-      "device": "nicht-vtii-pc",
+      "device": "auch-nicht-vtii-pc",
       "virtual_ip": "10.13.37.3",
-      "public_key": "E1aaBppDjSPLhvfV8dGJqGwjX0czwzwwNpzEzOw6d24=",
-      "private_key": "4Lg2u5Sj7429tRbdNoI5q82jlUySGyyom88BeZM++2Q=",
+      "public_key": "iCtwb0iIGAOT16Fh19b08qi8qMIZqylhDkPZjdgVrVg=",
+      "private_key": "4Ltlqfp9tYyqn0202MM7/t/upn6fylCsGTtWb0jOeGE=",
+      "active": true
+    },
+    {
+      "id": 7,
+      "device": "vtii-pc-ist-es-nicht",
+      "virtual_ip": "10.13.37.4",
+      "public_key": "FFBKnPO/B2lLkefoUe6h3oOFdlRuhgoQhRHr8jEjTxU=",
+      "private_key": "CG5QovZ1e6Ul0xE63KTJ2Mo35xhE7PIS9Z2kd7yY40E=",
       "active": true
     }
   ],

@@ -19,7 +19,7 @@ $(document).ready(() => {
 				.attr("disabled", false);
 
 			tableRow
-				.find("#public_key")
+				.find("input[name='public_key']")
 				.css("color", "#495057")
 				.attr("disabled", true);
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
@@ -69,7 +69,7 @@ $(document).ready(() => {
 			const confirmation = confirm("Are you sure you want to delete this peer?");
 
 			if (confirmation) {
-				const tableRow = $(e.currentTarget).parent().parent();
+				const tableRow = $(e.currentTarget).parent().parent().parent();
 
 				const req = $.ajax({
 					url: `/api/peer/${tableRow[0].id}`,
@@ -316,11 +316,6 @@ function createNewPeer() {
 			<td>
 				<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Public key">
 					<input id="public_key" type="text" class="form-control" name="public_key" value="${data.public_key}" disabled></input>
-				</div>
-			</td>
-			<td>
-				<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Allowed IP addresses">
-					<input type="text" class="form-control" name="allowed_ips" value=""></input>
 				</div>
 			</td>
 			<td>

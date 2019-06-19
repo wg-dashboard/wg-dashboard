@@ -122,7 +122,6 @@
 									<th scope="col">Active</th>
 									<th scope="col">Device</th>
 									<th scope="col">Public key</th>
-									<th scope="col">Allowed IP's</th>
 									<th scope="col">Virtual IP</th>
 									<th scope="col">Edit</th>
 									<th scope="col">Delete</th>
@@ -164,12 +163,7 @@
 									</td>
 									<td>
 										<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Public key">
-											<input id="public_key" type="text" class="form-control" name="public_key" value="{{ client.public_key }}" disabled></input>
-										</div>
-									</td>
-									<td>
-										<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Allowed IP addresses">
-											<input type="text" class="form-control" name="allowed_ips" value="{{ allowed_ips }}" disabled></input>
+											<input type="text" class="form-control" name="public_key" value="{{ client.public_key }}" disabled></input>
 										</div>
 									</td>
 									<td>
