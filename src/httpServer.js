@@ -425,7 +425,8 @@ exports.initServer = (state, cb) => {
 				return;
 			}
 
-			res.set("Content-disposition", "attachment; filename=client_config_" + id + ".conf");
+			const fileSuffix = item.device ? item.device : id;
+			res.set("Content-disposition", "attachment; filename=client_config_" + fileSuffix + ".conf");
 			res.set("Content-Type", "text/plain");
 			res.send(renderedConfig);
 		});
