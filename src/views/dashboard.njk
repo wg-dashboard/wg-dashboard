@@ -7,7 +7,6 @@
 			<div class="h4 m-0 card-title d-flex justify-content-between">
 				<p class="display-4 m-0">Dashboard</p>
 				<div class="text-right logout">
-					<i class="fas fa-user-plus mx-2" onclick="window.location='/createuser'" title="Create user"></i>
 					<i class="fas fa-door-open mx-2" onclick="window.location='/logout'" title="Logout"></i>
 				</div>
 			</div>
@@ -23,8 +22,7 @@
 						<p>Server settings</p>
 						<div class="text-right">
 							<i id="server_settings" class="far fa-edit text-dark px-2 editBtn" title="Edit server settings"></i>
-							<button class="btn btn-success btn-sm" onclick="saveConfig();" title="Save server settings as local file">Regenerate Config File</button>
-							<button class="btn btn-danger btn-sm" onclick="restartWG();" title="Restart wireguard service">Restart WireGuard</button>
+							<button class="btn btn-danger btn-sm" onclick="saveAndRestart();" title="Save server settings as local file and restart the Wireguard Service">Regenerate Config and Restart Wireguard</button>
 						</div>
 					</div>
 
@@ -47,8 +45,8 @@
 
 							<div class="col-4">
 								<div class="md-form">
-									<input type="number" id="cidr" class="form-control" value="{{ cidr }}" disabled>
-									<label for="cidr">CIDR</label>
+									<input type="text" id="network_adapter" class="form-control" value="{{ network_adapter }}" disabled>
+									<label for="network_adapter">Network Adapter</label>
 								</div>
 							</div>
 
@@ -61,15 +59,15 @@
 
 							<div class="col-4">
 								<div class="md-form">
-									<input type="text" id="dns" class="form-control" value="{{ dns }}" disabled>
-									<label for="dns">DNS</label>
+									<input type="number" id="cidr" class="form-control" value="{{ cidr }}" disabled>
+									<label for="cidr">CIDR</label>
 								</div>
 							</div>
 
 							<div class="col-4">
 								<div class="md-form">
-									<input type="text" id="network_adapter" class="form-control" value="{{ network_adapter }}" disabled>
-									<label for="network_adapter">Network Adapter</label>
+									<input type="text" id="dns" class="form-control" value="{{ dns }}" disabled>
+									<label for="dns">DNS</label>
 								</div>
 							</div>
 
@@ -77,6 +75,13 @@
 								<div class="md-form">
 									<input type="text" id="public_key" class="form-control" value="{{ public_key }}" disabled>
 									<label for="public_key">Public Key</label>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<input type="text" id="config_path" class="form-control" value="{{ config_path }}" disabled>
+									<label for="config_path">Config Path</label>
 								</div>
 							</div>
 						</div>
@@ -246,10 +251,15 @@
 								</tr>
 								{% endfor %}
 							</tbody>
+							<tr class="p-2">
+								<td class="text-center" colspan="8">
+									<button class="btn btn-success btn-lg mt-4" onclick="window.location='/createuser'" data-toggle="tooltip" data-placement="bottom" title="Add new user">
+										<i class="fa fa-user-plus"></i> Add User
+									</button>
+								</td>
+							</tr>
 						</table>
-
 					</div>
-
 				</div>
 			</div>
 		</div>

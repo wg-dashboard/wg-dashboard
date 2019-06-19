@@ -157,6 +157,7 @@ exports.initServer = (state, cb) => {
 			network_adapter: state.server_config.network_adapter,
 			clients: state.server_config.peers,
 			users: state.server_config.users,
+			config_path: state.server_config.config_path,
 		});
 	});
 
@@ -164,7 +165,7 @@ exports.initServer = (state, cb) => {
 		const ids = state.server_config.peers.map((el) => {
 			return parseInt(el.id, 10);
 		});
-		const id = Math.max(...ids) + 1;
+		const id = parseInt(Math.max(...ids) + 1, 10) || 0;
 
 		wireguardHelper.generateKeyPair((err, data) => {
 			if (err) {
@@ -347,14 +348,6 @@ exports.initServer = (state, cb) => {
 			return;
 		}
 
-		const ipValid = ipCheck.test(req.body.ip_address);
-		if (!ipValid) {
-			res.status(500).send({
-				msg: "IP_INVALID",
-			});
-			return;
-		}
-
 		const virtualIPValid = ipCheck.test(req.body.virtual_ip_address);
 		if (!virtualIPValid) {
 			res.status(500).send({
@@ -377,6 +370,7 @@ exports.initServer = (state, cb) => {
 		state.server_config.port = req.body.port;
 		state.server_config.cidr = req.body.cidr;
 		state.server_config.network_adapter = req.body.network_adapter;
+		state.server_config.config_path = req.body.config_path;
 
 		dataManager.saveServerConfig(state.server_config, (err) => {
 			if (err) {
@@ -437,32 +431,35 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.post("/api/saveconfig", (req, res) => {
-		dataManager.saveWireguardConfig(state, (err) => {
+	app.post("/api/saveandrestart", (req, res) => {
+		wireguardHelper.stopWireguard((err) => {
 			if (err) {
 				res.status(500).send({
-					msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG",
+					msg: "COULD_NOT_STOP_WIREGUARD",
 				});
 				return;
 			}
 
-			res.status(201).send({
-				msg: "OK",
-			});
-		});
-	});
+			dataManager.saveWireguardConfig(state, (err) => {
+				if (err) {
+					res.status(500).send({
+						msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG",
+					});
+					return;
+				}
 
-	app.post("/api/restartwg", (req, res) => {
-		wireguardHelper.restartWireguard((err) => {
-			if (err) {
-				res.status(500).send({
-					msg: "COULD_NOT_RESTART_WIREGUARD",
+				wireguardHelper.startWireguard((err) => {
+					if (err) {
+						res.status(500).send({
+							msg: "COULD_NOT_START_WIREGUARD",
+						});
+						return;
+					}
+
+					res.status(201).send({
+						msg: "OK",
+					});
 				});
-				return;
-			}
-
-			res.status(201).send({
-				msg: "OK",
 			});
 		});
 	});

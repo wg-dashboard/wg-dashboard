@@ -12,7 +12,7 @@ exports.checkServerKeys = (state, cb) => {
 
 			const private_key = stdout.replace(/\n/, "");
 
-			child_process.exec(`wg pubkey <<< "${private_key}"`, (err, stdout, stderr) => {
+			child_process.exec(`echo "${private_key}" | wg pubkey`, (err, stdout, stderr) => {
 				if (err || stderr) {
 					console.error(err);
 					console.error("Wireguard is possibly not installed?");
@@ -21,8 +21,8 @@ exports.checkServerKeys = (state, cb) => {
 
 				const public_key = stdout.replace(/\n/, "");
 
-				state.server_config.private_key = private_key;
 				state.server_config.public_key = public_key;
+				state.server_config.private_key = private_key;
 
 				dataManager.saveServerConfig(state.server_config, (err) => {
 					if (err) {
@@ -48,7 +48,7 @@ exports.generateKeyPair = (cb) => {
 
 		const private_key = stdout.replace(/\n/, "");
 
-		child_process.exec(`wg pubkey <<< "${private_key}"`, (err, stdout, stderr) => {
+		child_process.exec(`echo "${private_key}" | wg pubkey`, (err, stdout, stderr) => {
 			if (err || stderr) {
 				cb(err);
 				return;
@@ -64,8 +64,8 @@ exports.generateKeyPair = (cb) => {
 	});
 }
 
-exports.restartWireguard = (cb) => {
-	child_process.exec("wg-quick down wg0 && wg-quick up wg0", (err, stdout, stderr) => {
+exports.stopWireguard = (cb) => {
+	child_process.exec("systemctl stop wg-quick@wg0", (err, stdout, stderr) => {
 		if (err || stderr) {
 			cb(err);
 			console.error(err, stderr);
@@ -73,5 +73,29 @@ exports.restartWireguard = (cb) => {
 		}
 
 		cb();
+	});
+}
+
+exports.startWireguard = (cb) => {
+	child_process.exec("systemctl start wg-quick@wg0", (err, stdout, stderr) => {
+		if (err || stderr) {
+			cb(err);
+			console.error(err, stderr);
+			return;
+		}
+
+		cb();
+	});
+}
+
+exports.wireguardStatus = (cb) => {
+	child_process.exec("systemctl status wg-quick@wg0", (err, stdout, stderr) => {
+		if (err || stderr) {
+			cb(err);
+			console.error(err, stderr);
+			return;
+		}
+
+		cb(null, stdout);
 	});
 }

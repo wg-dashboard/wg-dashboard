@@ -20,6 +20,7 @@
   "allowed_ips": [
     "0.0.0.0/0"
   ],
+  "config_path": "./wireguard/wg0.conf",
   "peers": [
     {
       "id": 5,
