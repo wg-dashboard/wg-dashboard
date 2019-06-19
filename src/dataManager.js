@@ -28,8 +28,9 @@ exports.loadServerConfig = (cb) => {
 					return;
 				}
 
-				cb();
+				cb(null, defaultSettings);
 			});
+			return;
 		}
 
 		fs.readFile("server_config.json", (err, buffer) => {

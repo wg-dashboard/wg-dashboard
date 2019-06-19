@@ -349,23 +349,6 @@ function createNewPeer() {
 	});
 };
 
-// save serverconfig
-function saveConfig() {
-	const req = $.ajax({
-		url: `/api/saveconfig`,
-		method: "POST"
-	});
-
-	req.then(function( data ) {
-		alert("config saved successfully");
-	});
-
-	req.catch(function( data ) {
-		const msg = data.responseJSON ? data.responseJSON.msg : "";
-		alert("could not save config file: " + msg);
-	});
-};
-
 // login
 function login() {
 	const req = $.ajax({
@@ -390,14 +373,14 @@ function login() {
 }
 
 // restart wireguard
-function restartWG() {
+function saveAndRestart() {
 	const req = $.ajax({
-		url: `/api/restartwg`,
+		url: `/api/saveandrestart`,
 		method: "POST"
 	});
 
 	req.then(function( data ) {
-		alert("wireguard restarted successfully");
+		alert("config saved and wireguard restarted successfully");
 	});
 
 	req.catch(function( data ) {

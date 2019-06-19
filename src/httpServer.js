@@ -165,7 +165,7 @@ exports.initServer = (state, cb) => {
 		const ids = state.server_config.peers.map((el) => {
 			return parseInt(el.id, 10);
 		});
-		const id = Math.max(...ids) + 1;
+		const id = parseInt(Math.max(...ids) + 1, 10) || 0;
 
 		wireguardHelper.generateKeyPair((err, data) => {
 			if (err) {
@@ -431,32 +431,35 @@ exports.initServer = (state, cb) => {
 		});
 	});
 
-	app.post("/api/saveconfig", (req, res) => {
-		dataManager.saveWireguardConfig(state, (err) => {
+	app.post("/api/saveandrestart", (req, res) => {
+		wireguardHelper.stopWireguard((err) => {
 			if (err) {
 				res.status(500).send({
-					msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG",
+					msg: "COULD_NOT_STOP_WIREGUARD",
 				});
 				return;
 			}
 
-			res.status(201).send({
-				msg: "OK",
-			});
-		});
-	});
+			dataManager.saveWireguardConfig(state, (err) => {
+				if (err) {
+					res.status(500).send({
+						msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG",
+					});
+					return;
+				}
 
-	app.post("/api/restartwg", (req, res) => {
-		wireguardHelper.restartWireguard((err) => {
-			if (err) {
-				res.status(500).send({
-					msg: "COULD_NOT_RESTART_WIREGUARD",
+				wireguardHelper.startWireguard((err) => {
+					if (err) {
+						res.status(500).send({
+							msg: "COULD_NOT_START_WIREGUARD",
+						});
+						return;
+					}
+
+					res.status(201).send({
+						msg: "OK",
+					});
 				});
-				return;
-			}
-
-			res.status(201).send({
-				msg: "OK",
 			});
 		});
 	});
