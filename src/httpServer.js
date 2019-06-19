@@ -114,7 +114,9 @@ exports.initServer = (state, cb) => {
 				}
 			});
 		} else {
-			res.redirect("/login");
+			res.status(500).send({
+				msg: "USERNAME_OR_PASSWORD_WRONG"
+			});
 		}
 		/* if (req.body.username === state.server_config.dashboard_user && req.body.password === state.server_config.dashboard_password) {
 			req.session.admin = true;

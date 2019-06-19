@@ -389,6 +389,7 @@ function makeQR(id) {
 	});
 };
 
+// tooltip
 $(() => {
 	$('[data-toggle="tooltip"]').tooltip()
 });
