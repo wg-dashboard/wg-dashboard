@@ -7,8 +7,8 @@
 			<div class="h4 m-0 card-title d-flex justify-content-between">
 				<p class="display-4 m-0">Dashboard</p>
 				<div class="text-right logout">
-					<i class="fas fa-user-plus mx-2" onclick="window.location='/createuser'"></i>
-					<i class="fas fa-door-open mx-2" onclick="window.location='/logout'"></i>
+					<i class="fas fa-user-plus mx-2" onclick="window.location='/createuser'" data-toggle="tooltip" data-placement="bottom" title="Create new user"></i>
+					<i class="fas fa-door-open mx-2" onclick="window.location='/logout'" data-toggle="tooltip" data-placement="bottom" title="Logout"></i>
 				</div>
 			</div>
 		</div>
@@ -22,9 +22,9 @@
 					<div class="h4 card-title d-flex justify-content-between">
 						<p>Server settings</p>
 						<div class="text-right">
-							<i id="server_settings" class="far fa-edit text-dark px-2 editBtn"></i>
-							<button class="btn btn-success btn-sm" onclick="saveConfig();">Regenerate Config File</button>
-							<button class="btn btn-danger btn-sm" onclick="restartWG();">Restart WireGuard</button>
+							<i id="server_settings" class="far fa-edit text-dark px-2 editBtn" data-toggle="tooltip" data-placement="bottom" title="Edit server settings"></i>
+							<button class="btn btn-success btn-sm" onclick="saveConfig();" data-toggle="tooltip" data-placement="bottom" title="Save server settings as local file">Regenerate Config File</button>
+							<button class="btn btn-danger btn-sm" onclick="restartWG();" data-toggle="tooltip" data-placement="bottom" title="Restart wireguard service">Restart WireGuard</button>
 						</div>
 					</div>
 
@@ -115,14 +115,14 @@
 								{% for client in clients %}
 								<tr class="text-center p-2" id="{{ client.id }}">
 									<td>
-										<div class="my-auto">
+										<div class="my-auto" data-toggle="tooltip" data-placement="bottom" title="Show QR code for this peer">
 											<button onclick="makeQR({{ client.id }});" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#qrModal">
 												<i class="fas fa-qrcode fa-lg"></i>
 											</button>
 										</div>
 									</td>
 									<td>
-										<div class="my-auto">
+										<div class="my-auto" data-toggle="tooltip" data-placement="bottom" title="Download peer">
 											<button onclick="window.location='/api/download/{{ client.id }}';" class="btn btn-dark btn-sm">
 												<i class="fa fa-download fa-lg"></i>
 											</button>
@@ -130,51 +130,53 @@
 									</td>
 									<td>
 										{% if client.active %}
-										<button class="btn btn-success btn-sm activeBtn w-100" disabled>
+										<button class="btn btn-success btn-sm activeBtn w-100" data-toggle="tooltip" data-placement="bottom" title="Peer is active" disabled>
 											<i class="fas fa-check fa-lg"></i>
 										</button>
 										{% else %}
-										<button class="btn btn-danger btn-sm activeBtn w-100" disabled>
+										<button class="btn btn-danger btn-sm activeBtn w-100" data-toggle="tooltip" data-placement="bottom" title="Peer is deactivated" disabled>
 											<i class="fas fa-times fa-lg"></i>
 										</button>
 										{% endif %}
 									</td>
 									<td>
-										<div class="md-form m-0">
-											<input type="text" class="form-control" name="device" value="{{ client.device }}" disabled></input>
+										<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Device name">
+											<input type="text" class="form-control" name="device" value="{{ client.device }}"disabled></input>
 										</div>
 									</td>
 									<td>
-										<div class="md-form m-0">
-											<input type="text" class="form-control" name="public_key" value="{{ client.public_key }}" disabled></input>
+										<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Public key">
+											<input id="public_key" type="text" class="form-control" name="public_key" value="{{ client.public_key }}" disabled></input>
 										</div>
 									</td>
 									<td>
-										<div class="md-form m-0">
+										<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Allowed IP addresses">
 											<input type="text" class="form-control" name="allowed_ips" value="{{ client.allowed_ips }}" disabled></input>
 										</div>
 									</td>
 									<td>
-										<div class="md-form m-0">
+										<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Virtual IP address">
 											<input type="text" class="form-control" name="virtual_ip" value="{{ client.virtual_ip }}" disabled></input>
 										</div>
 									</td>
 									<td>
-										<button class="btn btn-dark btn-sm editBtn w-100">
+										<button class="btn btn-dark btn-sm editBtn w-100" data-toggle="tooltip" data-placement="bottom" title="Edit peer">
 											<i class="far fa-edit fa-lg"></i>
 										</button>
 									</td>
 									<td>
-										<button class="btn btn-danger btn-sm deleteBtn">
-											<i class="fas fa-trash fa-lg"></i>
-										</button>
+										<div class="my-auto" data-toggle="tooltip" data-placement="bottom" title="Delete peer">
+											<button class="btn btn-danger btn-sm deleteBtn">
+												<i class="fas fa-trash fa-lg"></i>
+											</button>
+										</div>
 									</td>
 								</tr>
 								{% endfor %}
 							</tbody>
 							<tr class="p-2">
 								<td class="text-center" colspan="9">
-									<button class="btn btn-success btn-lg mt-5" onclick="createNewPeer()">
+									<button class="btn btn-success btn-lg mt-5" onclick="createNewPeer();" data-toggle="tooltip" data-placement="bottom" title="Add new peer">
 										<i class="fa fa-user-plus"></i> Add Peer
 									</button>
 								</td>
