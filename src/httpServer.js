@@ -108,14 +108,18 @@ exports.initServer = (state, cb) => {
 
 				if (hashCorrect) {
 					req.session.admin = true;
-					res.redirect("/");
+					res.status(200).send({
+						msg: "OK"
+					});
 				} else {
-					res.redirect("/login");
+					res.status(404).send({
+						msg: "USERNAME_OR_PASSWORD_WRONG_OR_NOT_FOUND"
+					});
 				}
 			});
 		} else {
-			res.status(500).send({
-				msg: "USERNAME_OR_PASSWORD_WRONG"
+			res.status(404).send({
+				msg: "USERNAME_OR_PASSWORD_WRONG_OR_NOT_FOUND"
 			});
 		}
 		/* if (req.body.username === state.server_config.dashboard_user && req.body.password === state.server_config.dashboard_password) {

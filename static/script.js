@@ -360,6 +360,29 @@ function saveConfig() {
 	});
 };
 
+// login
+function login() {
+	const req = $.ajax({
+		url: `/api/login`,
+		method: "POST",
+		data: JSON.stringify({
+			username: $("#username").val(),
+			password: $("#password").val(),
+		}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json"
+	});
+
+	req.then(function( data ) {
+		window.location = "/";
+	});
+
+	req.catch(function( data ) {
+		const msg = data.responseJSON ? data.responseJSON.msg : "";
+		alert("Username or Password wrong/not found (Error: " + msg + " )");
+	});
+}
+
 // restart wireguard
 function restartWG() {
 	const req = $.ajax({

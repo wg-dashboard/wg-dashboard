@@ -5,7 +5,7 @@
 
 	<div class="card w-50 mx-auto mt-5">
 
-		<form class="card-body" action="/api/login" method="post">
+		<form class="card-body" onsubmit="return false;">
 			<h5 class="card-title h2">Wireguard Dashboard</h5>
 
 			<div class="card-text">
@@ -21,7 +21,7 @@
 			</div>
 
 			<div class="text-right">
-				<input type="submit" class="btn btn-outline-dark btn-lg" value="Login"></input>
+				<button class="btn btn-outline-dark btn-lg" onclick="login();">LOGIN</button>
 			</div>
 		</form>
 
