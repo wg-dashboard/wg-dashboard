@@ -220,8 +220,17 @@ exports.initServer = (state, cb) => {
 			return;
 		}
 
+		const ipCheck = new RegExp(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/);
+
+		const ipValid = ipCheck.test(req.body.virtual_ip);
+		if (!ipValid) {
+			res.status(500).send({
+				msg: "PEER_VIRTUAL_IP_INVALID",
+			});
+			return;
+		}
+
 		item.device = req.body.device;
-		// item.allowed_ips = req.body.allowed_ips.replace(/ /g, "").split(",");
 		item.virtual_ip = req.body.virtual_ip;
 		item.public_key = req.body.public_key;
 		item.active = req.body.active;
@@ -323,6 +332,41 @@ exports.initServer = (state, cb) => {
 			res.status(400).send({
 				msg: "ERROR_INPUT_MISSING",
 				missing: "data",
+			});
+			return;
+		}
+
+		const ipCheck = new RegExp(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/);
+		const portCheck = new RegExp(/^()([1-9]|[1-5]?[0-9]{2,4}|6[1-4][0-9]{3}|65[1-4][0-9]{2}|655[1-2][0-9]|6553[1-5])$/);
+
+		const dnsValid = ipCheck.test(req.body.dns);
+		if (!dnsValid) {
+			res.status(500).send({
+				msg: "DNS_IP_INVALID",
+			});
+			return;
+		}
+
+		const ipValid = ipCheck.test(req.body.ip_address);
+		if (!ipValid) {
+			res.status(500).send({
+				msg: "IP_INVALID",
+			});
+			return;
+		}
+
+		const virtualIPValid = ipCheck.test(req.body.virtual_ip_address);
+		if (!virtualIPValid) {
+			res.status(500).send({
+				msg: "VIRTUAL_IP_INVALID",
+			});
+			return;
+		}
+
+		const portValid = portCheck.test(req.body.port);
+		if (!portValid) {
+			res.status(500).send({
+				msg: "PORT_INVALID",
 			});
 			return;
 		}
