@@ -347,14 +347,6 @@ exports.initServer = (state, cb) => {
 			return;
 		}
 
-		const ipValid = ipCheck.test(req.body.ip_address);
-		if (!ipValid) {
-			res.status(500).send({
-				msg: "IP_INVALID",
-			});
-			return;
-		}
-
 		const virtualIPValid = ipCheck.test(req.body.virtual_ip_address);
 		if (!virtualIPValid) {
 			res.status(500).send({

@@ -7,7 +7,6 @@
 			<div class="h4 m-0 card-title d-flex justify-content-between">
 				<p class="display-4 m-0">Dashboard</p>
 				<div class="text-right logout">
-					<i class="fas fa-user-plus mx-2" onclick="window.location='/createuser'" data-toggle="tooltip" data-placement="bottom" title="Create new user"></i>
 					<i class="fas fa-door-open mx-2" onclick="window.location='/logout'" data-toggle="tooltip" data-placement="bottom" title="Logout"></i>
 				</div>
 			</div>
@@ -246,10 +245,15 @@
 								</tr>
 								{% endfor %}
 							</tbody>
+							<tr class="p-2">
+								<td class="text-center" colspan="8">
+									<button class="btn btn-success btn-lg mt-4" onclick="window.location='/createuser'" data-toggle="tooltip" data-placement="bottom" title="Add new user">
+										<i class="fa fa-user-plus"></i> Add User
+									</button>
+								</td>
+							</tr>
 						</table>
-
 					</div>
-
 				</div>
 			</div>
 		</div>

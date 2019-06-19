@@ -329,9 +329,11 @@ function createNewPeer() {
 				</button>
 			</td>
 			<td>
-				<button class="btn btn-danger btn-sm deleteBtn" data-toggle="tooltip" data-placement="bottom" title="Delete peer">
-					<i class="fas fa-trash fa-lg"></i>
-				</button>
+				<div class="my-auto" data-toggle="tooltip" data-placement="bottom" title="Delete peer">
+					<button class="btn btn-danger btn-sm deleteBtn w-100">
+						<i class="fas fa-trash fa-lg"></i>
+					</button>
+				</div>
 			</td>
 		</tr>
 		`);
