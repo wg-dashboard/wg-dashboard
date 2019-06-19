@@ -7,7 +7,7 @@ $(document).ready(() => {
 			$(e.currentTarget)
 				.html(`<i class="far fa-save fa-lg"></i>`)
 				.removeClass("editBtn")
-				.addClass("saveBtn")
+				.addClass("saveBtn");
 
 			tableRow
 				.find(".activeBtn")
@@ -17,6 +17,11 @@ $(document).ready(() => {
 				.find("input")
 				.css("color", "#4285F4")
 				.attr("disabled", false);
+
+			tableRow
+				.find("#public_key")
+				.css("color", "#495057")
+				.attr("disabled", true);
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
 			const tableRow = $(e.currentTarget).parent().parent();
 			const data = {};
@@ -103,7 +108,6 @@ $(document).ready(() => {
 			$("#port").attr("disabled", false).css("color", "#4285F4");
 			$("#cidr").attr("disabled", false).css("color", "#4285F4");
 			$("#dns").attr("disabled", false).css("color", "#4285F4");
-			$("#public_key").attr("disabled", false).css("color", "#4285F4");
 			$("#network_adapter").attr("disabled", false).css("color", "#4285F4");
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
 			let ip_address = $("#ip_address").val();
@@ -286,51 +290,51 @@ function createNewPeer() {
 		$("#peers").append(`
 		<tr class="text-center p-2" id="${data.id}">
 			<td>
-				<div class="my-auto">
+				<div class="my-auto" data-toggle="tooltip" data-placement="bottom" title="Show QR code for this peer">
 					<button onclick="makeQR(${data.id});" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#qrModal">
 						<i class="fas fa-qrcode fa-lg"></i>
 					</button>
 				</div>
 			</td>
 			<td>
-				<div class="my-auto">
+				<div class="my-auto" data-toggle="tooltip" data-placement="bottom" title="Download peer">
 					<button onclick="window.location='/api/download/${data.id}';" class="btn btn-dark btn-sm" >
 						<i class="fa fa-download fa-lg"></i>
 					</button>
 				</div>
 			</td>
 			<td>
-				<button class="btn btn-success btn-sm activeBtn w-100">
+				<button class="btn btn-success btn-sm activeBtn w-100" data-toggle="tooltip" data-placement="bottom" title="Peer is active">
 					<i class="fas fa-check fa-lg"></i>
 				</button>
 			</td>
 			<td>
-				<div class="md-form m-0">
+				<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Device name">
 					<input type="text" class="form-control" name="device" value=""></input>
 				</div>
 			</td>
 			<td>
-				<div class="md-form m-0">
-					<input type="text" class="form-control" name="public_key" value="${data.public_key}"></input>
+				<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Public key">
+					<input id="public_key" type="text" class="form-control" name="public_key" value="${data.public_key}" disabled></input>
 				</div>
 			</td>
 			<td>
-				<div class="md-form m-0">
+				<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Allowed IP addresses">
 					<input type="text" class="form-control" name="allowed_ips" value=""></input>
 				</div>
 			</td>
 			<td>
-				<div class="md-form m-0">
+				<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Virtual IP address">
 					<input type="text" class="form-control" name="virtual_ip" value=""></input>
 				</div>
 			</td>
 			<td>
-				<button class="btn btn-dark btn-sm saveBtn w-100">
+				<button class="btn btn-dark btn-sm saveBtn w-100" data-toggle="tooltip" data-placement="bottom" title="Save peer">
 					<i class="far fa-save fa-lg"></i>
 				</button>
 			</td>
 			<td>
-				<button class="btn btn-danger btn-sm deleteBtn">
+				<button class="btn btn-danger btn-sm deleteBtn" data-toggle="tooltip" data-placement="bottom" title="Delete peer">
 					<i class="fas fa-trash fa-lg"></i>
 				</button>
 			</td>
@@ -389,3 +393,7 @@ function makeQR(id) {
 		qrcode.makeCode(data);
 	});
 };
+
+$(() => {
+	$('[data-toggle="tooltip"]').tooltip()
+});
