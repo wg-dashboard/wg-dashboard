@@ -89,7 +89,7 @@
 
 		<div class="col-12 mb-3">
 			<div class="card my-3 rounded-0">
-				<div class="card-body col-3">
+				<div class="card-body">
 					<div class="h4 card-title d-flex justify-content-between">
 						<p>Allowed IP's</p>
 						<div class="text-right">
@@ -197,6 +197,66 @@
 									</button>
 								</td>
 							</tr>
+						</table>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 mb-3">
+			<div class="card rounded-0">
+				<div class="card-body">
+					<div class="h4 card-title">
+						<p>Users</p>
+					</div>
+
+					<div class="card-text">
+
+						<table class="table">
+							<thead class="bg-dark white-text">
+								<tr class="text-center">
+									<th scope="col">Username</th>
+									<th scope="col">Password</th>
+									<th scope="col">Edit</th>
+									<th scope="col">Delete</th>
+								</tr>
+							</thead>
+
+							<tbody id="users">
+								{% for user in users %}
+								<tr class="text-center p-2" id="user_{{ user.id }}">
+									<td>
+										<div class="md-form m-0">
+											<input type="text" class="form-control" name="username" value="{{ user.username }}" disabled></input>
+										</div>
+									</td>
+									<td>
+										<div class="md-form m-0">
+											<input type="password" class="form-control" name="password" placeholder="(new password)" disabled></input>
+										</div>
+									</td>
+									<td>
+										<button class="btn btn-dark btn-sm editBtn w-100">
+											<i class="far fa-edit fa-lg"></i>
+										</button>
+									</td>
+									<td>
+										<button class="btn btn-danger btn-sm deleteBtn w-100">
+											<i class="fas fa-trash fa-lg"></i>
+										</button>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+							<!-- <tr class="p-2">
+								<td class="text-center" colspan="9">
+									<button class="btn btn-success btn-lg mt-5" onclick="createNewUser()">
+										<i class="fa fa-user-plus"></i> Add User
+									</button>
+								</td>
+							</tr> -->
 						</table>
 
 					</div>

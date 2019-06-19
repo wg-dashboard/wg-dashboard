@@ -36,7 +36,7 @@ exports.initServer = (state, cb) => {
 	});
 
 	app.get("/login", (req, res) => { // main screen
-		if (state.server_config.dashboard_users.length === 0 && state.server_config.dashboard_passwords.length === 0) {
+		if (state.server_config.users.length === 0) {
 			res.redirect("/createuser");
 		}
 
@@ -54,7 +54,7 @@ exports.initServer = (state, cb) => {
 
 	app.post("/api/createuser", bodyParser.urlencoded({ extended: false }), (req, res) => {
 		if (req.body.username && req.body.password) {
-			if (state.server_config.dashboard_users.length === 0 && state.server_config.dashboard_passwords.length === 0 || req.session.admin) {
+			if (state.server_config.users.length === 0 || req.session.admin) {
 				const saltRounds = 10;
 
 				bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
@@ -65,8 +65,11 @@ exports.initServer = (state, cb) => {
 						return;
 					}
 
-					state.server_config.dashboard_users.push(req.body.username);
-					state.server_config.dashboard_passwords.push(hash);
+					state.server_config.users.push({
+						id: state.server_config.users.length + 1,
+						username: req.body.username,
+						password: hash,
+					});
 
 					dataManager.saveServerConfig(state.server_config, (err) => {
 						if (err) {
@@ -90,10 +93,10 @@ exports.initServer = (state, cb) => {
 
 	app.post("/api/login", bodyParser.urlencoded({ extended: false }), (req, res) => {
 
-		const userIndex = state.server_config.dashboard_users.findIndex(el => el === req.body.username);
+		const userItem = state.server_config.users.find(el => el.username === req.body.username);
 
-		if (userIndex !== -1) {
-			const pass = state.server_config.dashboard_passwords[userIndex];
+		if (userItem) {
+			const pass = userItem.password;
 
 			bcrypt.compare(req.body.password, pass, function(err, hashCorrect) {
 				if (err) {
@@ -127,7 +130,7 @@ exports.initServer = (state, cb) => {
 		if (req.session && req.session.admin) {
 			return next();
 		} else {
-			if (state.server_config.dashboard_users.length === 0 && state.server_config.dashboard_passwords.length === 0) {
+			if (state.server_config.users.length === 0) {
 				return res.redirect("/createuser");
 			}
 			return res.redirect("/login");
@@ -147,6 +150,7 @@ exports.initServer = (state, cb) => {
 			public_key: state.server_config.public_key,
 			network_adapter: state.server_config.network_adapter,
 			clients: state.server_config.peers,
+			users: state.server_config.users,
 		});
 	});
 
@@ -411,6 +415,105 @@ exports.initServer = (state, cb) => {
 				msg: "OK",
 			});
 		});
+	});
+
+	app.put("/api/user/edit/:id", (req, res) => {
+		const id = req.params.id;
+
+		if (!id) {
+			res.status(400).send({
+				msg: "NO_ID_PROVIDED_OR_FOUND",
+			});
+			return;
+		}
+
+		const userItem = state.server_config.users.find(el => parseInt(el.id, 10) === parseInt(id, 10));
+
+		if (userItem) {
+			const user = req.body.username;
+			const pass = req.body.password;
+
+			userItem.username = user;
+
+			if (pass) {
+				bcrypt.hash(pass, 10, (err, hash) => {
+					if (err) {
+						res.status(500).send({
+							msg: err
+						});
+						return;
+					}
+
+					userItem.password = hash;
+
+					dataManager.saveServerConfig(state.server_config, (err) => {
+						if (err) {
+							res.status(500).send({
+								msg: err
+							});
+							return;
+						}
+
+						res.status(200).send({
+							msg: "OK"
+						});
+					});
+				});
+			} else {
+				dataManager.saveServerConfig(state.server_config, (err) => {
+					if (err) {
+						res.status(500).send({
+							msg: err
+						});
+						return;
+					}
+
+					res.status(200).send({
+						msg: "OK"
+					});
+				});
+			}
+		} else {
+			res.status(404).send({
+				msg: "USER_NOT_FOUND"
+			});
+		}
+	});
+
+	app.delete("/api/user/delete/:id", (req, res) => {
+		const id = req.params.id;
+
+		if (!id) {
+			res.status(400).send({
+				msg: "NO_ID_PROVIDED_OR_FOUND",
+			});
+			return;
+		}
+
+		const userItemIndex = state.server_config.users.findIndex(el => parseInt(el.id, 10) === parseInt(id, 10));
+		console.log(userItemIndex);
+
+		if (userItemIndex !== -1) {
+			state.server_config.users.splice(userItemIndex, 1);
+
+			dataManager.saveServerConfig(state.server_config, (err) => {
+				if (err) {
+					res.status(500).send({
+						msg: err
+					});
+					return;
+				}
+
+				res.status(200).send({
+					msg: "OK"
+				});
+			});
+		} else {
+			res.status(404).send({
+				msg: "USER_NOT_FOUND"
+			});
+		}
+
 	});
 
 	app.listen(state.config.port, cb);

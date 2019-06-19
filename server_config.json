@@ -1,11 +1,15 @@
 {
-  "dashboard_users": [
-    "admin",
-    "cucu"
-  ],
-  "dashboard_passwords": [
-    "$2b$10$PZDhjic6LX8gg9LPL0TIYuSstrW/9lnByNEW31xQ7sDcHOGMcbEf6",
-    "$2b$10$BasnjZNpY2X0x0e2nys8iemOFfAHTgj1AQismyTc0IWtevTSUeHXe"
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "$2b$10$FX/zt.mcpitTnWyJYHf0OuSiudCTf/Nd7UeRyI78Z/uEb3celdsd."
+    },
+    {
+      "id": 2,
+      "username": "abc",
+      "password": "$2b$10$1pi9Jfg7Jl4KsxzSwWrIPegfPuwi6svZpZfdzJvUpwdpL1qYqstVm"
+    }
   ],
   "public_key": "FwHCrbx+1QdPgpYb3b1OzW/FPMnHwYt6q6mPq1DlJQY=",
   "virtual_ip_address": "10.13.37.1",
@@ -31,14 +35,6 @@
       "virtual_ip": "10.13.37.3",
       "public_key": "E1aaBppDjSPLhvfV8dGJqGwjX0czwzwwNpzEzOw6d24=",
       "private_key": "4Lg2u5Sj7429tRbdNoI5q82jlUySGyyom88BeZM++2Q=",
-      "active": true
-    },
-    {
-      "id": 7,
-      "device": "",
-      "virtual_ip": "10.13.37.4",
-      "public_key": "P0AzK1QOf6gsMwyjUsYi3tmhFNtOvQlbbx+iS+9dMUo=",
-      "private_key": "eLqCJD1cczHy7CPVX0enYClR9q3MQyjloiPSREiKwFo=",
       "active": true
     }
   ],

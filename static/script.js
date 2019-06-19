@@ -191,8 +191,84 @@ $(document).ready(() => {
 
 			req.catch(function( data ) {
 				const msg = data.responseJSON ? data.responseJSON.msg : "";
-				alert("could not save data: " + msg);
+				alert("could not save allowed ips: " + msg);
 			});
+		}
+	});
+
+	// edit user
+	$("#users").on("click", "button", (e) => {
+		if ($(e.currentTarget).hasClass("editBtn")) {
+			$(e.currentTarget)
+				.html(`<i class="far fa-save fa-lg"></i>`)
+				.removeClass("editBtn")
+				.addClass("saveBtn");
+
+			const tableRow = $(e.currentTarget).parent().parent();
+
+			tableRow
+				.find("input")
+				.css("color", "#4285F4")
+				.attr("disabled", false);
+		} else if ($(e.currentTarget).hasClass("saveBtn")) {
+			const tableRow = $(e.currentTarget).parent().parent();
+
+			let username = tableRow.find("input[name='username']").val();
+			let password = tableRow.find("input[name='password']").val();
+
+			const id = tableRow[0].id.replace("user_", "");
+
+			const req = $.ajax({
+				url: `/api/user/edit/${id}`,
+				method: "PUT",
+				data: JSON.stringify(
+					{
+						username,
+						password,
+					}
+				),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json"
+			});
+
+			req.then(function( data ) {
+				$(e.currentTarget)
+					.html(`<i class="far fa-edit fa-lg"></i>`)
+					.removeClass("saveBtn")
+					.addClass("editBtn");
+
+				tableRow
+					.find("input")
+					.css("color", "#495057")
+					.attr("disabled", true);
+			});
+
+			req.catch(function( data ) {
+				const msg = data.responseJSON ? data.responseJSON.msg : "";
+				alert("could not save user: " + msg);
+			});
+		} else if ($(e.currentTarget).hasClass("deleteBtn")) {
+			const confirmation = confirm("Are you sure you want to delete this user?");
+
+			if (confirmation) {
+				const tableRow = $(e.currentTarget).parent().parent();
+				const id = tableRow[0].id.replace("user_", "");
+
+				const req = $.ajax({
+					url: `/api/user/delete/${id}`,
+					method: "DELETE"
+				})
+
+				req.then(function( data ) {
+					tableRow
+						.remove();
+				});
+
+				req.catch(function( data ) {
+					const msg = data.responseJSON ? data.responseJSON.msg : "";
+					alert("could not delete user: " + msg);
+				});
+			}
 		}
 	});
 });

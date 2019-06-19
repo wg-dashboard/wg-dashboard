@@ -11,8 +11,7 @@ exports.loadServerConfig = (cb) => {
 			fs.stat("server_config.json", (err, stats) => {
 				if (err) {
 					const defaultSettings = {
-							dashboard_users: [],
-							dashboard_passwords: [],
+							users: [],
 							public_key: "",
 							ip_address: "",
 							virtual_ip_address: "",
