@@ -294,46 +294,46 @@ function createNewPeer() {
 		$("#peers").append(`
 		<tr class="text-center p-2" id="${data.id}">
 			<td>
-				<div class="my-auto" data-toggle="tooltip" data-placement="bottom" title="Show QR code for this peer">
+				<div class="my-auto" title="Show QR code for this peer">
 					<button onclick="makeQR(${data.id});" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#qrModal">
 						<i class="fas fa-qrcode fa-lg"></i>
 					</button>
 				</div>
 			</td>
 			<td>
-				<div class="my-auto" data-toggle="tooltip" data-placement="bottom" title="Download peer">
+				<div class="my-auto" title="Download peer">
 					<button onclick="window.location='/api/download/${data.id}';" class="btn btn-dark btn-sm" >
 						<i class="fa fa-download fa-lg"></i>
 					</button>
 				</div>
 			</td>
 			<td>
-				<button class="btn btn-success btn-sm activeBtn w-100" data-toggle="tooltip" data-placement="bottom" title="Peer is active">
+				<button class="btn btn-success btn-sm activeBtn w-100" title="Peer is active">
 					<i class="fas fa-check fa-lg"></i>
 				</button>
 			</td>
 			<td>
-				<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Device name">
+				<div class="md-form m-0" title="Device name">
 					<input type="text" class="form-control" name="device" value=""></input>
 				</div>
 			</td>
 			<td>
-				<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Public key">
+				<div class="md-form m-0" title="Public key">
 					<input id="public_key" type="text" class="form-control" name="public_key" value="${data.public_key}" disabled></input>
 				</div>
 			</td>
 			<td>
-				<div class="md-form m-0" data-toggle="tooltip" data-placement="bottom" title="Virtual IP address">
+				<div class="md-form m-0" title="Virtual IP address">
 					<input type="text" class="form-control" name="virtual_ip" value=""></input>
 				</div>
 			</td>
 			<td>
-				<button class="btn btn-dark btn-sm saveBtn w-100" data-toggle="tooltip" data-placement="bottom" title="Save peer">
+				<button class="btn btn-dark btn-sm saveBtn w-100" title="Save peer">
 					<i class="far fa-save fa-lg"></i>
 				</button>
 			</td>
 			<td>
-				<div class="my-auto" data-toggle="tooltip" data-placement="bottom" title="Delete peer">
+				<div class="my-auto" title="Delete peer">
 					<button class="btn btn-danger btn-sm deleteBtn w-100">
 						<i class="fas fa-trash fa-lg"></i>
 					</button>
@@ -400,8 +400,3 @@ function makeQR(id) {
 		qrcode.makeCode(data);
 	});
 };
-
-// tooltip
-$(() => {
-	$('[data-toggle="tooltip"]').tooltip()
-});
