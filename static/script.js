@@ -109,14 +109,16 @@ $(document).ready(() => {
 			$("#cidr").attr("disabled", false).css("color", "#4285F4");
 			$("#dns").attr("disabled", false).css("color", "#4285F4");
 			$("#network_adapter").attr("disabled", false).css("color", "#4285F4");
+			$("#config_path").attr("disabled", false).css("color", "#4285F4");
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
-			let ip_address = $("#ip_address").val();
-			let virtual_ip_address = $("#virtual_ip_address").val();
-			let port = $("#port").val();
-			let cidr = $("#cidr").val();
-			let dns = $("#dns").val();
-			let public_key = $("#public_key").val();
-			let network_adapter = $("#network_adapter").val();
+			const ip_address = $("#ip_address").val();
+			const virtual_ip_address = $("#virtual_ip_address").val();
+			const port = $("#port").val();
+			const cidr = $("#cidr").val();
+			const dns = $("#dns").val();
+			const public_key = $("#public_key").val();
+			const network_adapter = $("#network_adapter").val();
+			const config_path = $("#config_path").val();
 
 			const req = $.ajax({
 				url: `/api/server_settings/save`,
@@ -130,6 +132,7 @@ $(document).ready(() => {
 						dns: dns,
 						public_key: public_key,
 						network_adapter: network_adapter,
+						config_path: config_path,
 					}
 				),
 				contentType: "application/json; charset=utf-8",
@@ -149,6 +152,7 @@ $(document).ready(() => {
 				$("#cidr").attr("disabled", true).css("color", "#495057");
 				$("#public_key").attr("disabled", true).css("color", "#495057");
 				$("#network_adapter").attr("disabled", true).css("color", "#495057");
+				$("#config_path").attr("disabled", true).css("color", "#495057");
 			});
 
 			req.catch(function( data ) {

@@ -157,6 +157,7 @@ exports.initServer = (state, cb) => {
 			network_adapter: state.server_config.network_adapter,
 			clients: state.server_config.peers,
 			users: state.server_config.users,
+			config_path: state.server_config.config_path,
 		});
 	});
 
@@ -369,6 +370,7 @@ exports.initServer = (state, cb) => {
 		state.server_config.port = req.body.port;
 		state.server_config.cidr = req.body.cidr;
 		state.server_config.network_adapter = req.body.network_adapter;
+		state.server_config.config_path = req.body.config_path;
 
 		dataManager.saveServerConfig(state.server_config, (err) => {
 			if (err) {

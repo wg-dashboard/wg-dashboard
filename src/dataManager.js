@@ -6,45 +6,49 @@ exports.saveServerConfig = (server_config, cb) => {
 }
 
 exports.loadServerConfig = (cb) => {
-	fs.readFile("server_config.json", (err, buffer) => {
+	fs.stat("server_config.json", (err, stats) => {
 		if (err) {
-			fs.stat("server_config.json", (err, stats) => {
+			const defaultSettings = {
+					users: [],
+					public_key: "",
+					ip_address: "",
+					virtual_ip_address: "10.13.37.1",
+					cidr: "24",
+					port: "58210",
+					dns: "8.8.8.8",
+					network_adapter: "eth0",
+					config_path: "/etc/wireguard/wg0.conf",
+					allowed_ips: ["0.0.0.0/0"],
+					peers: []
+				};
+
+			fs.writeFile("server_config.json", JSON.stringify(defaultSettings, null, 2), (err) => {
 				if (err) {
-					const defaultSettings = {
-							users: [],
-							public_key: "",
-							ip_address: "",
-							virtual_ip_address: "10.13.37.1",
-							cidr: "24",
-							port: "58210",
-							dns: "8.8.8.8",
-							network_adapter: "eth0",
-							allowed_ips: ["0.0.0.0/0"],
-							peers: []
-						};
-
-					fs.writeFile("server_config.json", JSON.stringify(defaultSettings, null, 2), (err) => {
-						if (err) {
-							cb(err);
-							return;
-						}
-
-						cb();
-					});
+					cb(err);
+					return;
 				}
+
+				cb();
 			});
 		}
 
-		let parsed;
+		fs.readFile("server_config.json", (err, buffer) => {
+			if (err) {
+				cb(err);
+				return;
+			}
 
-		try {
-			parsed = JSON.parse(buffer.toString());
-		} catch (err) {
-			cb(err);
-			return;
-		}
+			let parsed;
 
-		cb(null, parsed);
+			try {
+				parsed = JSON.parse(buffer.toString());
+			} catch (err) {
+				cb(err);
+				return;
+			}
+
+			cb(null, parsed);
+		});
 	});
 }
 
@@ -58,7 +62,8 @@ exports.saveWireguardConfig = (state, cb) => {
 		peers: state.server_config.peers
 	});
 
-	fs.writeFile("./wireguard/wg0.conf", config, (err) => {
+	console.log(state.server_config.config_path);
+	fs.writeFile(state.server_config.config_path, config, (err) => {
 		if (err) {
 			cb(err);
 			return;

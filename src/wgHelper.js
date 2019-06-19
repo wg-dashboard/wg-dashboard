@@ -48,7 +48,7 @@ exports.generateKeyPair = (cb) => {
 
 		const private_key = stdout.replace(/\n/, "");
 
-		child_process.exec(`wg pubkey <<< "${private_key}"`, (err, stdout, stderr) => {
+		child_process.exec(`echo "${private_key}" | wg pubkey`, (err, stdout, stderr) => {
 			if (err || stderr) {
 				cb(err);
 				return;
