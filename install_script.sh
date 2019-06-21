@@ -16,8 +16,9 @@ apt-get install -y nodejs
 
 # go into home folder
 cd /home
-# delete wireguard-dashboard folder to make sure it does not exist
+# delete wireguard-dashboard folder and wireguard-dashboard.tar.gz to make sure it does not exist
 rm -rf wireguard-dashboard
+rm -rf wireguard-dashboard.tar.gz
 # Download WireGuard-Dashboard latest release
 curl -L https://github.com/$(wget https://github.com/daluf/wireguard-dashboard/releases/latest -O - | egrep '/.*/.*/.*tar.gz' -o) --output wireguard-dashboard.tar.gz
 # create directory for dashboard
