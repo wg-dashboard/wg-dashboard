@@ -6,7 +6,7 @@ function main() {
 	const state = {
 		config: {
 			port: process.env.PORT || 3000,
-			outPath: process.env.OUT_PATH || "wireguard/wg0.conf",
+			devLogs: false,
 		},
 		server_config: null,
 	};
@@ -21,7 +21,7 @@ function main() {
 
 		wireguardHelper.checkServerKeys(state, (state) => {
 			httpServer.initServer(state, () => {
-				console.log(`Listening on port ${state.config.port}!`);
+				console.log(`WireGuard-Dashboard listening on port ${state.config.port}!`);
 			});
 		});
 	});

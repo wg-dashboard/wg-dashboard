@@ -38,13 +38,13 @@ Description=WireGuard-Dashboard autostart service
 After=network.target
 
 [Service]
+Restart=always
 WorkingDirectory=/home/wireguard-dashboard
-ExecStart=/usr/bin/node /home/wireguard-dashboard/src/server.js
-
-[Install]
-Alias=wg-dashboard.service" > /etc/systemd/system/wg-dashboard.service
+ExecStart=/usr/bin/node /home/wireguard-dashboard/src/server.js" > /etc/systemd/system/wg-dashboard.service
 # reload systemct daemon
 systemctl daemon-reload
+# start wg-dashboard service on reboot
+systemctl enable wg-dashboard
 # start wg-dashboard service
 systemctl start wg-dashboard
 

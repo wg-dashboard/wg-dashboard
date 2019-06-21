@@ -10,7 +10,7 @@ const wireguardHelper = require("./wgHelper");
 
 exports.initServer = (state, cb) => {
 	const app = express();
-	app.use(morgan("dev"));
+	state.config.devLogs ? app.use(morgan("dev")) : "";
 	app.use("/static", express.static("static"));
 
 	app.use(express.json());
