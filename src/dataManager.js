@@ -1,5 +1,6 @@
 const nunjucks = require("nunjucks");
 const fs = require("fs");
+const wgHelper = require("./wgHelper");
 
 exports.saveServerConfig = (server_config, cb) => {
 	fs.writeFile("server_config.json", JSON.stringify(server_config, null, 2), cb);
@@ -8,29 +9,47 @@ exports.saveServerConfig = (server_config, cb) => {
 exports.loadServerConfig = (cb) => {
 	fs.stat("server_config.json", (err, stats) => {
 		if (err) {
-			const defaultSettings = {
-					users: [],
-					public_key: "",
-					ip_address: "",
-					virtual_ip_address: "10.13.37.1",
-					cidr: "24",
-					port: "58210",
-					dns: "8.8.8.8",
-					network_adapter: "eth0",
-					config_path: "/etc/wireguard/wg0.conf",
-					allowed_ips: ["0.0.0.0/0"],
-					peers: []
-				};
 
-			fs.writeFile("server_config.json", JSON.stringify(defaultSettings, null, 2), (err) => {
+			wgHelper.getNetworkAdapter((err, network_adapter) => {
 				if (err) {
-					cb(err);
-					return;
+					console.log(err);
+					network_adapter = "";
 				}
 
-				cb(null, defaultSettings);
+				wgHelper.getNetworkIP((err, network_ip) => {
+					if (err) {
+						console.log(err);
+						network_ip = "";
+					}
+					const defaultSettings = {
+							users: [],
+							public_key: "",
+							ip_address: network_ip,
+							virtual_ip_address: "10.13.37.1",
+							cidr: "24",
+							port: "58210",
+							dns: "1.1.1.1",
+							network_adapter: network_adapter,
+							config_path: "/etc/wireguard/wg0.conf",
+							allowed_ips: ["0.0.0.0/0"],
+							peers: []
+						};
+
+					fs.writeFile("server_config.json", JSON.stringify(defaultSettings, null, 2), (err) => {
+						if (err) {
+							cb(err);
+							return;
+						}
+
+						cb(null, defaultSettings);
+					});
+					return;
+				});
+
 			});
-			return;
+
+
+
 		}
 
 		fs.readFile("server_config.json", (err, buffer) => {

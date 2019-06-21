@@ -417,3 +417,8 @@ function makeQR(id) {
 		qrcode.makeCode(data);
 	});
 };
+
+// tooltip
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip();
+});

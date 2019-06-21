@@ -99,3 +99,27 @@ exports.wireguardStatus = (cb) => {
 		cb(null, stdout);
 	});
 }
+
+exports.getNetworkAdapter = (cb) => {
+	child_process.exec("ip route | grep default | cut -d ' ' -f 5", (err, stdout, stderr) => {
+		if (err || stderr) {
+			cb(err);
+			console.error(err, stderr);
+			return;
+		}
+
+		cb(null, stdout);
+	});
+}
+
+exports.getNetworkIP = (cb) => {
+	child_process.exec("ifconfig eth0 | grep inet | head -n 1 | xargs | cut -d ' ' -f 2", (err, stdout, stderr) => {
+		if (err || stderr) {
+			cb(err);
+			console.error(err, stderr);
+			return;
+		}
+
+		cb(null, stdout);
+	});
+}

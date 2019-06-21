@@ -16,10 +16,10 @@
 	<div class="row">
 
 		<div class="col-12 mb-3">
-			<div class="card rounded-0">
+			<div class="card mt-3 rounded-0">
 				<div class="card-body">
 					<div class="h4 card-title d-flex justify-content-between">
-						<p>Server settings</p>
+						<p>Server settings <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="Remember to save your settings after you changed them! This includes peers."></i></p>
 						<div class="text-right">
 							<i id="server_settings" class="far fa-edit text-dark px-2 editBtn" title="Edit server settings"></i>
 							<button class="btn btn-danger btn-sm" onclick="saveAndRestart();" title="Save server settings as local file and restart the Wireguard Service">Regenerate Config and Restart Wireguard</button>
@@ -33,14 +33,14 @@
 							<div class="col-4">
 								<div class="md-form">
 									<input type="text" id="ip_address" class="form-control" value="{{ ip_address }}" disabled>
-									<label for="ip_address">Public Host / IP</label>
+									<label for="ip_address">Public Host / IP <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="IP that is accessable by the outside."></i></label>
 								</div>
 							</div>
 
 							<div class="col-4">
 								<div class="md-form">
 									<input type="number" id="port" class="form-control" value="{{ port }}" disabled>
-									<label for="port">Port</label>
+									<label for="port">Port <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="VPN-Server port."></i></label>
 								</div>
 							</div>
 
@@ -54,35 +54,35 @@
 							<div class="col-4">
 								<div class="md-form">
 									<input type="text" id="virtual_ip_address" class="form-control" value="{{ virtual_ip_address }}" disabled>
-									<label for="ip_address">Virtual Address</label>
+									<label for="ip_address">Virtual Address <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="Address for the internal network."></i></label>
 								</div>
 							</div>
 
 							<div class="col-4">
 								<div class="md-form">
 									<input type="number" id="cidr" class="form-control" value="{{ cidr }}" disabled>
-									<label for="cidr">CIDR</label>
+									<label for="cidr">CIDR <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="CIDR of the virtual address."></i></label>
 								</div>
 							</div>
 
 							<div class="col-4">
 								<div class="md-form">
 									<input type="text" id="dns" class="form-control" value="{{ dns }}" disabled>
-									<label for="dns">DNS</label>
+									<label for="dns">DNS <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="DNS-Server used by the VPN."></i></label>
 								</div>
 							</div>
 
 							<div class="col-8">
 								<div class="md-form">
 									<input type="text" id="public_key" class="form-control" value="{{ public_key }}" disabled>
-									<label for="public_key">Public Key</label>
+									<label for="public_key">Public Key <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="Public key of the VPN-Server (unchangeable)."></i></label>
 								</div>
 							</div>
 
 							<div class="col-4">
 								<div class="md-form">
 									<input type="text" id="config_path" class="form-control" value="{{ config_path }}" disabled>
-									<label for="config_path">Config Path</label>
+									<label for="config_path">Config Path <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="Path to the WireGuard config."></i></label>
 								</div>
 							</div>
 						</div>
@@ -97,7 +97,7 @@
 			<div class="card my-3 rounded-0">
 				<div class="card-body">
 					<div class="h4 card-title d-flex justify-content-between">
-						<p>Allowed IP's</p>
+						<p>Allowed IP's <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="Defines what traffic is being routed trough the VPN."></i></p>
 						<div class="text-right pointer">
 							<i id="allowed_ip_settings" class="far fa-edit text-dark px-2 editBtn" title="Edit allowed ip addresses"></i>
 						</div>
@@ -105,7 +105,7 @@
 
 					<div class="md-form" >
 						<input type="text" id="allowed_ips" class="form-control" value="{{ allowed_ips }}" disabled>
-						<label for="allowed_ips">Allowed IP's</label>
+						<label for="allowed_ips">Allowed IP's <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="List of all allowed IP-Addresses [e.g.: 0.0.0.0/0 for all traffic]. Possible for multiple addressed separated trough comma."></i></label>
 					</div>
 				</div>
 			</div>
@@ -208,7 +208,7 @@
 		</div>
 
 		<div class="col-12 mb-3">
-			<div class="card rounded-0">
+			<div class="card my-3 rounded-0">
 				<div class="card-body">
 					<div class="h4 card-title">
 						<p>Users</p>

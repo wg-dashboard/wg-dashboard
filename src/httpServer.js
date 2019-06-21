@@ -4,9 +4,15 @@ const nunjucks = require("nunjucks");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
+const rateLimit = require("express-rate-limit");
 
 const dataManager = require("./dataManager");
 const wireguardHelper = require("./wgHelper");
+
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100 // limit each IP to 100 requests per windowMs
+});
 
 exports.initServer = (state, cb) => {
 	const app = express();
@@ -14,6 +20,7 @@ exports.initServer = (state, cb) => {
 	app.use("/static", express.static("static"));
 
 	app.use(express.json());
+	app.use(limiter);
 
 	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnoprqstuvwxyz0123456789";
 	let session_secret = "";
@@ -35,7 +42,7 @@ exports.initServer = (state, cb) => {
 		express: app
 	});
 
-	app.get("/login", (req, res) => { // main screen
+	app.get("/login", (req, res) => {
 		if (state.server_config.users.length === 0) {
 			res.redirect("/createuser");
 			return;
