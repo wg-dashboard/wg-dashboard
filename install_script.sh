@@ -9,8 +9,9 @@ curl https://deb.nodesource.com/setup_10.x | bash
 apt-get install -y nodejs
 
 cd /home
-curl -L https://github.com/daluf/wireguard-dashboard/archive/v1.tar.gz --output wireguard-dashboard.tar.gz
-tar -xvzf wireguard-dashboard.tar.gz
+curl -L https://github.com/$(wget https://github.com/daluf/wireguard-dashboard/releases/latest -O - | egrep '/.*/.*/.*tar.gz' -o) --output wireguard-dashboard.tar.gz
+mkdir wireguard-dashboard
+tar -xvzf wireguard-dashboard.tar.gz --strip-components=1 -C wireguard-dashboard
 rm wireguard-dashboard.tar.gz
 cd wireguard-dashboard
 npm i
@@ -20,14 +21,16 @@ Description=WireGuard-Dashboard autostart service
 After=network.target
 
 [Service]
+WorkingDirectory=/home/wireguard-dashboard
 ExecStart=/usr/bin/node /home/wireguard-dashboard/src/server.js
 
 [Install]
 Alias=wg-dashboard.service" > /etc/systemd/system/wg-dashboard.service
-systemctl start wg-dashboard
 systemctl enable wg-dashboard
-
+systemctl start wg-dashboard
 
 ufw allow 22
 ufw enable
 ufw allow 3000
+
+echo "Done! You can now connect to your dashboard at port 3000"
