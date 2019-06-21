@@ -16,10 +16,18 @@
 	<div class="row">
 
 		<div class="col-12 mb-3">
-			<div class="card mt-3 rounded-0">
+			<div class="card bg-dark text-light my-1 rounded-0">
+				<div class="card-body">
+					Remember to click <button class="btn btn-danger btn-sm" onclick="saveAndRestart();">Regenerate Config and Restart Wireguard</button> after you changed your settings! This includes peer changes.
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 mb-3">
+			<div class="card rounded-0">
 				<div class="card-body">
 					<div class="h4 card-title d-flex justify-content-between">
-						<p>Server settings <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="Remember to save your settings after you changed them! This includes peers."></i></p>
+						<p>Server settings</p>
 						<div class="text-right">
 							<i id="server_settings" class="far fa-edit text-dark px-2 editBtn" title="Edit server settings"></i>
 							<button class="btn btn-danger btn-sm" onclick="saveAndRestart();" title="Save server settings as local file and restart the Wireguard Service">Regenerate Config and Restart Wireguard</button>
@@ -33,14 +41,14 @@
 							<div class="col-4">
 								<div class="md-form">
 									<input type="text" id="ip_address" class="form-control" value="{{ ip_address }}" disabled>
-									<label for="ip_address">Public Host / IP <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="IP that is accessable by the outside."></i></label>
+									<label for="ip_address">Public Host / IP <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="IP that is accessible by the outside"></i></label>
 								</div>
 							</div>
 
 							<div class="col-4">
 								<div class="md-form">
 									<input type="number" id="port" class="form-control" value="{{ port }}" disabled>
-									<label for="port">Port <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="VPN-Server port."></i></label>
+									<label for="port">Port <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="VPN-Server port"></i></label>
 								</div>
 							</div>
 
@@ -54,28 +62,28 @@
 							<div class="col-4">
 								<div class="md-form">
 									<input type="text" id="virtual_ip_address" class="form-control" value="{{ virtual_ip_address }}" disabled>
-									<label for="ip_address">Virtual Address <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="Address for the internal network."></i></label>
+									<label for="ip_address">Virtual Address <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="VPN server address in virtual network"></i></label>
 								</div>
 							</div>
 
 							<div class="col-4">
 								<div class="md-form">
 									<input type="number" id="cidr" class="form-control" value="{{ cidr }}" disabled>
-									<label for="cidr">CIDR <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="CIDR of the virtual address."></i></label>
+									<label for="cidr">CIDR <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="CIDR of the virtual address"></i></label>
 								</div>
 							</div>
 
 							<div class="col-4">
 								<div class="md-form">
 									<input type="text" id="dns" class="form-control" value="{{ dns }}" disabled>
-									<label for="dns">DNS <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="DNS-Server used by the VPN."></i></label>
+									<label for="dns">DNS <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="DNS-Server used by the VPN"></i></label>
 								</div>
 							</div>
 
 							<div class="col-8">
 								<div class="md-form">
 									<input type="text" id="public_key" class="form-control" value="{{ public_key }}" disabled>
-									<label for="public_key">Public Key <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="Public key of the VPN-Server (unchangeable)."></i></label>
+									<label for="public_key">Public Key <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="Public key of the VPN-Server (unchangeable)."></i> <i class="fas fa-sync fa-sm text-info mx-2" data-toggle="tooltip" data-placement="bottom" title="Re-create public & private server keys" onclick="refreshServerKeys();" style="cursor: pointer;"></i></label>
 								</div>
 							</div>
 
@@ -97,7 +105,7 @@
 			<div class="card my-3 rounded-0">
 				<div class="card-body">
 					<div class="h4 card-title d-flex justify-content-between">
-						<p>Allowed IP's <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="bottom" title="Defines what traffic is being routed trough the VPN."></i></p>
+						<p>Allowed IP's</p>
 						<div class="text-right pointer">
 							<i id="allowed_ip_settings" class="far fa-edit text-dark px-2 editBtn" title="Edit allowed ip addresses"></i>
 						</div>

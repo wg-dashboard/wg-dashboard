@@ -372,6 +372,49 @@ function login() {
 	});
 }
 
+// create user
+function createUser() {
+	const req = $.ajax({
+		url: `/api/createuser`,
+		method: "POST",
+		data: JSON.stringify({
+			username: $("#username").val(),
+			password: $("#password").val(),
+			password_confirm: $("#password_confirm").val(),
+		}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json"
+	});
+
+	req.then(function( data ) {
+		window.location = "/";
+	});
+
+	req.catch(function( data ) {
+		const msg = data.responseJSON ? data.responseJSON.msg : "";
+		alert("Error: " + msg);
+	});
+}
+
+function refreshServerKeys() {
+	const refresh = confirm("Are you sure you want to create a new pair of keys? This action cannot be undone. All peers will need new configs.");
+	if (refresh) {
+		const req = $.ajax({
+			url: `/api/refreshserverkeys`,
+			method: "POST"
+		});
+
+		req.then(function( data ) {
+			$("#public_key").val(data.public_key);
+		});
+
+		req.catch(function( data ) {
+			const msg = data.responseJSON ? data.responseJSON.msg : "";
+			alert("could not generate new pair of keys: " + msg);
+		});
+	}
+}
+
 // restart wireguard
 function saveAndRestart() {
 	const req = $.ajax({

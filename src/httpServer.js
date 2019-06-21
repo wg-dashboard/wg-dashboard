@@ -57,45 +57,60 @@ exports.initServer = (state, cb) => {
 	});
 
 	app.get("/createuser", (req, res) => {
-		res.render("setup_user.njk");
+		const firstAccount = state.server_config.users.length === 0 ? true : false;
+		res.render("setup_user.njk", {
+			firstAccount: firstAccount,
+		});
 	});
 
 	app.post("/api/createuser", bodyParser.urlencoded({ extended: false }), (req, res) => {
 		if (req.body.username && req.body.password) {
-			if (state.server_config.users.length === 0 || req.session.admin) {
-				const saltRounds = 10;
+			if (req.body.password === req.body.password_confirm) {
+				if (state.server_config.users.length === 0 || req.session.admin) {
+					const saltRounds = 10;
 
-				bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
-					if (err) {
-						res.status(500).send({
-							msg: err
-						});
-						return;
-					}
-
-					state.server_config.users.push({
-						id: state.server_config.users.length + 1,
-						username: req.body.username,
-						password: hash,
-					});
-
-					dataManager.saveServerConfig(state.server_config, (err) => {
+					bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
 						if (err) {
 							res.status(500).send({
-								msg: "COULD_NOT_SAVE_CONFIG"
+								msg: err
 							});
 							return;
 						}
 
-						req.session.admin = true;
-						res.redirect("/");
+						state.server_config.users.push({
+							id: state.server_config.users.length + 1,
+							username: req.body.username,
+							password: hash,
+						});
+
+						dataManager.saveServerConfig(state.server_config, (err) => {
+							if (err) {
+								res.status(500).send({
+									msg: "COULD_NOT_SAVE_CONFIG"
+								});
+								return;
+							}
+
+							req.session.admin = true;
+							res.status(200).send({
+								msg: "OK",
+							});
+						});
 					});
-				});
+				} else {
+					res.status(401).send({
+						msg: "FIRST_ACCOUNT_ALREADY_EXISTS"
+					});
+				}
 			} else {
-				res.status(401).send({
-					msg: "FIRST_ACCOUNT_ALREADY_EXISTS"
+				res.status(500).send({
+					msg: "PASSWORDS_DO_NOT_MATCH"
 				});
 			}
+		} else {
+			res.status(500).send({
+				msg: "USERNAME_AND_OR_PASSWORD_MISSING"
+			});
 		}
 	});
 
@@ -485,6 +500,34 @@ exports.initServer = (state, cb) => {
 			res.status(201).send({
 				msg: "OK",
 				data: stdout,
+			});
+		});
+	});
+
+	app.post("/api/refreshserverkeys", (req, res) => {
+		wireguardHelper.generateKeyPair((err, newPair) => {
+			if (err) {
+				res.status(500).send({
+					msg: err.toString(),
+				});
+				return;
+			}
+
+			state.server_config.public_key = newPair.public_key;
+			state.server_config.private_key = newPair.private_key;
+
+			dataManager.saveServerConfig(state.server_config, (err) => {
+				if (err) {
+					res.status(500).send({
+						msg: err
+					});
+					return;
+				}
+
+				res.status(200).send({
+					msg: "OK",
+					public_key: newPair.public_key,
+				});
 			});
 		});
 	});
