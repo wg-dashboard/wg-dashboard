@@ -38,6 +38,7 @@ exports.initServer = (state, cb) => {
 	app.get("/login", (req, res) => { // main screen
 		if (state.server_config.users.length === 0) {
 			res.redirect("/createuser");
+			return;
 		}
 
 		res.render("login.njk");
@@ -50,7 +51,7 @@ exports.initServer = (state, cb) => {
 
 	app.get("/createuser", (req, res) => {
 		res.render("setup_user.njk");
-	})
+	});
 
 	app.post("/api/createuser", bodyParser.urlencoded({ extended: false }), (req, res) => {
 		if (req.body.username && req.body.password) {
