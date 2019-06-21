@@ -1,47 +1,48 @@
 #!/bin/bash
 set -ex
 
-# Add WireGuard Repository
+# add wireguard repository to apt
 add-apt-repository -y ppa:wireguard/wireguard
-# Install WireGuard
+# install wireguard
 apt-get install -y wireguard
-# Install Linux Kernel Headers
+# install linux kernel headers
 apt-get install -y linux-headers-$(uname -r)
-# Enable IPv4 Packet Forwarding
+# enable ipv4 packet forwarding
 sysctl -w net.ipv4.ip_forward=1
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
-# Install NodeJS
+# install nodejs
 curl https://deb.nodesource.com/setup_10.x | bash
 apt-get install -y nodejs
 
 # go into home folder
-cd /home
+cd /opt
 # delete wireguard-dashboard folder and wireguard-dashboard.tar.gz to make sure it does not exist
 rm -rf wireguard-dashboard
 rm -rf wireguard-dashboard.tar.gz
-# Download WireGuard-Dashboard latest release
+# download wireguard-dashboard latest release
 curl -L https://github.com/$(wget https://github.com/daluf/wireguard-dashboard/releases/latest -O - | egrep '/.*/.*/.*tar.gz' -o) --output wireguard-dashboard.tar.gz
 # create directory for dashboard
 mkdir wireguard-dashboard
-# Unzip wireguard-dashboard
+# unzip wireguard-dashboard
 tar -xzf wireguard-dashboard.tar.gz --strip-components=1 -C wireguard-dashboard
 # delete unpacked .tar.gz
-rm wireguard-dashboard.tar.gz
+rm -f wireguard-dashboard.tar.gz
 # go into wireguard-dashboard folder
 cd wireguard-dashboard
 # install node modules
 npm i
 
-# Create Autostart Script
+# create service unit file
 echo "[Unit]
 Description=WireGuard-Dashboard autostart service
 After=network.target
 
 [Service]
 Restart=always
-WorkingDirectory=/home/wireguard-dashboard
-ExecStart=/usr/bin/node /home/wireguard-dashboard/src/server.js" > /etc/systemd/system/wg-dashboard.service
-# reload systemct daemon
+WorkingDirectory=/opt/wireguard-dashboard
+ExecStart=/usr/bin/node /opt/wireguard-dashboard/src/server.js" > /etc/systemd/system/wg-dashboard.service
+
+# reload systemd unit files
 systemctl daemon-reload
 # start wg-dashboard service on reboot
 systemctl enable wg-dashboard
@@ -51,7 +52,7 @@ systemctl start wg-dashboard
 # enable port 22 in firewall for ssh
 ufw allow 22
 # enable firewall
-ufw enable
+ufw --force enable
 # enable port 3000 in firewall for the dashboard
 ufw allow 3000
 # enable port 3000 in firewall for wireguard

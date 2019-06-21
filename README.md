@@ -35,13 +35,9 @@ We made this dashboard to simplify the setup of WireGuard. Instead of having to 
 #### Automatic Install
 With our install script all the needed packages for WireGuard and WireGuard-Dashboard will be installed. Just follow the given steps.
 
-1. Download install_script.sh to your VPS
-	* `curl https://github.com/daluf/wireguard-dashboard/blob/master/install_script.sh --output wg_install_script.sh`
-2. Give the install script permissions
-	* `chmod +x wg_install_script.sh`
-3. Run the install script
-	* `./sh install_script.sh`
-4. Enjoy
+1. Run the install script
+	* `curl https://raw.githubusercontent.com/daluf/wireguard-dashboard/master/install_script.sh | bash`
+2. Enjoy
 
 #### Manual Install
 1. Download & install wireguard and wg-quick
