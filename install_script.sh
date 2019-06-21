@@ -45,16 +45,16 @@ ExecStart=/usr/bin/node /home/wireguard-dashboard/src/server.js
 Alias=wg-dashboard.service" > /etc/systemd/system/wg-dashboard.service
 # reload systemct daemon
 systemctl daemon-reload
-# enable wg-dashboard in autostart
-systemctl enable wg-dashboard
 # start wg-dashboard service
 systemctl start wg-dashboard
 
-# enable port 22 in firewall
+# enable port 22 in firewall for ssh
 ufw allow 22
 # enable firewall
 ufw enable
-# enable port 3000 in firewall
+# enable port 3000 in firewall for the dashboard
 ufw allow 3000
+# enable port 3000 in firewall for wireguard
+ufw allow 58210
 
 echo "Done! You can now connect to your dashboard at port 3000"
