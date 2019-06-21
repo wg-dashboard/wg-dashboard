@@ -30,7 +30,7 @@ rm -f wireguard-dashboard.tar.gz
 # go into wireguard-dashboard folder
 cd wireguard-dashboard
 # install node modules
-npm i
+npm i --production
 
 # create service unit file
 echo "[Unit]
