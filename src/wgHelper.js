@@ -108,7 +108,7 @@ exports.getNetworkAdapter = (cb) => {
 			return;
 		}
 
-		cb(null, stdout);
+		cb(null, stdout.replace(/\n/, ""));
 	});
 }
 
@@ -120,6 +120,6 @@ exports.getNetworkIP = (cb) => {
 			return;
 		}
 
-		cb(null, stdout);
+		cb(null, stdout.replace(/\n/, ""));
 	});
 }
