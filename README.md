@@ -27,6 +27,8 @@ We made this dashboard to simplify the setup of WireGuard. Instead of having to 
 	* Virtual Address
 	* DNS
 	* Allowed IP's for VPN Clients
+* Clean GUI
+![Dashboard](dev/dashboard.png)
 
 ## Installation
 
