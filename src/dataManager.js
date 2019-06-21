@@ -7,9 +7,8 @@ exports.saveServerConfig = (server_config, cb) => {
 }
 
 exports.loadServerConfig = (cb) => {
-	fs.stat("server_config.json", (err, stats) => {
+	fs.stat("server_config.json", (err) => {
 		if (err) {
-
 			wgHelper.getNetworkAdapter((err, network_adapter) => {
 				if (err) {
 					console.log(err);
@@ -21,6 +20,7 @@ exports.loadServerConfig = (cb) => {
 						console.log(err);
 						network_ip = "";
 					}
+
 					const defaultSettings = {
 							users: [],
 							public_key: "",
@@ -33,7 +33,7 @@ exports.loadServerConfig = (cb) => {
 							config_path: "/etc/wireguard/wg0.conf",
 							allowed_ips: ["0.0.0.0/0"],
 							peers: []
-						};
+					};
 
 					fs.writeFile("server_config.json", JSON.stringify(defaultSettings, null, 2), (err) => {
 						if (err) {
@@ -43,13 +43,10 @@ exports.loadServerConfig = (cb) => {
 
 						cb(null, defaultSettings);
 					});
-					return;
 				});
-
 			});
 
-
-
+			return;
 		}
 
 		fs.readFile("server_config.json", (err, buffer) => {
