@@ -13,6 +13,23 @@ We made this dashboard to simplify the setup of WireGuard. Instead of having to 
 * Ubuntu 18.04
 * Root user
 
+## Installation
+
+#### Automatic Install
+With our install script all the needed packages for WireGuard and WireGuard-Dashboard will be installed. Just follow the given steps.
+
+1. Run the install script
+	* `curl https://raw.githubusercontent.com/team-centric-software/wireguard-dashboard/master/install_script.sh | bash`
+2. Enjoy
+
+#### Manual Install
+1. Download & install wireguard and wg-quick
+2. Download & install node 10
+2. Download and unzip the dashboard
+3. Set `net.ipv4.ip_forward=1` in sysctl
+4. Optional: Enable ufw and forward port 22, 3000 and the desired port of the wireguard instance
+5. Optional: Put the dashboard in autostart
+
 ## Features
 
 * Dashboard with login system
@@ -34,23 +51,6 @@ We made this dashboard to simplify the setup of WireGuard. Instead of having to 
 	* Allowed IP's for VPN clients
 * Clean GUI
 ![Dashboard](dev/dashboard.png)
-
-## Installation
-
-#### Automatic Install
-With our install script all the needed packages for WireGuard and WireGuard-Dashboard will be installed. Just follow the given steps.
-
-1. Run the install script
-	* `curl https://raw.githubusercontent.com/team-centric-software/wireguard-dashboard/master/install_script.sh | bash`
-2. Enjoy
-
-#### Manual Install
-1. Download & install wireguard and wg-quick
-2. Download & install node 10
-2. Download and unzip the dashboard
-3. Set `net.ipv4.ip_forward=1` in sysctl
-4. Optional: Enable ufw and forward port 22, 3000 and the desired port of the wireguard instance
-5. Optional: Put the dashboard in autostart
 
 ## Known Problems
 * No HTTPS
