@@ -104,7 +104,6 @@ exports.saveWireguardConfig = (state, cb) => {
 		peers: state.server_config.peers
 	});
 
-	console.log(state.server_config.config_path);
 	fs.writeFile(state.server_config.config_path, config, (err) => {
 		if (err) {
 			cb(err);
@@ -112,5 +111,5 @@ exports.saveWireguardConfig = (state, cb) => {
 		}
 
 		cb(null);
-	})
+	});
 }
