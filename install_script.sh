@@ -1,6 +1,11 @@
 #!/bin/bash
 set -ex
 
+if [[ "$EUID" -ne 0 ]]; then
+    echo "Sorry, this script must be ran as root"
+    exit
+fi
+
 # add wireguard repository to apt
 add-apt-repository -y ppa:wireguard/wireguard
 # install wireguard
