@@ -170,18 +170,7 @@ exports.initServer = (state, cb) => {
 
 	app.get("/", (req, res) => {
 		res.render("dashboard.njk", {
-			ip_address: state.server_config.ip_address,
-			virtual_ip_address: state.server_config.virtual_ip_address,
-			cidr: state.server_config.cidr,
-			port: state.server_config.port,
-			dns: state.server_config.dns,
-			allowed_ips: state.server_config.allowed_ips,
-			public_key: state.server_config.public_key,
-			network_adapter: state.server_config.network_adapter || "eth0",
-			clients: state.server_config.peers,
-			users: state.server_config.users,
-			config_path: state.server_config.config_path,
-			private_traffic: state.server_config.private_traffic,
+			config: state.server_config,
 		});
 	});
 

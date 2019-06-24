@@ -22,7 +22,6 @@ $(document).ready(() => {
 				.find("input[name='public_key']")
 				.css("color", "#495057")
 				.attr("disabled", true);
-
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
 			const tableRow = $(e.currentTarget).parent().parent();
 			const data = {};
@@ -284,7 +283,56 @@ $(document).ready(() => {
 			}
 		}
 	});
+
+	$("#server_settings_items").on("change", "input", (e) => {
+		const target = $(e.currentTarget)
+
+		if (target[0].id) {
+			config[target[0].id] = target.val();
+		} else if (target[0].name) {
+			config[target[0].id] = target.val();
+		}
+
+		checkToast();
+	});
+
+	$("#allowed_ips").on("change", (e) => {
+		const target = $(e.currentTarget)
+
+		config["allowed_ips"] = target.val().split(",");
+
+		checkToast();
+	});
+
+	$("#peers").on("change", "input", (e) => {
+		const parent = $(e.currentTarget).parent().parent().parent();
+		const index = parent[0].id;
+
+		parent.find("input").each((i, e) => {
+			console.log(e.name, $(e).val());
+			config.peers[index][e.name] = $(e).val();
+		});
+
+		checkToast();
+	});
+
 });
+
+// check if we need to show toast that settings need to be saved
+let toastShown = false;
+function checkToast() {
+	if (JSON.stringify(config) !== JSON.stringify(_config)) {
+		if (!toastShown) {
+			$("#alert-container").append(`<div class="alert-box">Remember to click <button class="btn btn-danger saveAndRestartBtn btn-sm pulse infinite" onclick="saveAndRestart();">Regenerate Config and Restart Wireguard</button> after you changed your settings! This includes peer changes.</div>`);
+			$(".saveAndRestartBtn").addClass("animated");
+			toastShown = true;
+		}
+	} else {
+		$("#alert-container").empty();
+		$(".saveAndRestartBtn").removeClass("animated");
+		toastShown = false;
+	}
+}
 
 // create a new peer
 function createNewPeer() {
@@ -429,6 +477,11 @@ function saveAndRestart() {
 
 	req.then(function( data ) {
 		alert("config saved and wireguard restarted successfully");
+		$('#alert-container').empty();
+		$(".saveAndRestartBtn").removeClass("animated");
+		toastShown = false;
+
+		_config = config;
 	});
 
 	req.catch(function( data ) {
@@ -484,5 +537,5 @@ function switchTrafficMode() {
 
 // tooltip
 $(function () {
-	$('[data-toggle="tooltip"]').tooltip();
+	$("[data-toggle='tooltip']").tooltip();
 });
