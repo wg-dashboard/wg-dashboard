@@ -32,7 +32,7 @@ With our install script all the needed packages for WireGuard and WireGuard-Dash
 3. Download & install node 10
 4. Download and unzip the dashboard
 5. Set `net.ipv4.ip_forward=1` in sysctl
-6. Optional: Enable ufw and forward port 22, 3000 and the desired port of the wireguard instance
+6. Optional: Enable ufw and forward port 22 and the desired port of the wireguard instance
 7. Optional: Put the dashboard in autostart
 
 ## Features
