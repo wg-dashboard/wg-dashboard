@@ -57,6 +57,10 @@ $(document).ready(() => {
 					.attr("disabled", true);
 
 				tableRow
+					.find("button")
+					.attr("disabled", false);
+
+				tableRow
 					.find(".activeBtn")
 					.attr("disabled", true);
 			});
@@ -295,14 +299,14 @@ function createNewPeer() {
 		<tr class="text-center p-2" id="${data.id}">
 			<td>
 				<div class="my-auto" title="Show QR code for this peer">
-					<button onclick="makeQR(${data.id});" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#qrModal">
+					<button onclick="makeQR(${data.id});" class="btn btn-dark btn-sm" data-toggle="modal" name="getqrcode" data-target="#qrModal" disabled>
 						<i class="fas fa-qrcode fa-lg"></i>
 					</button>
 				</div>
 			</td>
 			<td>
 				<div class="my-auto" title="Download peer">
-					<button onclick="window.location='/api/download/${data.id}';" class="btn btn-dark btn-sm" >
+					<button onclick="window.location='/api/download/${data.id}';" class="btn btn-dark btn-sm" name="downloadfile" disabled>
 						<i class="fa fa-download fa-lg"></i>
 					</button>
 				</div>

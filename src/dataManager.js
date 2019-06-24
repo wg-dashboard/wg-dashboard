@@ -35,7 +35,7 @@ exports.loadServerConfig = (cb) => {
 							peers: []
 					};
 
-					fs.writeFile("server_config.json", JSON.stringify(defaultSettings, null, 2), (err) => {
+					this.saveServerConfig(defaultSettings, (err) => {
 						if (err) {
 							cb(err);
 							return;
@@ -59,12 +59,36 @@ exports.loadServerConfig = (cb) => {
 
 			try {
 				parsed = JSON.parse(buffer.toString());
+
+				let needSave = false;
+				for (let i = 0; i < parsed.peers.length; i++) {
+					const item = parsed.peers[i];
+
+					// check if item has virtual ip => if not, delete item
+					if (!item.virtual_ip) {
+						parsed.peers.splice(i, 1);
+						needSave = true;
+					}
+				}
+
+				if (needSave) {
+					this.saveServerConfig(parsed, (err) => {
+						if (err) {
+							cb(err);
+							return;
+						}
+
+						cb(null, parsed);
+					});
+				} else {
+					cb(null, parsed);
+				}
+
 			} catch (err) {
 				cb(err);
 				return;
 			}
 
-			cb(null, parsed);
 		});
 	});
 }

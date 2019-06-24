@@ -606,23 +606,28 @@ exports.initServer = (state, cb) => {
 		}
 
 		const userItemIndex = state.server_config.users.findIndex(el => parseInt(el.id, 10) === parseInt(id, 10));
-		console.log(userItemIndex);
 
 		if (userItemIndex !== -1) {
-			state.server_config.users.splice(userItemIndex, 1);
+			if (state.server_config.users.length !== 1) {
+				state.server_config.users.splice(userItemIndex, 1);
 
-			dataManager.saveServerConfig(state.server_config, (err) => {
-				if (err) {
-					res.status(500).send({
-						msg: err
+				dataManager.saveServerConfig(state.server_config, (err) => {
+					if (err) {
+						res.status(500).send({
+							msg: err
+						});
+						return;
+					}
+
+					res.status(200).send({
+						msg: "OK"
 					});
-					return;
-				}
-
-				res.status(200).send({
-					msg: "OK"
 				});
-			});
+			} else {
+				res.status(500).send({
+					msg: "CANNOT_DELETE_LAST_USER"
+				});
+			}
 		} else {
 			res.status(404).send({
 				msg: "USER_NOT_FOUND"
