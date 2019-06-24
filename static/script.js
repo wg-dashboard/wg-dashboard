@@ -470,24 +470,28 @@ function refreshServerKeys() {
 
 // restart wireguard
 function saveAndRestart() {
-	const req = $.ajax({
-		url: `/api/saveandrestart`,
-		method: "POST"
-	});
+	if ($(".saveBtn").length === 0) {
+		const req = $.ajax({
+			url: `/api/saveandrestart`,
+			method: "POST"
+		});
 
-	req.then(function( data ) {
-		alert("config saved and wireguard restarted successfully");
-		$('#alert-container').empty();
-		$(".saveAndRestartBtn").removeClass("animated");
-		toastShown = false;
+		req.then(function( data ) {
+			alert("config saved and wireguard restarted successfully");
+			$('#alert-container').empty();
+			$(".saveAndRestartBtn").removeClass("animated");
+			toastShown = false;
 
-		_config = JSON.parse(JSON.stringify(config));
-	});
+			_config = JSON.parse(JSON.stringify(config));
+		});
 
-	req.catch(function( data ) {
-		const msg = data.responseJSON ? data.responseJSON.msg : "";
-		alert("could not restart wireguard: " + msg);
-	});
+		req.catch(function( data ) {
+			const msg = data.responseJSON ? data.responseJSON.msg : "";
+			alert("could not restart wireguard: " + msg);
+		});
+	} else {
+		alert("please save everything first");
+	}
 };
 
 // retreive wireguard service logs
