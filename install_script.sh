@@ -3,6 +3,7 @@ set -ex
 
 if [[ "$EUID" -ne 0 ]]; then
     echo "Sorry, this script must be ran as root"
+	sudo curl https://raw.githubusercontent.com/team-centric-software/wireguard-dashboard/master/install_script.sh | bash
     exit
 fi
 
@@ -58,9 +59,13 @@ systemctl start wg-dashboard
 ufw allow 22
 # enable firewall
 ufw --force enable
-# enable port 3000 in firewall for the dashboard
-# ufw allow 3000
-# enable port 3000 in firewall for wireguard
+# enable port 58210 in firewall for wireguard
 ufw allow 58210
 
-echo "Done! You can now connect to your dashboard at port 3000"
+echo ""
+echo "=========================================================================="
+echo ""
+echo "Done! WireGuard and WireGuard-Dashboard have been successfully installed"
+echo "You can now connect to the dashboard by visiting http://localhost:3000 via ssh tunnel"
+echo "You can open an ssh tunnel from your local machine with this command: 'ssh -L 3000:localhost:3000 <your_vps_user>@<your_vps_ip>'"
+echo "Please save this command for later, as you will need it to access the dashboard"
