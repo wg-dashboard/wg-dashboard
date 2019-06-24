@@ -47,7 +47,10 @@ After=network.target
 [Service]
 Restart=always
 WorkingDirectory=/opt/wireguard-dashboard
-ExecStart=/usr/bin/node /opt/wireguard-dashboard/src/server.js" > /etc/systemd/system/wg-dashboard.service
+ExecStart=/usr/bin/node /opt/wireguard-dashboard/src/server.js
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/wg-dashboard.service
 
 # reload systemd unit files
 systemctl daemon-reload
