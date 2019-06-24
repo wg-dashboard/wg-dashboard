@@ -12,7 +12,7 @@ exports.loadServerConfig = (cb) => {
 			wgHelper.getNetworkAdapter((err, network_adapter) => {
 				if (err) {
 					console.log(err);
-					network_adapter = "";
+					network_adapter = "eth0";
 				}
 
 				wgHelper.getNetworkIP((err, network_ip) => {
@@ -32,7 +32,8 @@ exports.loadServerConfig = (cb) => {
 							network_adapter: network_adapter,
 							config_path: "/etc/wireguard/wg0.conf",
 							allowed_ips: ["0.0.0.0/0"],
-							peers: []
+							peers: [],
+							private_traffic: false
 					};
 
 					this.saveServerConfig(defaultSettings, (err) => {

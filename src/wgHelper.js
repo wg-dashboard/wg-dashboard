@@ -123,3 +123,35 @@ exports.getNetworkIP = (cb) => {
 		cb(null, stdout.replace(/\n/, ""));
 	});
 }
+
+exports.makeDashboardPrivate = (state, cb) => {
+	child_process.exec(`ufw delete allow 3000 ; ufw deny in on ${state.server_config.network_adapter || "eth0"} to any port 3000`, (err, stdout, stderr) => {
+		if (err || stderr) {
+			cb(err);
+			console.error(err, stderr);
+			return;
+		}
+
+		child_process.exec("ufw allow in on wg0 to any port 3000", (err, stdout, stderr) => {
+			if (err || stderr) {
+				cb(err);
+				console.error(err, stderr);
+				return;
+			}
+
+			cb(null, stdout.replace(/\n/, ""));
+		});
+	});
+}
+
+exports.makeDashboardPublic = (state, cb) => {
+	child_process.exec(`ufw allow in on ${state.server_config.network_adapter || "eth0"} to any port 3000`, (err, stdout, stderr) => {
+		if (err || stderr) {
+			cb(err);
+			console.error(err, stderr);
+			return;
+		}
+
+		cb(null, stdout.replace(/\n/, ""));
+	});
+}

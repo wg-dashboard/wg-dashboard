@@ -24,6 +24,7 @@
     "express-rate-limit": "^5.0.0",
     "express-session": "^1.16.2",
     "morgan": "^1.9.1",
+    "node-cidr": "^1.0.0",
     "nunjucks": "^3.2.0"
   },
   "devDependencies": {

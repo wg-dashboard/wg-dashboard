@@ -328,7 +328,7 @@ function createNewPeer() {
 			</td>
 			<td>
 				<div class="md-form m-0" title="Virtual IP address">
-					<input type="text" class="form-control" name="virtual_ip" value=""></input>
+					<input type="text" class="form-control" name="virtual_ip" value="${data.ip}"></input>
 				</div>
 			</td>
 			<td>
@@ -464,6 +464,22 @@ function makeQR(id) {
 		qrcode.makeCode(data);
 	});
 };
+
+function switchTrafficMode() {
+	const req = $.ajax({
+		url: `/api/switchtrafficmode`,
+		method: "POST"
+	});
+
+	req.then(function( res ) {
+		window.location = "/";
+	});
+
+	req.catch(function( data ) {
+		const msg = data.responseJSON ? data.responseJSON.msg : "";
+		alert("could not switch (error: " + msg + " )");
+	});
+}
 
 // tooltip
 $(function () {

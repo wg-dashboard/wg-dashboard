@@ -5,6 +5,7 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const rateLimit = require("express-rate-limit");
+const cidr = require("node-cidr");
 
 const dataManager = require("./dataManager");
 const wireguardHelper = require("./wgHelper");
@@ -115,7 +116,6 @@ exports.initServer = (state, cb) => {
 	});
 
 	app.post("/api/login", bodyParser.urlencoded({ extended: false }), (req, res) => {
-
 		const userItem = state.server_config.users.find(el => el.username === req.body.username);
 
 		if (userItem) {
@@ -177,10 +177,11 @@ exports.initServer = (state, cb) => {
 			dns: state.server_config.dns,
 			allowed_ips: state.server_config.allowed_ips,
 			public_key: state.server_config.public_key,
-			network_adapter: state.server_config.network_adapter,
+			network_adapter: state.server_config.network_adapter || "eth0",
 			clients: state.server_config.peers,
 			users: state.server_config.users,
 			config_path: state.server_config.config_path,
+			private_traffic: state.server_config.private_traffic,
 		});
 	});
 
@@ -198,10 +199,31 @@ exports.initServer = (state, cb) => {
 				});
 			}
 
+			let virtual_ip = "";
+
+			if (state.server_config.virtual_ip_address) {
+				const ipList = cidr.cidr.ips(`${state.server_config.virtual_ip_address}/${state.server_config.cidr}`);
+
+				// delete the ip of the server
+				const mainIndex = ipList.findIndex(el => el === state.server_config.virtual_ip_address);
+				ipList.splice(mainIndex, 1);
+
+				// delete the ips of all available clients
+				for (let i = 0; i < state.server_config.peers.length; i++) {
+					const index = ipList.findIndex(el => el === state.server_config.peers[i].virtual_ip);
+					ipList.splice(index, 1);
+				}
+
+				// check if there is an free ip available
+				if (ipList[0]) {
+					virtual_ip = ipList[0];
+				}
+			}
+
 			state.server_config.peers.push({
 				id,
 				device: "",
-				virtual_ip: "",
+				virtual_ip: virtual_ip,
 				public_key: data.public_key,
 				private_key: data.private_key,
 				active: true,
@@ -220,6 +242,7 @@ exports.initServer = (state, cb) => {
 					msg: "OK",
 					id,
 					public_key: data.public_key,
+					ip: virtual_ip,
 				});
 			});
 		});
@@ -633,8 +656,39 @@ exports.initServer = (state, cb) => {
 				msg: "USER_NOT_FOUND"
 			});
 		}
-
 	});
 
-	app.listen(state.config.port, cb);
+	app.post("/api/switchtrafficmode", (req, res) => {
+		if (state.server_config.private_traffic) {
+			wireguardHelper.makeDashboardPublic(state, (err) => {
+				if (err) {
+					res.status(500).send({
+						msg: err.toString()
+					});
+					return;
+				}
+
+				state.server_config.private_traffic = false;
+				res.status(200).send({
+					msg: "OK"
+				});
+			});
+		} else {
+			wireguardHelper.makeDashboardPrivate(state, (err) => {
+				if (err) {
+					res.status(500).send({
+						msg: err.toString()
+					});
+					return;
+				}
+
+				state.server_config.private_traffic = true;
+				res.status(200).send({
+					msg: "OK"
+				});
+			});
+		}
+	});
+
+	app.listen(state.config.port, "localhost", cb);
 }

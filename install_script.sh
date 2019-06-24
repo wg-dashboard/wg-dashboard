@@ -54,7 +54,7 @@ ufw allow 22
 # enable firewall
 ufw --force enable
 # enable port 3000 in firewall for the dashboard
-ufw allow 3000
+# ufw allow 3000
 # enable port 3000 in firewall for wireguard
 ufw allow 58210
 
