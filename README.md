@@ -56,3 +56,18 @@ With our install script all the needed packages for WireGuard and WireGuard-Dash
 	* Allowed IP's for VPN clients
 * Clean GUI
 ![Dashboard](dev/dashboard.png)
+
+## Looking for a cheap VPS?
+
+You are looking for a cheap VPS to run WireGuard on? Feel free to check these out:
+* [Vultr](https://www.vultr.com/?ref=8177683-4F)
+* [DigitalOcean](https://m.do.co/c/8d5e8ac9b8f1)
+
+## Donations
+
+If you would like support this project, please consider donating:
+* Bitcoin: `17WesqNX7ozumrufLWhukDCvwaiywHxny3`
+* Ethereum: `0x5d7836D6d3A10b1b970fb45E8f571A0cA3cE4f57`
+* Bitcoin Cash: `qr3vcp6zngks2mc42vpyakq76wlpngerj5z0e3pq9l`
+* Stellar: `GAA2EKSDAAUNM4GVTIGM7FKJSXCGUKNZKUNURHIUCHJ56M4ITB36F55K`
+* USDPAX: `0x5d7836d6d3a10b1b970fb45e8f571a0ca3ce4f57`
