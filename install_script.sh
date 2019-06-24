@@ -1,9 +1,10 @@
 #!/bin/bash
-set -ex
+set -e
 
 if [[ "$EUID" -ne 0 ]]; then
     echo "Sorry, this script must be ran as root"
-	sudo curl https://raw.githubusercontent.com/team-centric-software/wireguard-dashboard/master/install_script.sh | bash
+	echo "Maybe try this:"
+	echo "curl https://raw.githubusercontent.com/team-centric-software/wireguard-dashboard/master/install_script.sh | sudo bash"
     exit
 fi
 
