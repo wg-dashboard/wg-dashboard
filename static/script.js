@@ -481,7 +481,7 @@ function saveAndRestart() {
 		$(".saveAndRestartBtn").removeClass("animated");
 		toastShown = false;
 
-		_config = config;
+		_config = JSON.parse(JSON.stringify(config));
 	});
 
 	req.catch(function( data ) {
