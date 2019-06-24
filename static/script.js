@@ -22,6 +22,7 @@ $(document).ready(() => {
 				.find("input[name='public_key']")
 				.css("color", "#495057")
 				.attr("disabled", true);
+
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
 			const tableRow = $(e.currentTarget).parent().parent();
 			const data = {};
