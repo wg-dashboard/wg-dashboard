@@ -121,6 +121,23 @@
 											title="Path to the WireGuard config."></i></label>
 								</div>
 							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<div class="custom-control custom-switch">
+										<input type="checkbox" class="custom-control-input" id="dns_over_tls" {{ "checked" if config.dns_over_tls }}>
+										<label style="position: relative;" class="custom-control-label" for="dns_over_tls">Enable DNS over TLS</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-4" style="visibility: {{ 'visible' if config.dns_over_tls else 'hidden' }}" id="tls_servername_input">
+								<div class="md-form">
+									<input type="text" id="tls_servername" class="form-control"
+										value="{{ config.tls_servername }}" value="{{ config.tls_servername }}" disabled>
+									<label for="tls_servername">TLS Servername</label>
+								</div>
+							</div>
 						</div>
 
 					</div>

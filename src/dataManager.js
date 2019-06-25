@@ -33,7 +33,9 @@ exports.loadServerConfig = (cb) => {
 							config_path: "/etc/wireguard/wg0.conf",
 							allowed_ips: ["0.0.0.0/0"],
 							peers: [],
-							private_traffic: false
+							private_traffic: false,
+							dns_over_tls: true,
+							tls_servername: "tls.cloudflare-dns.com"
 					};
 
 					this.saveServerConfig(defaultSettings, (err) => {
@@ -94,6 +96,10 @@ exports.loadServerConfig = (cb) => {
 	});
 }
 
+exports.saveDNSConfig = (state, cb) => {
+
+}
+
 exports.saveWireguardConfig = (state, cb) => {
 	const config = nunjucks.render("templates/config_server.njk", {
 		virtual_ip_address: state.server_config.virtual_ip_address,
@@ -104,12 +110,26 @@ exports.saveWireguardConfig = (state, cb) => {
 		peers: state.server_config.peers
 	});
 
+	// write main config
 	fs.writeFile(state.server_config.config_path, config, (err) => {
 		if (err) {
 			cb(err);
 			return;
 		}
 
-		cb(null);
+		const coredns_config = nunjucks.render("templates/coredns_corefile.njk", {
+			dns_over_tls: state.server_config.dns_over_tls,
+			ip: state.server_config.dns,
+			tls_servername: state.server_config.tls_servername
+		});
+
+		fs.writeFile("/etc/coredns/Corefile", coredns_config, (err) => {
+			if (err) {
+				cb(err);
+				return;
+			}
+
+			cb(null);
+		});
 	});
 }

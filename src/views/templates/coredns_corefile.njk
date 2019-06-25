@@ -1,0 +1,11 @@
+. {
+    forward . {{ "tls://" if dns_over_tls }}{{ ip }} {
+		{{% if dns_over_tls %}}
+        tls_servername {{ tls_servername }}
+		{{% endif %}}
+        health_check 10s
+    }
+
+    cache
+    errors
+}

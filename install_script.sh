@@ -65,6 +65,52 @@ ufw allow 22
 ufw --force enable
 # enable port 58210 in firewall for wireguard
 ufw allow 58210
+# enable port 53 in firewall for dns
+ufw allow 53
+
+# make and enter coredns folder
+mkdir /etc/coredns
+cd /etc/coredns
+# download coredns
+curl -L https://github.com/coredns/coredns/releases/download/v1.5.0/coredns_1.5.0_linux_amd64.tgz --output coredns.tgz
+# unzip and delete tar
+tar -xzf coredns.tgz
+rm -f coredns.tgz
+# move coredns to correct directory
+mv coredns /usr/bin/coredns
+# write default coredns config
+echo ". {
+    forward . tls://1.1.1.1 {
+        tls_servername tls.cloudflare-dns.com
+        health_check 10s
+    }
+
+    cache
+    errors
+}" > /etc/coredns/Corefile
+# write autostart config
+echo "
+[Unit]
+Description=CoreDNS DNS Server
+Documentation=https://coredns.io/manual/toc/
+After=network.target
+
+[Service]
+LimitNOFILE=8192
+ExecStart=/usr/bin/coredns -conf /etc/coredns/Corefile -cpu 10%
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/coredns.service
+# disable systemd-resolved from startup
+systemctl disable systemd-resolved
+# stop systemd-resolved service
+systemctl stop systemd-resolved
+# enable coredns on system start
+systemctl enable coredns
+# start coredns
+systemctl start coredns
+
 
 echo ""
 echo ""

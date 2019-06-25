@@ -114,6 +114,7 @@ $(document).ready(() => {
 			$("#dns").attr("disabled", false).css("color", "#4285F4");
 			$("#network_adapter").attr("disabled", false).css("color", "#4285F4");
 			$("#config_path").attr("disabled", false).css("color", "#4285F4");
+			$("#tls_servername").attr("disabled", false).css("color", "#4285F4");
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
 			const ip_address = $("#ip_address").val();
 			const virtual_ip_address = $("#virtual_ip_address").val();
@@ -123,6 +124,8 @@ $(document).ready(() => {
 			const public_key = $("#public_key").val();
 			const network_adapter = $("#network_adapter").val();
 			const config_path = $("#config_path").val();
+			const dns_over_tls = $("#dns_over_tls").is(":checked");
+			const tls_servername = $("#tls_servername").val();
 
 			const req = $.ajax({
 				url: `/api/server_settings/save`,
@@ -137,6 +140,8 @@ $(document).ready(() => {
 						public_key: public_key,
 						network_adapter: network_adapter,
 						config_path: config_path,
+						dns_over_tls: dns_over_tls,
+						tls_servername: tls_servername
 					}
 				),
 				contentType: "application/json; charset=utf-8",
@@ -157,6 +162,7 @@ $(document).ready(() => {
 				$("#public_key").attr("disabled", true).css("color", "#495057");
 				$("#network_adapter").attr("disabled", true).css("color", "#495057");
 				$("#config_path").attr("disabled", true).css("color", "#495057");
+				$("#tls_servername").attr("disabled", true).css("color", "#495057");
 			});
 
 			req.catch(function( data ) {
@@ -286,6 +292,19 @@ $(document).ready(() => {
 
 	$("#server_settings_items").on("change", "input", (e) => {
 		const target = $(e.currentTarget)
+
+		if (target[0].id === "dns_over_tls") {
+			const enableDNSOverTLS = $("#dns_over_tls").is(":checked")
+			config[target[0].id] = enableDNSOverTLS;
+			checkToast();
+
+			if (enableDNSOverTLS) {
+				$("#tls_servername_input").css("visibility", "visible");
+			} else {
+				$("#tls_servername_input").css("visibility", "hidden");
+			}
+			return;
+		}
 
 		if (target[0].id) {
 			config[target[0].id] = target.val();
