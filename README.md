@@ -59,7 +59,9 @@ With our install script all the needed packages for WireGuard and WireGuard-Dash
 
 ## Looking for a cheap VPS?
 
-You are looking for a cheap VPS to run WireGuard on? Feel free to check these out:
+You are looking for a cheap VPS to run WireGuard on? Check these out:
+
+#### Get free $50 credit when you sign up on either of these!
 * [Vultr](https://www.vultr.com/?ref=8177683-4F)
 * [DigitalOcean](https://m.do.co/c/8d5e8ac9b8f1)
 
