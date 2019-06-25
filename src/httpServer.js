@@ -155,10 +155,11 @@ exports.initServer = (state, cb) => {
 	});
 
 	// Authentication and Authorization Middleware
-	let auth = function(req, res, next) {
+	const auth = function(req, res, next) {
 		if (req.session && req.session.admin) {
 			return next();
 		} else {
+			// check if a single user exists
 			if (state.server_config.users.length === 0) {
 				return res.redirect("/createuser");
 			}
@@ -386,7 +387,7 @@ exports.initServer = (state, cb) => {
 		const virtualIPValid = ipCheck.test(req.body.virtual_ip_address);
 		if (!virtualIPValid) {
 			res.status(500).send({
-				msg: "VIRTUAL_IP_INVALID",
+				msg: "VIRTUAL_ADDRESS_INVALID",
 			});
 			return;
 		}

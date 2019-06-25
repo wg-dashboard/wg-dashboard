@@ -117,7 +117,7 @@
 					</div>
 
 					<div class="md-form" >
-						<input type="text" id="allowed_ips" class="form-control" value="{{ config.allowed_ips }}" disabled>
+						<input type="text" id="allowed_ips" class="form-control" value="{{ config.allowed_ips.join(", ") }}" disabled>
 						<label for="allowed_ips">Allowed IPs <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="top" title="List of all allowed IP-Addresses [e.g.: 0.0.0.0/0 for all traffic]. Multiple addresses possible, separated trough comma."></i></label>
 					</div>
 				</div>
@@ -240,7 +240,7 @@
 							</thead>
 
 							<tbody id="users">
-								{% for user in users %}
+								{% for user in config.users %}
 								<tr class="text-center p-2" id="user_{{ user.id }}">
 									<td>
 										<div class="md-form m-0" title="Username">
