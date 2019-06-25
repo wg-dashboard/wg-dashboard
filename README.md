@@ -15,7 +15,7 @@ We made this dashboard to simplify the setup of WireGuard. Instead of having to 
 
 ## Sponsoring
 
-Thanks to [TCS](http://tcs.de) for sponsoring initial development
+Thanks to [Team Centric Software](http://tcs.de) for sponsoring initial development
 
 ## Installation
 
