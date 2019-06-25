@@ -13,6 +13,10 @@ We made this dashboard to simplify the setup of WireGuard. Instead of having to 
 * Ubuntu 18.04
 * root user
 
+## Sponsoring
+
+Thanks to [TCS](http://tcs.de) for sponsoring initial development
+
 ## Installation
 
 #### Automatic Install
