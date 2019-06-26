@@ -81,8 +81,13 @@ $(document).ready(() => {
 				})
 
 				req.then(function( data ) {
+					const index = config.peers.findIndex(el => el.id === tableRow[0].id);
+					config.peers.splice(index, 1);
+
 					tableRow
 						.remove();
+
+					checkToast();
 				});
 
 				req.catch(function( data ) {
@@ -115,6 +120,7 @@ $(document).ready(() => {
 			$("#network_adapter").attr("disabled", false).css("color", "#4285F4");
 			$("#config_path").attr("disabled", false).css("color", "#4285F4");
 			$("#tls_servername").attr("disabled", false).css("color", "#4285F4");
+			$("#dns_over_tls").attr("disabled", false).css("color", "#4285F4");
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
 			const ip_address = $("#ip_address").val();
 			const virtual_ip_address = $("#virtual_ip_address").val();
@@ -163,6 +169,7 @@ $(document).ready(() => {
 				$("#network_adapter").attr("disabled", true).css("color", "#495057");
 				$("#config_path").attr("disabled", true).css("color", "#495057");
 				$("#tls_servername").attr("disabled", true).css("color", "#495057");
+				$("#dns_over_tls").attr("disabled", true).css("color", "#495057");
 			});
 
 			req.catch(function( data ) {
@@ -363,6 +370,14 @@ function createNewPeer() {
 	});
 
 	req.then(function( data ) {
+		config.peers.push({
+			id: data.id,
+			device: "",
+			virtual_ip: data.ip,
+			public_key: data.public_key,
+			active: true,
+		});
+
 		$("#peers").append(`
 		<tr class="text-center p-2" id="${data.id}">
 			<td>
@@ -413,6 +428,8 @@ function createNewPeer() {
 			</td>
 		</tr>
 		`);
+
+		checkToast();
 	});
 
 	req.catch(function( data ) {

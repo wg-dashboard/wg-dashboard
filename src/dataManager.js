@@ -123,13 +123,22 @@ exports.saveWireguardConfig = (state, cb) => {
 			tls_servername: state.server_config.tls_servername
 		});
 
+		// write new coredns config
 		fs.writeFile("/etc/coredns/Corefile", coredns_config, (err) => {
 			if (err) {
 				cb(err);
 				return;
 			}
 
-			cb(null);
+			// restart coredns
+			wgHelper.restartCoreDNS((err) => {
+				if (err) {
+					cb(err);
+					return;
+				}
+
+				cb(null);
+			});
 		});
 	});
 }

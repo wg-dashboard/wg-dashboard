@@ -68,7 +68,6 @@ exports.stopWireguard = (cb) => {
 	child_process.exec("systemctl stop wg-quick@wg0", (err, stdout, stderr) => {
 		if (err || stderr) {
 			cb(err);
-			console.error(err, stderr);
 			return;
 		}
 
@@ -80,7 +79,6 @@ exports.startWireguard = (cb) => {
 	child_process.exec("systemctl start wg-quick@wg0", (err, stdout, stderr) => {
 		if (err || stderr) {
 			cb(err);
-			console.error(err, stderr);
 			return;
 		}
 
@@ -92,7 +90,6 @@ exports.wireguardStatus = (cb) => {
 	child_process.exec("journalctl -u wg-quick@wg0.service -n 100", (err, stdout, stderr) => {
 		if (err || stderr) {
 			cb(err);
-			console.error(err, stderr);
 			return;
 		}
 
@@ -104,7 +101,6 @@ exports.getNetworkAdapter = (cb) => {
 	child_process.exec("ip route | grep default | cut -d ' ' -f 5", (err, stdout, stderr) => {
 		if (err || stderr) {
 			cb(err);
-			console.error(err, stderr);
 			return;
 		}
 
@@ -116,7 +112,6 @@ exports.getNetworkIP = (cb) => {
 	child_process.exec("ifconfig eth0 | grep inet | head -n 1 | xargs | cut -d ' ' -f 2", (err, stdout, stderr) => {
 		if (err || stderr) {
 			cb(err);
-			console.error(err, stderr);
 			return;
 		}
 
@@ -128,14 +123,12 @@ exports.makeDashboardPrivate = (state, cb) => {
 	child_process.exec(`ufw delete allow 3000 ; ufw deny in on ${state.server_config.network_adapter || "eth0"} to any port 3000`, (err, stdout, stderr) => {
 		if (err || stderr) {
 			cb(err);
-			console.error(err, stderr);
 			return;
 		}
 
 		child_process.exec("ufw allow in on wg0 to any port 3000", (err, stdout, stderr) => {
 			if (err || stderr) {
 				cb(err);
-				console.error(err, stderr);
 				return;
 			}
 
@@ -148,10 +141,20 @@ exports.makeDashboardPublic = (state, cb) => {
 	child_process.exec(`ufw allow in on ${state.server_config.network_adapter || "eth0"} to any port 3000`, (err, stdout, stderr) => {
 		if (err || stderr) {
 			cb(err);
-			console.error(err, stderr);
 			return;
 		}
 
 		cb(null, stdout.replace(/\n/, ""));
+	});
+}
+
+exports.restartCoreDNS = (cb) => {
+	child_process.exec(`systemctl restart coredns`, (err, stdout, stderr) => {
+		if (err || stderr) {
+			cb(err);
+			return;
+		}
+
+		cb(null);
 	});
 }
