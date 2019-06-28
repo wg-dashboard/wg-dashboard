@@ -36,8 +36,12 @@ With our install script all the needed packages for WireGuard and WireGuard-Dash
 3. Download & install node 10
 4. Download and unzip the dashboard
 5. Set `net.ipv4.ip_forward=1` in sysctl
-6. Optional: Enable ufw and forward port 22 and the desired port of the wireguard instance
-7. Optional: Put the dashboard in autostart
+6. Install CoreDNS (needed for DNS over TLS)
+7. Put CoreDNS in autostart
+8. Optional: Enable ufw and forward port 22 and the desired port of the wireguard instance
+9. Put the dashboard in autostart
+10. Start the dashboard service
+11. Enjoy
 
 ## Features
 
