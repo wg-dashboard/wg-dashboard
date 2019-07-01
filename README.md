@@ -10,7 +10,7 @@ We made this dashboard to simplify the setup of WireGuard. Instead of having to 
 
 ## Requirements
 
-* Ubuntu 18.04
+* Ubuntu 18.04 or Raspbian Buster
 * root user
 
 ## Sponsoring
