@@ -16,15 +16,15 @@ if [[ "$(lsb_release -is)" == "Raspbian" ]]; then
 	# get the latest stable snapshot
 	curl -L https://git.zx2c4.com/WireGuard/snapshot/WireGuard-0.0.20190601.tar.xz --output WireGuard.tar.xz
 	# create directory
-	mkdir WireGuard
+	mkdir -f WireGuard
 	# unzip tarball
 	tar xf WireGuard.tar.xz -C WireGuard --strip-components=1
 	# delete tarball
-	rm WireGuard.tar.xz
+	rm -f WireGuard.tar.xz
 	# go into source folder
 	cd WireGuard/src
 	# build and install wireguard
-	sudo make
+	# sudo make
 	sudo make install
 	# go back to home folder
 	cd ~
