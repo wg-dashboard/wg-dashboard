@@ -28,7 +28,7 @@ if [[ "$(lsb_release -is)" == "Raspbian" ]]; then
 	# go into source folder
 	cd WireGuard/src
 	# build and install wireguard
-	# sudo make
+	sudo make
 	sudo make install
 	# go back to home folder
 	cd ~
