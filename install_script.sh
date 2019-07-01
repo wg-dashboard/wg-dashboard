@@ -16,7 +16,7 @@ if [[ "$(lsb_release -is)" == "Raspbian" ]]; then
 	# get the latest stable snapshot
 	curl -L https://git.zx2c4.com/WireGuard/snapshot/WireGuard-0.0.20190601.tar.xz --output WireGuard.tar.xz
 	# create directory
-	mkdir -f WireGuard
+	mkdir -p WireGuard
 	# unzip tarball
 	tar xf WireGuard.tar.xz -C WireGuard --strip-components=1
 	# delete tarball
@@ -54,7 +54,7 @@ rm -rf wireguard-dashboard.tar.gz
 # download wireguard-dashboard latest release
 curl -L https://github.com/$(wget https://github.com/team-centric-software/wireguard-dashboard/releases/latest -O - | egrep '/.*/.*/.*tar.gz' -o) --output wireguard-dashboard.tar.gz
 # create directory for dashboard
-mkdir wireguard-dashboard
+mkdir -p wireguard-dashboard
 # unzip wireguard-dashboard
 tar -xzf wireguard-dashboard.tar.gz --strip-components=1 -C wireguard-dashboard
 # delete unpacked .tar.gz
@@ -94,7 +94,7 @@ ufw allow 58210
 ufw allow 53
 
 # make and enter coredns folder
-mkdir /etc/coredns
+mkdir -p /etc/coredns
 cd /etc/coredns
 if [[ "$(lsb_release -is)" == "Raspbian" ]]; then
 	# download coredns
