@@ -60,8 +60,10 @@ With our install script all the needed packages for WireGuard and WireGuard-Dash
 	* Port
 	* Network adapter
 	* Virtual address
-	* DNS
 	* Allowed IP's for VPN clients
+* CoreDNS config management
+	* DNS Server
+	* DNS over TLS
 * Clean GUI
 ![Dashboard](dev/dashboard.png)
 
