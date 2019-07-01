@@ -11,8 +11,8 @@ fi
 # i = distributor id, s = short, gives us name of the os ("Ubuntu", "Raspbian", ...)
 if [[ "$(lsb_release -is)" == "Raspbian" ]]; then
 	# needed for new kernel
-	sudo apt-get update
-	sudo apt-get upgrade
+	sudo apt-get update -y
+	sudo apt-get upgrade -y
 
 	# install required build tools
 	sudo apt-get install -y raspberrypi-kernel-headers libmnl-dev libelf-dev build-essential ufw
