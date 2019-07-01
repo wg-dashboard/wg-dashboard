@@ -3,11 +3,11 @@ const fs = require("fs");
 const wgHelper = require("./wgHelper");
 
 exports.saveServerConfig = (server_config, cb) => {
-	fs.writeFile("server_config.json", JSON.stringify(server_config, null, 2), cb);
+	fs.writeFile("./server_config.json", JSON.stringify(server_config, null, 2), cb);
 }
 
 exports.loadServerConfig = (cb) => {
-	fs.stat("server_config.json", (err) => {
+	fs.stat("./server_config.json", (err) => {
 		if (err) {
 			wgHelper.getNetworkAdapter((err, network_adapter) => {
 				if (err) {
@@ -52,7 +52,7 @@ exports.loadServerConfig = (cb) => {
 			return;
 		}
 
-		fs.readFile("server_config.json", (err, buffer) => {
+		fs.readFile("./server_config.json", (err, buffer) => {
 			if (err) {
 				cb(err);
 				return;

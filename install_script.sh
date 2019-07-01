@@ -2,18 +2,43 @@
 set -e
 
 if [[ "$EUID" -ne 0 ]]; then
-    echo "Sorry, this script must be ran as root"
+	echo "Sorry, this script must be ran as root"
 	echo "Maybe try this:"
 	echo "curl https://raw.githubusercontent.com/team-centric-software/wireguard-dashboard/master/install_script.sh | sudo bash"
-    exit
+	exit
 fi
 
-# add wireguard repository to apt
-add-apt-repository -y ppa:wireguard/wireguard
-# install wireguard
-apt-get install -y wireguard
-# install linux kernel headers
-apt-get install -y linux-headers-$(uname -r)
+# i = distributor id, s = short, gives us name of the os ("Ubuntu", "Raspbian", ...)
+if [[ "$(lsb_release -is)" == "Raspbian" ]]; then
+	# install required build tools
+	sudo apt-get install -y raspberrypi-kernel-headers libmnl-dev libelf-dev build-essential ufw
+	cd /opt
+	# get the latest stable snapshot
+	curl -L https://git.zx2c4.com/WireGuard/snapshot/WireGuard-0.0.20190601.tar.xz --output WireGuard.tar.xz
+	# create directory
+	mkdir WireGuard
+	# unzip tarball
+	tar xf WireGuard.tar.xz -C WireGuard --strip-components=1
+	# delete tarball
+	rm WireGuard.tar.xz
+	# go into source folder
+	cd WireGuard/src
+	# build and install wireguard
+	sudo make
+	sudo make install
+	# go back to home folder
+	cd ~
+elif [[ "$(lsb_release -is)" == "Ubuntu" ]]; then
+	# needed for add-apt-repository
+	apt-get install -y software-properties-common
+	# add wireguard repository to apt
+	add-apt-repository -y ppa:wireguard/wireguard
+	# install wireguard
+	apt-get install -y wireguard
+	# install linux kernel headers
+	apt-get install -y linux-headers-$(uname -r)
+fi
+
 # enable ipv4 packet forwarding
 sysctl -w net.ipv4.ip_forward=1
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
@@ -37,7 +62,7 @@ rm -f wireguard-dashboard.tar.gz
 # go into wireguard-dashboard folder
 cd wireguard-dashboard
 # install node modules
-npm i --production
+sudo npm i --production --unsafe-perm
 
 # create service unit file
 echo "[Unit]
@@ -71,8 +96,13 @@ ufw allow 53
 # make and enter coredns folder
 mkdir /etc/coredns
 cd /etc/coredns
-# download coredns
-curl -L https://github.com/coredns/coredns/releases/download/v1.5.0/coredns_1.5.0_linux_amd64.tgz --output coredns.tgz
+if [[ "$(lsb_release -is)" == "Raspbian" ]]; then
+	# download coredns
+	curl -L https://github.com/coredns/coredns/releases/download/v1.5.0/coredns_1.5.0_linux_amd64.tgz --output coredns.tgz
+elif [[ "$(lsb_release -is)" == "Ubuntu" ]]; then
+	# download coredns
+	curl -L https://github.com/coredns/coredns/releases/download/v1.5.1/coredns_1.5.1_linux_arm.tgz --output coredns.tgz
+fi
 # unzip and delete tar
 tar -xzf coredns.tgz
 rm -f coredns.tgz
@@ -80,13 +110,13 @@ rm -f coredns.tgz
 mv coredns /usr/bin/coredns
 # write default coredns config
 echo ". {
-    forward . tls://1.1.1.1 {
-        tls_servername tls.cloudflare-dns.com
-        health_check 10s
-    }
+	forward . tls://1.1.1.1 {
+		tls_servername tls.cloudflare-dns.com
+		health_check 10s
+	}
 
-    cache
-    errors
+	cache
+	errors
 }" > /etc/coredns/Corefile
 # write autostart config
 echo "
