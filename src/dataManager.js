@@ -22,6 +22,7 @@ exports.loadServerConfig = (cb) => {
 					}
 
 					const defaultSettings = {
+							webserver_port: 3000,
 							users: [],
 							public_key: "",
 							ip_address: network_ip,

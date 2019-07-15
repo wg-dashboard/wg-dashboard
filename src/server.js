@@ -3,19 +3,20 @@ const httpServer = require("./httpServer");
 const wireguardHelper = require("./wgHelper");
 
 function main() {
-	const state = {
-		config: {
-			port: process.env.PORT || 3000,
-			devLogs: false,
-		},
-		server_config: null,
-	};
 
 	dataManager.loadServerConfig((err, server_config) => {
 		if (err) {
 			console.error("could not load server config", err);
 			return;
 		}
+
+		const state = {
+			config: {
+				port: server_config.webserver_port || 3000,
+				devLogs: false,
+			},
+			server_config: null,
+		};
 
 		state.server_config = server_config;
 
