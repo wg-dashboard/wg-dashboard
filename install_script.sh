@@ -41,6 +41,9 @@ elif [[ "$(lsb_release -is)" == "Ubuntu" ]]; then
 	apt-get install -y wireguard
 	# install linux kernel headers
 	apt-get install -y linux-headers-$(uname -r)
+else
+	echo "Sorry, your operating system is not supported"
+	exit
 fi
 
 # enable ipv4 packet forwarding
