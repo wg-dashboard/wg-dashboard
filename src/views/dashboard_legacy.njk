@@ -1,0 +1,386 @@
+{% extends "base.njk" %}
+
+{% block content %}
+<div id="alert-container"></div>
+
+<div class="container animated fadeIn">
+
+
+	<div class="row">
+
+		<div class="col-12">
+			<div class="card my-3 rounded-0">
+				<div class="card-body">
+					<div class="h4 m-0 card-title d-flex justify-content-between">
+						<p class="display-4 m-0">WireGuard Dashboard</p>
+						<div class="text-right logout">
+							<div id="switchInterfaceContainer">
+								{# {% if private_traffic %}
+								<button class="btn btn-grey btn-sm" onclick="switchTrafficMode();">ALLOW DASHBOARD FROM {{ network_adapter }} (PUBLIC) INTERFACE</button>
+								{% else %}
+									<button class="btn btn-grey btn-sm" onclick="switchTrafficMode();">ONLY ALLOW DASHBOARD FROM wg0 (PRIVATE) INTERFACE</button>
+								{% endif %} #}
+							</div>
+							<i class="fas fa-door-open mx-2" onclick="window.location='/logout'" alt="Logout"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 mb-3">
+			<div class="card rounded-0">
+				<div class="card-body">
+					<div class="h4 card-title d-flex justify-content-between">
+						<p>Server settings</p>
+						<div class="text-right">
+							<i id="server_settings" class="far fa-edit text-dark px-2 editBtn"
+								title="Edit server settings"></i>
+							<button class="btn btn-success btn-sm" onclick="retreiveLogs();"
+								title="View Wireguard Service Logs" data-toggle="modal"
+								data-target="#logsModal">Logs</button>
+						</div>
+					</div>
+
+					<div class="card-text" id="server_settings_items">
+
+						<div class="row">
+							<div class="col-4">
+								<div class="md-form">
+									<input type="text" id="ip_address" class="form-control"
+										value="{{ config.ip_address }}" disabled>
+									<label for="ip_address">Public Host / IP <i class="fas fa-info-circle fa-sm"
+											data-toggle="tooltip" data-placement="top"
+											title="IP that is accessible by the outside"></i></label>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<input type="number" id="port" class="form-control" value="{{ config.port }}"
+										disabled>
+									<label for="port">Port <i class="fas fa-info-circle fa-sm" data-toggle="tooltip"
+											data-placement="top" title="VPN-Server port"></i></label>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<input type="text" id="network_adapter" class="form-control"
+										value="{{ config.network_adapter }}" disabled>
+									<label for="network_adapter">Network Adapter</label>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<input type="text" id="virtual_ip_address" class="form-control"
+										value="{{ config.virtual_ip_address }}" disabled>
+									<label for="ip_address">Virtual Address <i class="fas fa-info-circle fa-sm"
+											data-toggle="tooltip" data-placement="top"
+											title="VPN server address in virtual network"></i></label>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<input type="number" id="cidr" class="form-control" value="{{ config.cidr }}"
+										disabled>
+									<label for="cidr">CIDR <i class="fas fa-info-circle fa-sm" data-toggle="tooltip"
+											data-placement="top" title="CIDR of the virtual address"></i></label>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<input type="text" id="dns" class="form-control" value="{{ config.dns }}" disabled>
+									<label for="dns">DNS</label>
+								</div>
+							</div>
+
+							<div class="col-8">
+								<div class="md-form">
+									<input type="text" id="public_key" class="form-control"
+										value="{{ config.public_key }}" disabled>
+									<label for="public_key">Public Key <i class="fas fa-info-circle fa-sm"
+											data-toggle="tooltip" data-placement="top"
+											title="Public key of the VPN-Server (unchangeable)."></i> <i
+											class="fas fa-sync fa-sm text-info mx-2" data-toggle="tooltip"
+											data-placement="top" title="Re-create public & private server keys"
+											onclick="refreshServerKeys();" style="cursor: pointer; display: inline-block;"></i></label>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<input type="text" id="config_path" class="form-control"
+										value="{{ config.config_path }}" disabled>
+									<label for="config_path">Config Path <i class="fas fa-info-circle fa-sm"
+											data-toggle="tooltip" data-placement="top"
+											title="Path to the WireGuard config."></i></label>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="md-form">
+									<div class="custom-control custom-switch">
+										<input type="checkbox" class="custom-control-input" id="dns_over_tls" {{ "checked" if config.dns_over_tls }} disabled>
+										<label style="position: relative;" class="custom-control-label" for="dns_over_tls">Enable DNS over TLS</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-4" style="visibility: {{ 'visible' if config.dns_over_tls else 'hidden' }}" id="tls_servername_input">
+								<div class="md-form">
+									<input type="text" id="tls_servername" class="form-control"
+										value="{{ config.tls_servername }}" value="{{ config.tls_servername }}" disabled>
+									<label for="tls_servername">TLS Servername</label>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 mb-3">
+			<div class="card my-3 rounded-0">
+				<div class="card-body">
+					<div class="h4 card-title d-flex justify-content-between">
+						<p>Allowed IPs</p>
+						<div class="text-right pointer">
+							<i id="allowed_ip_settings" class="far fa-edit text-dark px-2 editBtn"
+								title="Edit allowed ip addresses"></i>
+						</div>
+					</div>
+
+					<div class="md-form">
+						<input type="text" id="allowed_ips" class="form-control"
+							value="{{ config.allowed_ips.join(", ") }}" disabled>
+						<label for="allowed_ips">Allowed IPs <i class="fas fa-info-circle fa-sm" data-toggle="tooltip"
+								data-placement="top"
+								title="List of all allowed IP-Addresses [e.g.: 0.0.0.0/0 for all traffic]. Multiple addresses possible, separated trough comma."></i></label>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 mb-3">
+			<div class="card rounded-0">
+				<div class="card-body">
+					<div class="h4 card-title">
+						<p>Peers</p>
+					</div>
+
+					<div class="card-text">
+
+						<table class="table" style="table-layout: fixed;">
+							<thead class="bg-dark white-text">
+								<tr class="text-center">
+									<th scope="col" width="10%">QR Code</th>
+									<th scope="col" width="12%">Download <i class="fas fa-info-circle fa-sm"
+											data-toggle="tooltip" data-placement="top"
+											title="Download the configuration file (can be imported into wireguard app)"></i>
+									</th>
+									<th scope="col" width="10%">Active</th>
+									<th scope="col">Device</th>
+									<th scope="col">Public key <i class="fas fa-info-circle fa-sm" data-toggle="tooltip"
+											data-placement="top" title="Public key of the device"></i></th>
+									<th scope="col">Virtual IP <i class="fas fa-info-circle fa-sm" data-toggle="tooltip"
+											data-placement="top"
+											title="Virtual IP of the device (must be in same virtual network as the wireguard server)"></i>
+									</th>
+									<th scope="col" width="10%">Edit</th>
+									<th scope="col" width="10%">Delete</th>
+								</tr>
+							</thead>
+
+							<tbody id="peers">
+								{% for client in config.peers %}
+								<tr class="text-center p-2" id="{{ client.id }}">
+									<td>
+										<div class="my-auto" title="Show QR code for this peer">
+											<button onclick="makeQR({{ client.id }});" class="btn btn-dark btn-sm"
+												data-toggle="modal" data-target="#qrModal">
+												<i class="fas fa-qrcode fa-lg"></i>
+											</button>
+										</div>
+									</td>
+									<td>
+										<div class="my-auto" title="Download peer">
+											<button onclick="window.location='/api/download/{{ client.id }}';"
+												class="btn btn-dark btn-sm">
+												<i class="fa fa-download fa-lg"></i>
+											</button>
+										</div>
+									</td>
+									<td>
+										{% if client.active %}
+										<button class="btn btn-success btn-sm activeBtn w-100" title="Peer is active"
+											disabled>
+											<i class="fas fa-check fa-lg"></i>
+										</button>
+										{% else %}
+										<button class="btn btn-danger btn-sm activeBtn w-100"
+											title="Peer is deactivated" disabled>
+											<i class="fas fa-times fa-lg"></i>
+										</button>
+										{% endif %}
+									</td>
+									<td>
+										<div class="md-form m-0" title="Device name">
+											<input type="text" class="form-control" name="device"
+												value="{{ client.device }}" disabled></input>
+										</div>
+									</td>
+									<td>
+										<div class="md-form m-0" title="Public key">
+											<input type="text" class="form-control" name="public_key"
+												value="{{ client.public_key }}" disabled></input>
+										</div>
+									</td>
+									<td>
+										<div class="md-form m-0" title="Virtual IP address">
+											<input type="text" class="form-control" name="virtual_ip"
+												value="{{ client.virtual_ip }}" disabled></input>
+										</div>
+									</td>
+									<td>
+										<button class="btn btn-dark btn-sm editBtn w-100" title="Edit peer">
+											<i class="far fa-edit fa-lg"></i>
+										</button>
+									</td>
+									<td>
+										<div class="my-auto" title="Delete peer">
+											<button class="btn btn-danger btn-sm deleteBtn w-100">
+												<i class="fas fa-trash fa-lg"></i>
+											</button>
+										</div>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+							<tr class="p-2">
+								<td class="text-center" colspan="8">
+									<button class="btn btn-success btn-lg mt-4" onclick="createNewPeer();"
+										title="Add new peer">
+										<i class="fa fa-user-plus"></i> Add Peer
+									</button>
+								</td>
+							</tr>
+						</table>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 mb-3">
+			<div class="card my-3 rounded-0">
+				<div class="card-body">
+					<div class="h4 card-title">
+						<p>Users</p>
+					</div>
+
+					<div class="card-text">
+
+						<table class="table" style="table-layout: fixed;">
+							<thead class="bg-dark white-text">
+								<tr class="text-center">
+									<th scope="col" width="40%">Username</th>
+									<th scope="col" width="40%">Password</th>
+									<th scope="col" width="10%">Edit</th>
+									<th scope="col" width="10%">Delete</th>
+								</tr>
+							</thead>
+
+							<tbody id="users">
+								{% for user in config.users %}
+								<tr class="text-center p-2" id="user_{{ user.id }}">
+									<td>
+										<div class="md-form m-0" title="Username">
+											<input type="text" class="form-control" name="username"
+												value="{{ user.username }}" disabled></input>
+										</div>
+									</td>
+									<td>
+										<div class="md-form m-0" title="Password">
+											<input type="password" class="form-control" name="password"
+												placeholder="(new password)" disabled></input>
+										</div>
+									</td>
+									<td>
+										<button class="btn btn-dark btn-sm editBtn w-100" title="Edit user">
+											<i class="far fa-edit fa-lg"></i>
+										</button>
+									</td>
+									<td>
+										<button class="btn btn-danger btn-sm deleteBtn w-100" title="Delete user">
+											<i class="fas fa-trash fa-lg"></i>
+										</button>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+							<tr class="p-2">
+								<td class="text-center" colspan="8">
+									<button class="btn btn-success btn-lg mt-4" onclick="window.location='/createuser'"
+										data-toggle="tooltip" data-placement="top" title="Add new user">
+										<i class="fa fa-user-plus"></i> Add User
+									</button>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="qrModal" tabindex="-1" role="dialog" aria-labelledby="qrModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="qrModalLabel"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body d-flex justify-content-center">
+				<div id="qrcode"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="logsModal" tabindex="-1" role="dialog" aria-labelledby="logsModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="logsModalLabel"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body d-flex justify-content-center">
+				<div id="logscode" class="bg-dark text-light p-2"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+let private_traffic = {{ config.private_traffic }}
+let _config = {{ config | dump | safe }}
+let config = {{ config | dump | safe }}
+</script>
+
+{% endblock %}

@@ -6,20 +6,20 @@
 	<div class="card w-50 mx-auto mt-5">
 
 		<form class="card-body" onsubmit="return false;">
-			<h5 class="card-title h2">Setup Username and Password</h5>
+			<h5 class="card-title h2 mb-4">Setup Username and Password</h5>
 
 			<div class="card-text">
-				<div class="md-form">
+				<div class="mb-3">
 					<label for="username">Username</label>
 					<input type="text" id="username" name="username" class="form-control">
 				</div>
 
-				<div class="md-form">
+				<div class="mb-3">
 					<label for="password">Password</label>
 					<input type="password" id="password" name="password" class="form-control">
 				</div>
 
-				<div class="md-form">
+				<div class="mb-3">
 					<label for="password">Password confirmation</label>
 					<input type="password" id="password_confirm" name="password_confirm" class="form-control">
 				</div>
@@ -28,9 +28,9 @@
 
 			<div class="text-right">
 				{% if not firstAccount %}
-					<span onclick="window.location='/'" style="cursor: pointer;" class="mx-4">CANCEL</span>
+					<button onclick="window.location='/'" style="cursor: pointer;" class="btn border-0 mt-4 mx-2">CANCEL</button>
 				{% endif %}
-				<button onclick="createUser();" class="btn btn-outline-dark btn-lg">CREATE</button>
+				<button onclick="createUser();" class="btn btn-outline-dark mt-4">CREATE</button>
 			</div>
 		</form>
 

@@ -12,7 +12,7 @@ const wireguardHelper = require("./wgHelper");
 
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
-	max: 100 // limit each IP to 100 requests per windowMs
+	max: 1000000 // limit each IP to 100 requests per windowMs
 });
 
 exports.initServer = (state, cb) => {
@@ -682,5 +682,5 @@ exports.initServer = (state, cb) => {
 		}
 	});
 
-	app.listen(state.config.port, "localhost", cb);
+	app.listen(state.config.port, cb);
 }

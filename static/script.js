@@ -1,4 +1,15 @@
+$("span[data-toggle='tab']").on("shown.bs.tab", function (e) {
+	// e.target // newly activated tab
+	$(e.target).addClass("linkActive");
+	$(e.target).parent().addClass("linkActive");
+	// e.relatedTarget // previous active tab
+	$(e.relatedTarget).removeClass("linkActive");
+	$(e.relatedTarget).parent().removeClass("linkActive");
+});
+
 $(document).ready(() => {
+	$("#v-settings-tab").click();
+
 	// edit peer
 	$("#peers").on("click", "button", (e) => {
 		if ($(e.currentTarget).hasClass("editBtn")) {
@@ -104,6 +115,26 @@ $(document).ready(() => {
 		}
 	});
 
+	$("#enableTLSoverDNS").on("click", (e) => {
+		if (!$(e.currentTarget).hasClass("gradientOn")) {
+			$("#disableTLSoverDNS").removeClass("gradientOn");
+			$("#disableTLSoverDNS").addClass("gradientOff");
+			$(e.currentTarget).removeClass("gradientOff");
+			$(e.currentTarget).addClass("gradientOn");
+			config.dns_over_tls = true;
+		}
+	});
+
+	$("#disableTLSoverDNS").on("click", (e) => {
+		if (!$(e.currentTarget).hasClass("gradientOn")) {
+			$("#enableTLSoverDNS").removeClass("gradientOn");
+			$("#enableTLSoverDNS").addClass("gradientOff");
+			$(e.currentTarget).removeClass("gradientOff");
+			$(e.currentTarget).addClass("gradientOn");
+			config.dns_over_tls = false;
+		}
+	});
+
 	// edit server_settings
 	$("#server_settings").on("click", (e) => {
 		if ($(e.currentTarget).hasClass("editBtn")) {
@@ -121,6 +152,8 @@ $(document).ready(() => {
 			$("#config_path").attr("disabled", false).css("color", "#4285F4");
 			$("#tls_servername").attr("disabled", false).css("color", "#4285F4");
 			$("#dns_over_tls").attr("disabled", false).css("color", "#4285F4");
+			$("#enableTLSoverDNS").attr("disabled", false);
+			$("#disableTLSoverDNS").attr("disabled", false);
 		} else if ($(e.currentTarget).hasClass("saveBtn")) {
 			const ip_address = $("#ip_address").val();
 			const virtual_ip_address = $("#virtual_ip_address").val();
@@ -170,6 +203,8 @@ $(document).ready(() => {
 				$("#config_path").attr("disabled", true).css("color", "#495057");
 				$("#tls_servername").attr("disabled", true).css("color", "#495057");
 				$("#dns_over_tls").attr("disabled", true).css("color", "#495057");
+				$("#enableTLSoverDNS").attr("disabled", true);
+				$("#disableTLSoverDNS").attr("disabled", true);
 			});
 
 			req.catch(function( data ) {
@@ -349,13 +384,11 @@ let toastShown = false;
 function checkToast() {
 	if (JSON.stringify(config) !== JSON.stringify(_config)) {
 		if (!toastShown) {
-			$("#alert-container").append(`<div class="alert-box">Remember to click <button class="btn btn-danger saveAndRestartBtn btn-sm pulse infinite" onclick="saveAndRestart();">Regenerate Config and Restart Wireguard</button> after you changed your settings! This includes peer changes.</div>`);
-			$(".saveAndRestartBtn").addClass("animated");
+			$(".saveAndRestartBtn").addClass("pulse");
 			toastShown = true;
 		}
 	} else {
-		$("#alert-container").empty();
-		$(".saveAndRestartBtn").removeClass("animated");
+		$(".saveAndRestartBtn").removeClass("pulse");
 		toastShown = false;
 	}
 }
@@ -390,7 +423,7 @@ function createNewPeer() {
 			<td>
 				<div class="my-auto" title="Download peer">
 					<button onclick="window.location='/api/download/${data.id}';" class="btn btn-dark btn-sm" name="downloadfile" disabled>
-						<i class="fa fa-download fa-lg"></i>
+						<i class="fas fa-download fa-lg"></i>
 					</button>
 				</div>
 			</td>
