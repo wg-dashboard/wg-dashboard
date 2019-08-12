@@ -1,9 +1,9 @@
-# WireGuard-Dashboard
+# wg-dashboard
 
 ## Description
 
 #### What is this?
-WireGuard-Dashboard is a user friendly and easy to use interface to manage your WireGuard instance and peers.
+wg-dashboard is a user friendly and easy to use interface to manage your WireGuard instance and peers.
 
 #### Why did we make this?
 We made this dashboard to simplify the setup of WireGuard. Instead of having to use the terminal to manage settings we wanted an easy to use and nice looking GUI.
@@ -20,12 +20,12 @@ Thanks to [Team Centric Software](http://tcs.de) for sponsoring initial developm
 ## Installation
 
 #### Automatic Install
-With our install script all the needed packages for WireGuard and WireGuard-Dashboard will be installed. Just follow the given steps.
+With our install script all the needed packages for WireGuard and wg-dashboard will be installed. Just follow the given steps.
 
 1. Connect to your server and open a ssh tunnel from remote to local on port 3000
 	* `ssh -L 3000:localhost:3000 <your_vps_user>@<your_vps_ip>`
 2. Run the install script
-	* `curl https://raw.githubusercontent.com/team-centric-software/wireguard-dashboard/master/install_script.sh | sudo bash`
+	* `curl https://raw.githubusercontent.com/team-centric-software/wg-dashboard/master/install_script.sh | sudo bash`
 3. Go to [http://localhost:3000](http://localhost:3000) in your favorite browser
 4. Enjoy
 
@@ -76,6 +76,10 @@ You are looking for a cheap VPS to run WireGuard on? Check these out:
 #### Get free $50 credit when you sign up on either of these!
 * [Vultr](https://www.vultr.com/?ref=8177683-4F) (affiliate)
 * [DigitalOcean](https://m.do.co/c/8d5e8ac9b8f1) (affiliate)
+
+## Disclaimer
+
+We are not, in any way, affiliated with WireGuard or their creators.
 
 ## Donations
 
