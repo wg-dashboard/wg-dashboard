@@ -41,6 +41,16 @@ elif [[ "$(lsb_release -is)" == "Ubuntu" ]]; then
 	apt-get install -y wireguard
 	# install linux kernel headers
 	apt-get install -y linux-headers-$(uname -r)
+elif [[ "$(lsb_release -is)" == "Debian" ]]; then
+	# add unstable list
+	echo "deb http://deb.debian.org/debian/ unstable main" > /etc/apt/sources.list.d/unstable.list
+	printf 'Package: *\nPin: release a=unstable\nPin-Priority: 90\n' > /etc/apt/preferences.d/limit-unstable
+	# update repository
+	apt update
+	# install linux kernel headers
+	apt-get install "linux-headers-$(uname -r)"
+	# install wireguard
+	apt install wireguard
 else
 	echo "Sorry, your operating system is not supported"
 	exit
