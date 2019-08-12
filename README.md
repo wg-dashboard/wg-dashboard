@@ -25,7 +25,7 @@ With our install script all the needed packages for WireGuard and wg-dashboard w
 1. Connect to your server and open a ssh tunnel from remote to local on port 3000
 	* `ssh -L 3000:localhost:3000 <your_vps_user>@<your_vps_ip>`
 2. Run the install script
-	* `curl https://raw.githubusercontent.com/team-centric-software/wg-dashboard/master/install_script.sh | sudo bash`
+	* `curl https://raw.githubusercontent.com/wg-dashboard/wg-dashboard/master/install_script.sh | sudo bash`
 3. Go to [http://localhost:3000](http://localhost:3000) in your favorite browser
 4. Enjoy
 
