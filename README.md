@@ -1,5 +1,7 @@
 # wg-dashboard
 
+![Dashboard](dev/dashboard.png)
+
 ## Description
 
 #### What is this?
@@ -65,7 +67,6 @@ With our install script all the needed packages for WireGuard and wg-dashboard w
 	* DNS Server
 	* DNS over TLS
 * Clean GUI
-![Dashboard](dev/dashboard.png)
 
 ## Looking for a cheap VPS?
 
