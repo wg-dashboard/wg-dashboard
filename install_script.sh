@@ -4,7 +4,7 @@ set -e
 if [[ "$EUID" -ne 0 ]]; then
 	echo "Sorry, this script must be ran as root"
 	echo "Maybe try this:"
-	echo "curl https://raw.githubusercontent.com/team-centric-software/wireguard-dashboard/master/install_script.sh | sudo bash"
+	echo "curl https://raw.githubusercontent.com/wg-dashboard/wg-dashboard/master/install_script.sh | sudo bash"
 	exit
 fi
 
@@ -59,7 +59,7 @@ cd /opt
 rm -rf wireguard-dashboard
 rm -rf wireguard-dashboard.tar.gz
 # download wireguard-dashboard latest release
-curl -L https://github.com/$(wget https://github.com/team-centric-software/wireguard-dashboard/releases/latest -O - | egrep '/.*/.*/.*tar.gz' -o) --output wireguard-dashboard.tar.gz
+curl -L https://github.com/$(wget https://github.com/wg-dashboard/wg-dashboard/releases/latest -O - | egrep '/.*/.*/.*tar.gz' -o) --output wireguard-dashboard.tar.gz
 # create directory for dashboard
 mkdir -p wireguard-dashboard
 # unzip wireguard-dashboard

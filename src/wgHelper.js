@@ -12,26 +12,50 @@ exports.checkServerKeys = (state, cb) => {
 
 			const private_key = stdout.replace(/\n/, "");
 
-			child_process.exec(`echo "${private_key}" | wg pubkey`, (err, stdout, stderr) => {
+			child_process.exec("wg genkey", (err, stdout, stderr) => {
 				if (err || stderr) {
 					console.error(err);
 					console.error("Wireguard is possibly not installed?");
 					process.exit(1);
 				}
 
-				const public_key = stdout.replace(/\n/, "");
+				const private_key = stdout.replace(/\n/, "");
 
-				state.server_config.public_key = public_key;
-				state.server_config.private_key = private_key;
+				const wgchild = child_process.spawn("wg", ["pubkey"])
 
-				dataManager.saveServerConfig(state.server_config, (err) => {
-					if (err) {
-						console.error("could not save private and public keys");
+				let pubkey;
+				wgchild.stdout.on('data', (data) => {
+					pubkey = data.toString();
+				});
+
+				wgchild.stderr.on('data', (data) => {
+					console.log(data.toString());
+				});
+
+				wgchild.on('close', (code) => {
+					if (code !== 0) {
+						console.error(`wg pubkey process exited with code ${code}`);
 						process.exit(1);
 					}
 
-					cb(state);
+					const public_key = pubkey.replace(/\n/, "");
+
+					state.server_config.public_key = public_key;
+					state.server_config.private_key = private_key;
+
+					dataManager.saveServerConfig(state.server_config, (err) => {
+						if (err) {
+							console.error("could not save private and public keys");
+							process.exit(1);
+							return;
+						}
+
+						cb(state);
+					});
+					// do stuff
 				});
+
+				wgchild.stdin.end(private_key);
 			});
 		});
 	} else {

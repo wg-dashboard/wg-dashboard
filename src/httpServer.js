@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const rateLimit = require("express-rate-limit");
 const cidr = require("node-cidr");
+const crypto = require('crypto');
 
 const dataManager = require("./dataManager");
 const wireguardHelper = require("./wgHelper");
@@ -23,13 +24,7 @@ exports.initServer = (state, cb) => {
 	app.use(express.json());
 	app.use(limiter);
 
-	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnoprqstuvwxyz0123456789";
-	let session_secret = "";
-	for (let i = 0; i < 32; i++) {
-		session_secret += chars[Math.floor(Math.random() * chars.length)];
-	}
-	session_secret = session_secret.slice(7, 12) + "-" + session_secret.slice(18, 23) + "-" + session_secret.slice(26, 31);
-
+	const session_secret = crypto.randomBytes(48).toString("base64");
 	app.use(session({
 		secret: session_secret,
 		resave: true,
