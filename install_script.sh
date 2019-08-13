@@ -119,6 +119,9 @@ if [[ "$(lsb_release -is)" == "Raspbian" ]]; then
 elif [[ "$(lsb_release -is)" == "Ubuntu" ]]; then
 	# download coredns
 	curl -L https://github.com/coredns/coredns/releases/download/v1.5.1/coredns_1.5.1_linux_amd64.tgz --output coredns.tgz
+elif [[ "$(lsb_release -is)" == "Debian" ]]; then
+	# download coredns
+	curl -L https://github.com/coredns/coredns/releases/download/v1.5.1/coredns_1.5.1_linux_amd64.tgz --output coredns.tgz
 fi
 # unzip and delete tar
 tar -xzf coredns.tgz
