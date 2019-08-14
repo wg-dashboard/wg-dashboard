@@ -42,15 +42,22 @@ elif [[ "$(lsb_release -is)" == "Ubuntu" ]]; then
 	# install linux kernel headers
 	apt-get install -y linux-headers-$(uname -r)
 elif [[ "$(lsb_release -is)" == "Debian" ]]; then
-	# add unstable list
-	echo "deb http://deb.debian.org/debian/ unstable main" > /etc/apt/sources.list.d/unstable.list
-	printf 'Package: *\nPin: release a=unstable\nPin-Priority: 90\n' > /etc/apt/preferences.d/limit-unstable
-	# update repository
-	apt update
-	# install linux kernel headers
-	apt-get install -y "linux-headers-$(uname -r)" ufw
-	# install wireguard
-	apt install -y wireguard
+	if [[ "$(lsb_release -rs)" -ge "10" ]]; then
+		# add unstable list
+		echo "deb http://deb.debian.org/debian/ unstable main" > /etc/apt/sources.list.d/unstable.list
+		printf 'Package: *\nPin: release a=unstable\nPin-Priority: 90\n' > /etc/apt/preferences.d/limit-unstable
+		# update repository
+		apt update
+		# install linux kernel headers
+		apt-get install -y "linux-headers-$(uname -r)" ufw
+		# install wireguard
+		apt install -y wireguard
+		# update again (needed because of the linux kernel headers)
+		sudo apt-get update && sudo apt-get upgrade
+	else
+		echo "Sorry, your operating system is not supported"
+		exit
+	fi
 else
 	echo "Sorry, your operating system is not supported"
 	exit
