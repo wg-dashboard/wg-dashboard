@@ -11,11 +11,11 @@ fi
 # i = distributor id, s = short, gives us name of the os ("Ubuntu", "Raspbian", ...)
 if [[ "$(lsb_release -is)" == "Raspbian" ]]; then
 	# needed for new kernel
-	sudo apt-get update -y
-	sudo apt-get upgrade -y
+	apt-get update -y
+	apt-get upgrade -y
 
 	# install required build tools
-	sudo apt-get install -y raspberrypi-kernel-headers libmnl-dev libelf-dev build-essential ufw
+	apt-get install -y raspberrypi-kernel-headers libmnl-dev libelf-dev build-essential ufw
 	cd /opt
 	# get the latest stable snapshot
 	curl -L https://git.zx2c4.com/WireGuard/snapshot/WireGuard-0.0.20190601.tar.xz --output WireGuard.tar.xz
@@ -28,8 +28,8 @@ if [[ "$(lsb_release -is)" == "Raspbian" ]]; then
 	# go into source folder
 	cd WireGuard/src
 	# build and install wireguard
-	sudo make
-	sudo make install
+	make
+	make install
 	# go back to home folder
 	cd ~
 elif [[ "$(lsb_release -is)" == "Ubuntu" ]]; then
@@ -53,7 +53,7 @@ elif [[ "$(lsb_release -is)" == "Debian" ]]; then
 		# install wireguard
 		apt install -y wireguard
 		# update again (needed because of the linux kernel headers)
-		sudo apt-get update && sudo apt-get upgrade
+		apt-get update && apt-get upgrade
 	else
 		echo "Sorry, your operating system is not supported"
 		exit
@@ -86,7 +86,7 @@ rm -f wireguard-dashboard.tar.gz
 # go into wireguard-dashboard folder
 cd wireguard-dashboard
 # install node modules
-sudo npm i --production --unsafe-perm
+npm i --production --unsafe-perm
 
 # create service unit file
 echo "[Unit]
