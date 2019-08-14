@@ -48,7 +48,7 @@ elif [[ "$(lsb_release -is)" == "Debian" ]]; then
 	# update repository
 	apt update
 	# install linux kernel headers
-	apt-get install -y "linux-headers-$(uname -r)" ufw curl
+	apt-get install -y "linux-headers-$(uname -r)" ufw
 	# install wireguard
 	apt install -y wireguard
 else
