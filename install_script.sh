@@ -48,9 +48,9 @@ elif [[ "$(lsb_release -is)" == "Debian" ]]; then
 	# update repository
 	apt update
 	# install linux kernel headers
-	apt-get install "linux-headers-$(uname -r)"
+	apt-get install -y "linux-headers-$(uname -r)" ufw curl
 	# install wireguard
-	apt install wireguard
+	apt install -y wireguard
 else
 	echo "Sorry, your operating system is not supported"
 	exit
