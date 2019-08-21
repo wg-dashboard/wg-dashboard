@@ -1,3 +1,7 @@
+<p align="center">
+	<img src="/dev/wg-dashboard-logo.png" />
+</p>
+
 # wg-dashboard
 
 ![Dashboard](dev/dashboard.png)
