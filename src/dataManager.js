@@ -2,6 +2,27 @@ const nunjucks = require("nunjucks");
 const fs = require("fs");
 const wgHelper = require("./wgHelper");
 
+/**
+ * Save Dashboard and WireGuard configuration to disk
+ */
+exports.saveBothConfigs = (server_config, cb) => {
+	dataManager.saveServerConfig(server_config, err => {
+		if (err) {
+			cb("COULD_NOT_SAVE_SERVER_CONFIG");
+			return;
+		}
+
+		dataManager.saveWireguardConfig(server_config, err => {
+			if (err) {
+				cb("COULD_NOT_SAVE_WIREGUARD_CONFIG");
+				return;
+			}
+
+			cb();
+		});
+	});
+}
+
 exports.saveServerConfig = (server_config, cb) => {
 	fs.writeFile(
 		"./server_config.json",
@@ -99,20 +120,18 @@ exports.loadServerConfig = cb => {
 	});
 };
 
-exports.saveDNSConfig = (state, cb) => {};
-
-exports.saveWireguardConfig = (state, cb) => {
+exports.saveWireguardConfig = (server_config, cb) => {
 	const config = nunjucks.render("templates/config_server.njk", {
-		virtual_ip_address: state.server_config.virtual_ip_address,
-		cidr: state.server_config.cidr,
-		private_key: state.server_config.private_key,
-		port: state.server_config.port,
-		network_adapter: state.server_config.network_adapter,
-		peers: state.server_config.peers
+		virtual_ip_address: server_config.virtual_ip_address,
+		cidr: server_config.cidr,
+		private_key: server_config.private_key,
+		port: server_config.port,
+		network_adapter: server_config.network_adapter,
+		peers: server_config.peers
 	});
 
 	// write main config
-	fs.writeFile(state.server_config.config_path, config, err => {
+	fs.writeFile(server_config.config_path, config, err => {
 		if (err) {
 			cb(err);
 			return;
@@ -121,9 +140,9 @@ exports.saveWireguardConfig = (state, cb) => {
 		const coredns_config = nunjucks.render(
 			"templates/coredns_corefile.njk",
 			{
-				dns_over_tls: state.server_config.dns_over_tls,
-				ip: state.server_config.dns,
-				tls_servername: state.server_config.tls_servername
+				dns_over_tls: server_config.dns_over_tls,
+				ip: server_config.dns,
+				tls_servername: server_config.tls_servername
 			}
 		);
 

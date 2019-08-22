@@ -5,29 +5,27 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const rateLimit = require("express-rate-limit");
-const cidr = require("node-cidr");
+const { cidr } = require("node-cidr");
 const crypto = require("crypto");
 
 const dataManager = require("./dataManager");
 const wireguardHelper = require("./wgHelper");
 
-const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 15 minutes
-	max: 1000000 // limit each IP to 100 requests per windowMs
-});
-
 exports.initServer = (state, cb) => {
 	const app = express();
-	state.config.devLogs ? app.use(morgan("dev")) : "";
+	app.use(morgan(state.config.devLogs ? "dev" : "combined"));
 	app.use("/static", express.static("static"));
 
 	app.use(express.json());
-	app.use(limiter);
 
-	const session_secret = crypto.randomBytes(48).toString("base64");
+	app.use(rateLimit({
+		windowMs: 15 * 60 * 1000, // 15 minutes
+		max: 1000000 // limit each IP to 100 requests per windowMs
+	}));
+
 	app.use(
 		session({
-			secret: session_secret,
+			secret: crypto.randomBytes(48).toString("base64"),
 			resave: true,
 			saveUninitialized: true
 		})
@@ -164,18 +162,12 @@ exports.initServer = (state, cb) => {
 					msg: "USERNAME_OR_PASSWORD_WRONG_OR_NOT_FOUND"
 				});
 			}
-			/* if (req.body.username === state.server_config.dashboard_user && req.body.password === state.server_config.dashboard_password) {
-			req.session.admin = true;
-
-			res.redirect("/");
-		} else {
-			res.redirect("/login");
-		} */
 		}
 	);
 
 	// Authentication and Authorization Middleware
-	const auth = function(req, res, next) {
+	// all routes below will only be accessible by logged in users
+	app.use((req, res, next) => {
 		if (req.session && req.session.admin) {
 			return next();
 		} else {
@@ -185,9 +177,7 @@ exports.initServer = (state, cb) => {
 			}
 			return res.redirect("/login");
 		}
-	};
-
-	app.use(auth);
+	});
 
 	app.get("/", (req, res) => {
 		res.render("dashboard.njk", {
@@ -212,10 +202,8 @@ exports.initServer = (state, cb) => {
 			let virtual_ip = "";
 
 			if (state.server_config.virtual_ip_address) {
-				const ipList = cidr.cidr.ips(
-					`${state.server_config.virtual_ip_address}/${
-						state.server_config.cidr
-					}`
+				const ipList = cidr.ips(
+					`${state.server_config.virtual_ip_address}/${state.server_config.cidr}`
 				);
 
 				// delete the ip of the server
@@ -232,7 +220,7 @@ exports.initServer = (state, cb) => {
 					ipList.splice(index, 1);
 				}
 
-				// check if there is an free ip available
+				// check if there is a free ip available
 				if (ipList[0]) {
 					virtual_ip = ipList[0];
 				}
@@ -259,7 +247,7 @@ exports.initServer = (state, cb) => {
 					return;
 				}
 
-				dataManager.saveWireguardConfig(state, err => {
+				dataManager.saveWireguardConfig(state.server_config, err => {
 					if (err) {
 						res.status(500).send({
 							msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG"
@@ -304,11 +292,11 @@ exports.initServer = (state, cb) => {
 			return;
 		}
 
-		const item = state.server_config.peers.find(
+		const peer = state.server_config.peers.find(
 			el => parseInt(el.id, 10) === parseInt(id, 10)
 		);
 
-		if (!item) {
+		if (!peer) {
 			res.status(404).send({
 				msg: "PEER_NOT_FOUND"
 			});
@@ -327,14 +315,14 @@ exports.initServer = (state, cb) => {
 			return;
 		}
 
-		const old_active = item.active;
+		const old_active = peer.active;
 
-		item.device = req.body.device;
-		item.virtual_ip = req.body.virtual_ip;
-		item.public_key = req.body.public_key;
-		item.active = req.body.active;
+		peer.device = req.body.device;
+		peer.virtual_ip = req.body.virtual_ip;
+		peer.public_key = req.body.public_key;
+		peer.active = req.body.active;
 
-		saveConfig(err => {
+		dataManager.saveBothConfigs(state.server_config, err => {
 			if (err) {
 				res.status(500).send({
 					msg: err
@@ -342,11 +330,11 @@ exports.initServer = (state, cb) => {
 				return;
 			}
 
-			if (old_active === false && item.active === true) {
+			if (old_active === false && peer.active === true) {
 				wireguardHelper.addPeer(
 					{
-						allowed_ips: item.virtual_ip,
-						public_key: item.public_key
+						allowed_ips: peer.virtual_ip,
+						public_key: peer.public_key
 					},
 					err => {
 						if (err) {
@@ -362,10 +350,10 @@ exports.initServer = (state, cb) => {
 						});
 					}
 				);
-			} else if (old_active === true && item.active === false) {
+			} else if (old_active === true && peer.active === false) {
 				wireguardHelper.deletePeer(
 					{
-						public_key: item.public_key
+						public_key: peer.public_key
 					},
 					err => {
 						if (err) {
@@ -387,24 +375,6 @@ exports.initServer = (state, cb) => {
 				});
 			}
 		});
-
-		function saveConfig(cb) {
-			dataManager.saveServerConfig(state.server_config, err => {
-				if (err) {
-					cb("COULD_NOT_SAVE_SERVER_CONFIG");
-					return;
-				}
-
-				dataManager.saveWireguardConfig(state, err => {
-					if (err) {
-						cb("COULD_NOT_SAVE_WIREGUARD_CONFIG");
-						return;
-					}
-
-					cb();
-				});
-			});
-		}
 	});
 
 	app.delete("/api/peer/:id", (req, res) => {
@@ -432,44 +402,35 @@ exports.initServer = (state, cb) => {
 
 		state.server_config.peers.splice(itemIndex, 1);
 
-		dataManager.saveServerConfig(state.server_config, err => {
+		dataManager.saveBothConfigs(state.server_config, (err) => {
 			if (err) {
 				console.error(
-					"DELETE /api/peer/:id COULD_NOT_SAVE_SERVER_CONFIG",
+					"DELETE /api/peer/:id",
 					err
 				);
 				res.status(500).send({
-					msg: "COULD_NOT_SAVE_SERVER_CONFIG"
+					msg: "COULD_NOT_SAVE_CONFIGS",
 				});
 				return;
 			}
 
-			dataManager.saveWireguardConfig(state, err => {
-				if (err) {
-					res.status(500).send({
-						msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG"
-					});
-					return;
-				}
-
-				wireguardHelper.deletePeer(
-					{
-						public_key
-					},
-					err => {
-						if (err) {
-							res.status(500).send({
-								msg: "COULD_NOT_DELETE_PEER_FROM_wg0"
-							});
-							return;
-						}
-
-						res.send({
-							msg: "OK"
+			wireguardHelper.deletePeer(
+				{
+					public_key
+				},
+				err => {
+					if (err) {
+						res.status(500).send({
+							msg: "COULD_NOT_DELETE_PEER_FROM_wg0"
 						});
+						return;
 					}
-				);
-			});
+
+					res.send({
+						msg: "OK"
+					});
+				}
+			);
 		});
 	});
 
@@ -647,7 +608,7 @@ exports.initServer = (state, cb) => {
 				return;
 			}
 
-			dataManager.saveWireguardConfig(state, err => {
+			dataManager.saveWireguardConfig(state.server_config, err => {
 				if (err) {
 					res.status(500).send({
 						msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG"
