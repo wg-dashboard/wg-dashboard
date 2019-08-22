@@ -6,13 +6,13 @@ const wgHelper = require("./wgHelper");
  * Save Dashboard and WireGuard configuration to disk
  */
 exports.saveBothConfigs = (server_config, cb) => {
-	dataManager.saveServerConfig(server_config, err => {
+	exports.saveServerConfig(server_config, err => {
 		if (err) {
 			cb("COULD_NOT_SAVE_SERVER_CONFIG");
 			return;
 		}
 
-		dataManager.saveWireguardConfig(server_config, err => {
+		exports.saveWireguardConfig(server_config, err => {
 			if (err) {
 				cb("COULD_NOT_SAVE_WIREGUARD_CONFIG");
 				return;
