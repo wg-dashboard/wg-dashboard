@@ -3,11 +3,15 @@ const fs = require("fs");
 const wgHelper = require("./wgHelper");
 
 exports.saveServerConfig = (server_config, cb) => {
-	fs.writeFile("./server_config.json", JSON.stringify(server_config, null, 2), cb);
-}
+	fs.writeFile(
+		"./server_config.json",
+		JSON.stringify(server_config, null, 2),
+		cb
+	);
+};
 
-exports.loadServerConfig = (cb) => {
-	fs.stat("./server_config.json", (err) => {
+exports.loadServerConfig = cb => {
+	fs.stat("./server_config.json", err => {
 		if (err) {
 			wgHelper.getNetworkAdapter((err, network_adapter) => {
 				if (err) {
@@ -22,24 +26,24 @@ exports.loadServerConfig = (cb) => {
 					}
 
 					const defaultSettings = {
-							webserver_port: 3000,
-							users: [],
-							public_key: "",
-							ip_address: network_ip,
-							virtual_ip_address: "10.13.37.1",
-							cidr: "24",
-							port: "58210",
-							dns: "1.1.1.1",
-							network_adapter: network_adapter,
-							config_path: "/etc/wireguard/wg0.conf",
-							allowed_ips: ["0.0.0.0/0"],
-							peers: [],
-							private_traffic: false,
-							dns_over_tls: true,
-							tls_servername: "tls.cloudflare-dns.com"
+						webserver_port: 3000,
+						users: [],
+						public_key: "",
+						ip_address: network_ip,
+						virtual_ip_address: "10.13.37.1",
+						cidr: "24",
+						port: "58210",
+						dns: "1.1.1.1",
+						network_adapter: network_adapter,
+						config_path: "/etc/wireguard/wg0.conf",
+						allowed_ips: ["0.0.0.0/0"],
+						peers: [],
+						private_traffic: false,
+						dns_over_tls: true,
+						tls_servername: "tls.cloudflare-dns.com"
 					};
 
-					this.saveServerConfig(defaultSettings, (err) => {
+					this.saveServerConfig(defaultSettings, err => {
 						if (err) {
 							cb(err);
 							return;
@@ -76,7 +80,7 @@ exports.loadServerConfig = (cb) => {
 				}
 
 				if (needSave) {
-					this.saveServerConfig(parsed, (err) => {
+					this.saveServerConfig(parsed, err => {
 						if (err) {
 							cb(err);
 							return;
@@ -87,19 +91,15 @@ exports.loadServerConfig = (cb) => {
 				} else {
 					cb(null, parsed);
 				}
-
 			} catch (err) {
 				cb(err);
 				return;
 			}
-
 		});
 	});
-}
+};
 
-exports.saveDNSConfig = (state, cb) => {
-
-}
+exports.saveDNSConfig = (state, cb) => {};
 
 exports.saveWireguardConfig = (state, cb) => {
 	const config = nunjucks.render("templates/config_server.njk", {
@@ -112,27 +112,30 @@ exports.saveWireguardConfig = (state, cb) => {
 	});
 
 	// write main config
-	fs.writeFile(state.server_config.config_path, config, (err) => {
+	fs.writeFile(state.server_config.config_path, config, err => {
 		if (err) {
 			cb(err);
 			return;
 		}
 
-		const coredns_config = nunjucks.render("templates/coredns_corefile.njk", {
-			dns_over_tls: state.server_config.dns_over_tls,
-			ip: state.server_config.dns,
-			tls_servername: state.server_config.tls_servername
-		});
+		const coredns_config = nunjucks.render(
+			"templates/coredns_corefile.njk",
+			{
+				dns_over_tls: state.server_config.dns_over_tls,
+				ip: state.server_config.dns,
+				tls_servername: state.server_config.tls_servername
+			}
+		);
 
 		// write new coredns config
-		fs.writeFile("/etc/coredns/Corefile", coredns_config, (err) => {
+		fs.writeFile("/etc/coredns/Corefile", coredns_config, err => {
 			if (err) {
 				cb(err);
 				return;
 			}
 
 			// restart coredns
-			wgHelper.restartCoreDNS((err) => {
+			wgHelper.restartCoreDNS(err => {
 				if (err) {
 					cb(err);
 					return;
@@ -142,4 +145,4 @@ exports.saveWireguardConfig = (state, cb) => {
 			});
 		});
 	});
-}
+};

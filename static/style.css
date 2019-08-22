@@ -25,16 +25,17 @@ button {
 }
 
 #qrcode {
-	width:400px;
-	height:500px;
-	margin-top:15px;
+	width: 400px;
+	height: 500px;
+	margin-top: 15px;
 }
 
 #qrcode img {
 	width: 100%;
 }
 
-input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 }
@@ -55,17 +56,29 @@ div.alert-box {
 	z-index: 99;
 	font-size: 1.3rem;
 	background-color: #222;
-	color: #FFF;
+	color: #fff;
 }
 
 div.alert-box a {
-	color:#FFF;
-	text-decoration:none;
+	color: #fff;
+	text-decoration: none;
 }
 
-.alert-box a.close { color: #eee; position: absolute; right: 30px; top: 0; font-size: 18px; opacity: 0.8; padding: 4px; text-decoration:none; }
+.alert-box a.close {
+	color: #eee;
+	position: absolute;
+	right: 30px;
+	top: 0;
+	font-size: 18px;
+	opacity: 0.8;
+	padding: 4px;
+	text-decoration: none;
+}
 
-.alert-box a.close:hover,.alert-box a.close:focus { opacity: 0.4; }
+.alert-box a.close:hover,
+.alert-box a.close:focus {
+	opacity: 0.4;
+}
 
 .text-center {
 	text-align: center;
