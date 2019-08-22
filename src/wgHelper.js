@@ -162,6 +162,34 @@ exports.getNetworkIP = cb => {
 	);
 };
 
+exports.addPeer = (peer, cb) => {
+	child_process.exec(
+		`wg set wg0 peer ${peer.public_key} allowed-ips ${peer.allowed_ips}/32`,
+		(err, stdout, stderr) => {
+			if (err || stderr) {
+				cb(err);
+				return;
+			}
+
+			cb(null);
+		}
+	);
+};
+
+exports.deletePeer = (peer, cb) => {
+	child_process.exec(
+		`wg set wg0 peer ${peer.public_key} remove`,
+		(err, stdout, stderr) => {
+			if (err || stderr) {
+				cb(err);
+				return;
+			}
+
+			cb(null);
+		}
+	);
+};
+
 exports.makeDashboardPrivate = (state, cb) => {
 	child_process.exec(
 		`ufw delete allow 3000 ; ufw deny in on ${state.server_config

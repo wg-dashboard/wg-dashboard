@@ -463,7 +463,7 @@ function createNewPeer() {
 		dataType: "json"
 	});
 
-	req.then(function(data) {
+	req.always(function(data) {
 		config.peers.push({
 			id: data.id,
 			device: "",

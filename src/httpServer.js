@@ -259,11 +259,36 @@ exports.initServer = (state, cb) => {
 					return;
 				}
 
-				res.status(201).send({
-					msg: "OK",
-					id,
-					public_key: data.public_key,
-					ip: virtual_ip
+				dataManager.saveWireguardConfig(state, err => {
+					if (err) {
+						res.status(500).send({
+							msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG"
+						});
+						return;
+					}
+
+					wireguardHelper.addPeer(
+						{
+							public_key: data.public_key,
+							allowed_ips: virtual_ip
+						},
+						err => {
+							if (err) {
+								console.error(err);
+								res.status(500).send({
+									msg: "COULD_NOT_ADD_PEER_TO_wg0"
+								});
+								return;
+							}
+
+							res.status(201).send({
+								msg: "OK",
+								id,
+								public_key: data.public_key,
+								ip: virtual_ip
+							});
+						}
+					);
 				});
 			});
 		});
@@ -302,27 +327,84 @@ exports.initServer = (state, cb) => {
 			return;
 		}
 
+		const old_active = item.active;
+
 		item.device = req.body.device;
 		item.virtual_ip = req.body.virtual_ip;
 		item.public_key = req.body.public_key;
 		item.active = req.body.active;
 
-		dataManager.saveServerConfig(state.server_config, err => {
+		saveConfig(err => {
 			if (err) {
-				console.error(
-					"PUT /api/peer/:id COULD_NOT_SAVE_SERVER_CONFIG",
-					err
-				);
 				res.status(500).send({
-					msg: "COULD_NOT_SAVE_SERVER_CONFIG"
+					msg: err
 				});
 				return;
 			}
 
-			res.send({
-				msg: "OK"
-			});
+			if (old_active === false && item.active === true) {
+				wireguardHelper.addPeer(
+					{
+						allowed_ips: item.virtual_ip,
+						public_key: item.public_key
+					},
+					err => {
+						if (err) {
+							console.error(err);
+							res.status(500).send({
+								msg: "COULD_NOT_ADD_PEER_TO_wg0"
+							});
+							return;
+						}
+
+						res.send({
+							msg: "OK"
+						});
+					}
+				);
+			} else if (old_active === true && item.active === false) {
+				wireguardHelper.deletePeer(
+					{
+						public_key: item.public_key
+					},
+					err => {
+						if (err) {
+							console.error(err);
+							res.status(500).send({
+								msg: "COULD_NOT_DELETE_PEER_FROM_wg0"
+							});
+							return;
+						}
+
+						res.send({
+							msg: "OK"
+						});
+					}
+				);
+			} else {
+				res.send({
+					msg: "OK"
+				});
+			}
 		});
+
+		function saveConfig(cb) {
+			dataManager.saveServerConfig(state.server_config, err => {
+				if (err) {
+					cb("COULD_NOT_SAVE_SERVER_CONFIG");
+					return;
+				}
+
+				dataManager.saveWireguardConfig(state, err => {
+					if (err) {
+						cb("COULD_NOT_SAVE_WIREGUARD_CONFIG");
+						return;
+					}
+
+					cb();
+				});
+			});
+		}
 	});
 
 	app.delete("/api/peer/:id", (req, res) => {
@@ -346,6 +428,8 @@ exports.initServer = (state, cb) => {
 			return;
 		}
 
+		const public_key = state.server_config.peers[itemIndex].public_key;
+
 		state.server_config.peers.splice(itemIndex, 1);
 
 		dataManager.saveServerConfig(state.server_config, err => {
@@ -360,8 +444,31 @@ exports.initServer = (state, cb) => {
 				return;
 			}
 
-			res.send({
-				msg: "OK"
+			dataManager.saveWireguardConfig(state, err => {
+				if (err) {
+					res.status(500).send({
+						msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG"
+					});
+					return;
+				}
+
+				wireguardHelper.deletePeer(
+					{
+						public_key
+					},
+					err => {
+						if (err) {
+							res.status(500).send({
+								msg: "COULD_NOT_DELETE_PEER_FROM_wg0"
+							});
+							return;
+						}
+
+						res.send({
+							msg: "OK"
+						});
+					}
+				);
 			});
 		});
 	});
