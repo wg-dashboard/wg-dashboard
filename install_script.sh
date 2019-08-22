@@ -72,31 +72,31 @@ apt-get install -y nodejs
 
 # go into home folder
 cd /opt
-# delete wireguard-dashboard folder and wireguard-dashboard.tar.gz to make sure it does not exist
-rm -rf wireguard-dashboard
-rm -rf wireguard-dashboard.tar.gz
-# download wireguard-dashboard latest release
-curl -L https://github.com/$(wget https://github.com/wg-dashboard/wg-dashboard/releases/latest -O - | egrep '/.*/.*/.*tar.gz' -o) --output wireguard-dashboard.tar.gz
+# delete wg-dashboard folder and wg-dashboard.tar.gz to make sure it does not exist
+rm -rf wg-dashboard
+rm -rf wg-dashboard.tar.gz
+# download wg-dashboard latest release
+curl -L https://github.com/$(wget https://github.com/wg-dashboard/wg-dashboard/releases/latest -O - | egrep '/.*/.*/.*tar.gz' -o) --output wg-dashboard.tar.gz
 # create directory for dashboard
-mkdir -p wireguard-dashboard
-# unzip wireguard-dashboard
-tar -xzf wireguard-dashboard.tar.gz --strip-components=1 -C wireguard-dashboard
+mkdir -p wg-dashboard
+# unzip wg-dashboard
+tar -xzf wg-dashboard.tar.gz --strip-components=1 -C wg-dashboard
 # delete unpacked .tar.gz
-rm -f wireguard-dashboard.tar.gz
-# go into wireguard-dashboard folder
-cd wireguard-dashboard
+rm -f wg-dashboard.tar.gz
+# go into wg-dashboard folder
+cd wg-dashboard
 # install node modules
 npm i --production --unsafe-perm
 
 # create service unit file
 echo "[Unit]
-Description=WireGuard-Dashboard autostart service
+Description=wg-dashboard service
 After=network.target
 
 [Service]
 Restart=always
-WorkingDirectory=/opt/wireguard-dashboard
-ExecStart=/usr/bin/node /opt/wireguard-dashboard/src/server.js
+WorkingDirectory=/opt/wg-dashboard
+ExecStart=/usr/bin/node /opt/wg-dashboard/src/server.js
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/wg-dashboard.service
@@ -173,7 +173,7 @@ echo ""
 echo ""
 echo "=========================================================================="
 echo ""
-echo "> Done! WireGuard and WireGuard-Dashboard have been successfully installed"
+echo "> Done! WireGuard and wg-dashboard have been successfully installed"
 echo "> You can now connect to the dashboard via ssh tunnel by visiting:"
 echo ""
 echo -e "\t\thttp://localhost:3000"
