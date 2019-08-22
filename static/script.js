@@ -81,6 +81,7 @@ $(document).ready(() => {
 			req.catch(function(data) {
 				const msg = data.responseJSON ? data.responseJSON.msg : "";
 				alert("could not save user: " + msg);
+				window.location = "/";
 			});
 		} else if ($(e.currentTarget).hasClass("deleteBtn")) {
 			const confirmation = confirm(
@@ -537,6 +538,7 @@ function createNewPeer() {
 	req.catch(function(data) {
 		const msg = data.responseJSON ? data.responseJSON.msg : "";
 		alert("could not save user: " + msg);
+		window.location = "/";
 	});
 }
 
