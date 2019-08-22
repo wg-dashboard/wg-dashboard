@@ -1,0 +1,9 @@
+trailingComma: "es5"
+useTabs: true
+tabWidth: 4
+semi: true
+singleQuote: false
+proseWrap: "never"
+bracketSpacing: false
+quoteProps: "as-needed"
+arrowParens: "avoid"

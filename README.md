@@ -18,8 +18,8 @@ We made this dashboard to simplify the setup of WireGuard. Instead of having to 
 
 ## Requirements
 
--   Ubuntu 18.04, Raspbian Buster or Debian 10
--   root user
+* Ubuntu 18.04, Raspbian Buster or Debian 10
+* root user
 
 ## Sponsoring
 
@@ -32,16 +32,16 @@ Thanks to [Team Centric Software](http://tcs.de) for sponsoring initial developm
 With our install script all the needed packages for WireGuard and wg-dashboard will be installed. Just follow the given steps.
 
 1. Connect to your server and open a ssh tunnel from remote to local on port 3000
-    - `ssh -L 3000:localhost:3000 <your_vps_user>@<your_vps_ip>`
+	* `ssh -L 3000:localhost:3000 <your_vps_user>@<your_vps_ip>`
 2. Run the install script
-    - `curl https://raw.githubusercontent.com/wg-dashboard/wg-dashboard/master/install_script.sh | sudo bash`
+	* `curl https://raw.githubusercontent.com/wg-dashboard/wg-dashboard/master/install_script.sh | sudo bash`
 3. Go to [http://localhost:3000](http://localhost:3000) in your favorite browser
 4. Enjoy
 
 #### Manual Install
 
 1. Connect to your VPS and open an ssh tunnel
-    - `ssh -L 3000:localhost:3000 <your_vps_user>@<your_vps_ip>`
+	* `ssh -L 3000:localhost:3000 <your_vps_user>@<your_vps_ip>`
 2. Download & install wireguard and wg-quick
 3. Download & install node 10
 4. Download and unzip the dashboard
@@ -55,24 +55,26 @@ With our install script all the needed packages for WireGuard and wg-dashboard w
 
 ## Features
 
--   Dashboard with login system
--   Dashboard user management
--   Automatic creation of public and private keys for server and peers
--   Peer administration
-    _ Generation of QR Codes
-    _ VPN configuration download \* Enable/Disable peers
--   WireGuard server management
-    _ Restart
-    _ Logs
--   WireGuard config management
-    _ Host / IP
-    _ Port
-    _ Network adapter
-    _ Virtual address \* Allowed IP's for VPN clients
--   CoreDNS config management
-    _ DNS Server
-    _ DNS over TLS
--   Clean GUI
+* Dashboard with login system
+* Dashboard user management
+* Automatic creation of public and private keys for server and peers
+* Peer administration
+	* Generation of QR Codes
+	* VPN configuration download
+		* Enable/Disable peers
+* WireGuard server management
+	* Restart
+	* Logs
+* WireGuard config management
+	* Host / IP
+	* Port
+	* Network adapter
+	* Virtual address 
+		* Allowed IP's for VPN clients
+* CoreDNS config management
+	* DNS Server
+	* DNS over TLS
+* Clean GUI
 
 ## Looking for a cheap VPS?
 

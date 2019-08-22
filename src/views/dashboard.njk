@@ -232,7 +232,7 @@
 
 							<div id="server_settings_items" class="mb-5">
 								<div class="row mb-3">
-									<div class="col-4">
+									<div class="col-md-4 col-sm-12">
 										<input type="text" id="ip_address" class="form-control"
 											value="{{ config.ip_address }}" disabled>
 										<label for="ip_address">Public Host / IP <i class="fas fa-info-circle fa-sm"
@@ -240,44 +240,46 @@
 												title="IP that is accessible by the outside"></i></label>
 									</div>
 
-									<div class="col-4">
+									<div class="col-md-4 col-sm-12">
 										<input type="number" id="port" class="form-control" value="{{ config.port }}"
 											disabled>
 										<label for="port">Port <i class="fas fa-info-circle fa-sm" data-toggle="tooltip"
 												data-placement="top" title="VPN-Server port"></i></label>
 									</div>
 
-									<div class="col-4">
+									<div class="col-md-4 col-sm-12">
 										<input type="text" id="network_adapter" class="form-control"
 											value="{{ config.network_adapter }}" disabled>
-										<label for="network_adapter">Network Adapter</label>
+										<label for="network_adapter">Network Adapter <i class="fas fa-info-circle fa-sm" data-toggle="tooltip"
+												data-placement="top" title="Network interface on which WireGuard listens for peer connections"></i></label>
 									</div>
 								</div>
 
 								<div class="row mb-3">
-									<div class="col-4">
+									<div class="col-md-4 col-sm-12">
 										<input type="text" id="virtual_ip_address" class="form-control"
 											value="{{ config.virtual_ip_address }}" disabled>
 										<label for="ip_address">Virtual Address <i class="fas fa-info-circle fa-sm"
 												data-toggle="tooltip" data-placement="top"
-												title="VPN server address in virtual network"></i></label>
+												title="VPN server address in virtual network - This and the CIDR setting will determine the used virtual network range"></i></label>
 									</div>
 
-									<div class="col-4">
+									<div class="col-md-4 col-sm-12">
 										<input type="number" id="cidr" class="form-control" value="{{ config.cidr }}"
 											disabled>
 										<label for="cidr">CIDR <i class="fas fa-info-circle fa-sm" data-toggle="tooltip"
 												data-placement="top" title="CIDR of the virtual address"></i></label>
 									</div>
 
-									<div class="col-4">
+									<div class="col-md-4 col-sm-12">
 										<input type="text" id="dns" class="form-control" value="{{ config.dns }}" disabled>
-										<label for="dns">DNS</label>
+										<label for="dns">DNS <i class="fas fa-info-circle fa-sm" data-toggle="tooltip"
+												data-placement="top" title="DNS server ip that will be used by peers to resolve domain names"></i></label>
 									</div>
 								</div>
 
 								<div class="row mb-3">
-									<div class="col-8">
+									<div class="col-md-8 col-sm-12">
 										<input type="text" id="public_key" class="form-control"
 											value="{{ config.public_key }}" disabled>
 										<label for="public_key">Public Key <i class="fas fa-info-circle fa-sm"
@@ -288,7 +290,7 @@
 												onclick="refreshServerKeys();" style="cursor: pointer; display: inline-block;"></i></label>
 									</div>
 
-									<div class="col-4">
+									<div class="col-md-4 col-sm-12">
 										<input type="text" id="config_path" class="form-control"
 											value="{{ config.config_path }}" disabled>
 										<label for="config_path">Config Path <i class="fas fa-info-circle fa-sm"
@@ -298,7 +300,7 @@
 								</div>
 
 								<div class="row mb-3">
-									<div class="col-6">
+									<div class="col-md-4 col-sm-12">
 										<div class="btn-group inputToggleContainer" id="dns_over_tls">
 											{% if config.dns_over_tls %}
 												<button class="btn gradientOff" id="disableTLSoverDNS" disabled>OFF</button>
@@ -309,13 +311,20 @@
 											{% endif %}
 
 										</div>
-										<label for="dns_over_tls" style="display: block;"><span>Enable DNS over TLS</span></label>
+										<label for="dns_over_tls" style="display: block;"><span>Enable DNS over TLS <i class="fas fa-info-circle fa-sm"
+												data-toggle="tooltip" data-placement="top"
+												title="Toggle usage of DNS over TLS - this basically encrypts dns queries before they are sent to the configured DNS server"></i></span>
+												<br />
+												<span><a target="_blank" href="https://developers.cloudflare.com/1.1.1.1/dns-over-tls/">read more here</a></span>
+										</label>
 									</div>
 
-									<div class="col-4" style="visibility: {{ 'visible' if config.dns_over_tls else 'hidden' }}" id="tls_servername_input">
+									<div class="col-md-4 col-sm-12" style="visibility: {{ 'visible' if config.dns_over_tls else 'hidden' }}" id="tls_servername_input">
 										<input type="text" id="tls_servername" class="form-control"
 											value="{{ config.tls_servername }}" value="{{ config.tls_servername }}" disabled>
-										<label for="tls_servername">TLS Servername</label>
+										<label for="tls_servername">TLS Servername <i class="fas fa-info-circle fa-sm"
+												data-toggle="tooltip" data-placement="top"
+												title="DNS over TLS requires that a TLS hostname is sent"></i></label>
 									</div>
 								</div>
 							</div>
