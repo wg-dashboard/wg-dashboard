@@ -84,7 +84,6 @@ You are looking for a cheap VPS to run WireGuard on? Check these out:
 
 #### Get free \$50 credit when you sign up on either of these!
 
--   [Vultr](https://www.vultr.com/?ref=8177683-4F) (affiliate)
 -   [DigitalOcean](https://m.do.co/c/8d5e8ac9b8f1) (affiliate)
 
 ## Disclaimer
