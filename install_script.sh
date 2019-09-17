@@ -115,7 +115,7 @@ ufw --force enable
 # enable port 58210 in firewall for wireguard
 ufw allow 58210
 # enable port 53 in firewall for dns
-ufw allow 53
+ufw allow in on wg0 to any port 53
 
 # make and enter coredns folder
 mkdir -p /etc/coredns
