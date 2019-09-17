@@ -21,12 +21,13 @@ exports.saveBothConfigs = (server_config, cb) => {
 			cb();
 		});
 	});
-}
+};
 
 exports.saveServerConfig = (server_config, cb) => {
 	fs.writeFile(
 		"./server_config.json",
 		JSON.stringify(server_config, null, 2),
+		{mode: 0o600},
 		cb
 	);
 };
@@ -61,7 +62,7 @@ exports.loadServerConfig = cb => {
 						peers: [],
 						private_traffic: false,
 						dns_over_tls: true,
-						tls_servername: "tls.cloudflare-dns.com"
+						tls_servername: "tls.cloudflare-dns.com",
 					};
 
 					this.saveServerConfig(defaultSettings, err => {
@@ -127,11 +128,11 @@ exports.saveWireguardConfig = (server_config, cb) => {
 		private_key: server_config.private_key,
 		port: server_config.port,
 		network_adapter: server_config.network_adapter,
-		peers: server_config.peers
+		peers: server_config.peers,
 	});
 
 	// write main config
-	fs.writeFile(server_config.config_path, config, err => {
+	fs.writeFile(server_config.config_path, config, {mode: 0o600}, err => {
 		if (err) {
 			cb(err);
 			return;
@@ -142,7 +143,7 @@ exports.saveWireguardConfig = (server_config, cb) => {
 			{
 				dns_over_tls: server_config.dns_over_tls,
 				ip: server_config.dns,
-				tls_servername: server_config.tls_servername
+				tls_servername: server_config.tls_servername,
 			}
 		);
 
