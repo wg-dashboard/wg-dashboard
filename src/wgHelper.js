@@ -74,7 +74,7 @@ exports.generateKeyPair = cb => {
 
 				cb(null, {
 					private_key: private_key,
-					public_key: public_key
+					public_key: public_key,
 				});
 			}
 		);
@@ -218,6 +218,28 @@ exports.makeDashboardPublic = (state, cb) => {
 
 exports.restartCoreDNS = cb => {
 	child_process.exec(`systemctl restart coredns`, (err, stdout, stderr) => {
+		if (err || stderr) {
+			cb(err);
+			return;
+		}
+
+		cb(null);
+	});
+};
+
+exports.enableUFW = (port, cb) => {
+	child_process.exec(`ufw allow ${port}`, (err, stdout, stderr) => {
+		if (err || stderr) {
+			cb(err);
+			return;
+		}
+
+		cb(null);
+	});
+};
+
+exports.disableUFW = (port, cb) => {
+	child_process.exec(`ufw delete allow ${port}`, (err, stdout, stderr) => {
 		if (err || stderr) {
 			cb(err);
 			return;

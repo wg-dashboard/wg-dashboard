@@ -5,7 +5,7 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const rateLimit = require("express-rate-limit");
-const { cidr } = require("node-cidr");
+const {cidr} = require("node-cidr");
 const crypto = require("crypto");
 
 const dataManager = require("./dataManager");
@@ -18,16 +18,18 @@ exports.initServer = (state, cb) => {
 
 	app.use(express.json());
 
-	app.use(rateLimit({
-		windowMs: 15 * 60 * 1000, // 15 minutes
-		max: 1000000 // limit each IP to 100 requests per windowMs
-	}));
+	app.use(
+		rateLimit({
+			windowMs: 15 * 60 * 1000, // 15 minutes
+			max: 1000000, // limit each IP to 100 requests per windowMs
+		})
+	);
 
 	app.use(
 		session({
 			secret: crypto.randomBytes(48).toString("base64"),
 			resave: true,
-			saveUninitialized: true
+			saveUninitialized: true,
 		})
 	);
 
@@ -35,7 +37,7 @@ exports.initServer = (state, cb) => {
 		autoescape: true,
 		watch: false,
 		noCache: true,
-		express: app
+		express: app,
 	});
 
 	app.get("/login", (req, res) => {
@@ -56,13 +58,13 @@ exports.initServer = (state, cb) => {
 		const firstAccount =
 			state.server_config.users.length === 0 ? true : false;
 		res.render("setup_user.njk", {
-			firstAccount: firstAccount
+			firstAccount: firstAccount,
 		});
 	});
 
 	app.post(
 		"/api/createuser",
-		bodyParser.urlencoded({ extended: false }),
+		bodyParser.urlencoded({extended: false}),
 		(req, res) => {
 			if (req.body.username && req.body.password) {
 				if (req.body.password === req.body.password_confirm) {
@@ -78,7 +80,7 @@ exports.initServer = (state, cb) => {
 						) {
 							if (err) {
 								res.status(500).send({
-									msg: err
+									msg: err,
 								});
 								return;
 							}
@@ -86,7 +88,7 @@ exports.initServer = (state, cb) => {
 							state.server_config.users.push({
 								id: state.server_config.users.length + 1,
 								username: req.body.username,
-								password: hash
+								password: hash,
 							});
 
 							dataManager.saveServerConfig(
@@ -94,31 +96,31 @@ exports.initServer = (state, cb) => {
 								err => {
 									if (err) {
 										res.status(500).send({
-											msg: "COULD_NOT_SAVE_CONFIG"
+											msg: "COULD_NOT_SAVE_CONFIG",
 										});
 										return;
 									}
 
 									req.session.admin = true;
 									res.status(200).send({
-										msg: "OK"
+										msg: "OK",
 									});
 								}
 							);
 						});
 					} else {
 						res.status(401).send({
-							msg: "FIRST_ACCOUNT_ALREADY_EXISTS"
+							msg: "FIRST_ACCOUNT_ALREADY_EXISTS",
 						});
 					}
 				} else {
 					res.status(500).send({
-						msg: "PASSWORDS_DO_NOT_MATCH"
+						msg: "PASSWORDS_DO_NOT_MATCH",
 					});
 				}
 			} else {
 				res.status(500).send({
-					msg: "USERNAME_AND_OR_PASSWORD_MISSING"
+					msg: "USERNAME_AND_OR_PASSWORD_MISSING",
 				});
 			}
 		}
@@ -126,7 +128,7 @@ exports.initServer = (state, cb) => {
 
 	app.post(
 		"/api/login",
-		bodyParser.urlencoded({ extended: false }),
+		bodyParser.urlencoded({extended: false}),
 		(req, res) => {
 			const userItem = state.server_config.users.find(
 				el => el.username === req.body.username
@@ -141,7 +143,7 @@ exports.initServer = (state, cb) => {
 				) {
 					if (err) {
 						res.status(500).send({
-							msg: err
+							msg: err,
 						});
 						return;
 					}
@@ -149,17 +151,17 @@ exports.initServer = (state, cb) => {
 					if (hashCorrect) {
 						req.session.admin = true;
 						res.status(200).send({
-							msg: "OK"
+							msg: "OK",
 						});
 					} else {
 						res.status(404).send({
-							msg: "USERNAME_OR_PASSWORD_WRONG_OR_NOT_FOUND"
+							msg: "USERNAME_OR_PASSWORD_WRONG_OR_NOT_FOUND",
 						});
 					}
 				});
 			} else {
 				res.status(404).send({
-					msg: "USERNAME_OR_PASSWORD_WRONG_OR_NOT_FOUND"
+					msg: "USERNAME_OR_PASSWORD_WRONG_OR_NOT_FOUND",
 				});
 			}
 		}
@@ -181,7 +183,7 @@ exports.initServer = (state, cb) => {
 
 	app.get("/", (req, res) => {
 		res.render("dashboard.njk", {
-			config: state.server_config
+			config: state.server_config,
 		});
 	});
 
@@ -195,7 +197,7 @@ exports.initServer = (state, cb) => {
 			if (err) {
 				console.error(err);
 				res.status(500).send({
-					msg: "COULD_NOT_CREATE_KEYPAIR"
+					msg: "COULD_NOT_CREATE_KEYPAIR",
 				});
 			}
 
@@ -232,7 +234,7 @@ exports.initServer = (state, cb) => {
 				virtual_ip: virtual_ip,
 				public_key: data.public_key,
 				private_key: data.private_key,
-				active: true
+				active: true,
 			});
 
 			dataManager.saveServerConfig(state.server_config, err => {
@@ -242,7 +244,7 @@ exports.initServer = (state, cb) => {
 						err
 					);
 					res.status(500).send({
-						msg: "COULD_NOT_SAVE_SERVER_CONFIG"
+						msg: "COULD_NOT_SAVE_SERVER_CONFIG",
 					});
 					return;
 				}
@@ -250,7 +252,7 @@ exports.initServer = (state, cb) => {
 				dataManager.saveWireguardConfig(state.server_config, err => {
 					if (err) {
 						res.status(500).send({
-							msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG"
+							msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG",
 						});
 						return;
 					}
@@ -258,13 +260,13 @@ exports.initServer = (state, cb) => {
 					wireguardHelper.addPeer(
 						{
 							public_key: data.public_key,
-							allowed_ips: virtual_ip
+							allowed_ips: virtual_ip,
 						},
 						err => {
 							if (err) {
 								console.error(err);
 								res.status(500).send({
-									msg: "COULD_NOT_ADD_PEER_TO_wg0"
+									msg: "COULD_NOT_ADD_PEER_TO_wg0",
 								});
 								return;
 							}
@@ -273,7 +275,7 @@ exports.initServer = (state, cb) => {
 								msg: "OK",
 								id,
 								public_key: data.public_key,
-								ip: virtual_ip
+								ip: virtual_ip,
 							});
 						}
 					);
@@ -287,7 +289,7 @@ exports.initServer = (state, cb) => {
 
 		if (!id) {
 			res.status(404).send({
-				msg: "NO_ID_PROVIDED_OR_FOUND"
+				msg: "NO_ID_PROVIDED_OR_FOUND",
 			});
 			return;
 		}
@@ -298,7 +300,7 @@ exports.initServer = (state, cb) => {
 
 		if (!peer) {
 			res.status(404).send({
-				msg: "PEER_NOT_FOUND"
+				msg: "PEER_NOT_FOUND",
 			});
 			return;
 		}
@@ -310,7 +312,7 @@ exports.initServer = (state, cb) => {
 		const ipValid = ipCheck.test(req.body.virtual_ip);
 		if (!ipValid) {
 			res.status(500).send({
-				msg: "PEER_VIRTUAL_IP_INVALID"
+				msg: "PEER_VIRTUAL_IP_INVALID",
 			});
 			return;
 		}
@@ -325,7 +327,7 @@ exports.initServer = (state, cb) => {
 		dataManager.saveBothConfigs(state.server_config, err => {
 			if (err) {
 				res.status(500).send({
-					msg: err
+					msg: err,
 				});
 				return;
 			}
@@ -334,44 +336,44 @@ exports.initServer = (state, cb) => {
 				wireguardHelper.addPeer(
 					{
 						allowed_ips: peer.virtual_ip,
-						public_key: peer.public_key
+						public_key: peer.public_key,
 					},
 					err => {
 						if (err) {
 							console.error(err);
 							res.status(500).send({
-								msg: "COULD_NOT_ADD_PEER_TO_wg0"
+								msg: "COULD_NOT_ADD_PEER_TO_wg0",
 							});
 							return;
 						}
 
 						res.send({
-							msg: "OK"
+							msg: "OK",
 						});
 					}
 				);
 			} else if (old_active === true && peer.active === false) {
 				wireguardHelper.deletePeer(
 					{
-						public_key: peer.public_key
+						public_key: peer.public_key,
 					},
 					err => {
 						if (err) {
 							console.error(err);
 							res.status(500).send({
-								msg: "COULD_NOT_DELETE_PEER_FROM_wg0"
+								msg: "COULD_NOT_DELETE_PEER_FROM_wg0",
 							});
 							return;
 						}
 
 						res.send({
-							msg: "OK"
+							msg: "OK",
 						});
 					}
 				);
 			} else {
 				res.send({
-					msg: "OK"
+					msg: "OK",
 				});
 			}
 		});
@@ -382,7 +384,7 @@ exports.initServer = (state, cb) => {
 
 		if (!id) {
 			res.status(404).send({
-				msg: "NO_ID_PROVIDED_OR_FOUND"
+				msg: "NO_ID_PROVIDED_OR_FOUND",
 			});
 			return;
 		}
@@ -393,7 +395,7 @@ exports.initServer = (state, cb) => {
 
 		if (itemIndex === -1) {
 			res.status(404).send({
-				msg: "PEER_NOT_FOUND"
+				msg: "PEER_NOT_FOUND",
 			});
 			return;
 		}
@@ -402,12 +404,9 @@ exports.initServer = (state, cb) => {
 
 		state.server_config.peers.splice(itemIndex, 1);
 
-		dataManager.saveBothConfigs(state.server_config, (err) => {
+		dataManager.saveBothConfigs(state.server_config, err => {
 			if (err) {
-				console.error(
-					"DELETE /api/peer/:id",
-					err
-				);
+				console.error("DELETE /api/peer/:id", err);
 				res.status(500).send({
 					msg: "COULD_NOT_SAVE_CONFIGS",
 				});
@@ -416,18 +415,18 @@ exports.initServer = (state, cb) => {
 
 			wireguardHelper.deletePeer(
 				{
-					public_key
+					public_key,
 				},
 				err => {
 					if (err) {
 						res.status(500).send({
-							msg: "COULD_NOT_DELETE_PEER_FROM_wg0"
+							msg: "COULD_NOT_DELETE_PEER_FROM_wg0",
 						});
 						return;
 					}
 
 					res.send({
-						msg: "OK"
+						msg: "OK",
 					});
 				}
 			);
@@ -438,7 +437,7 @@ exports.initServer = (state, cb) => {
 		if (!req.body) {
 			res.status(400).send({
 				msg: "ERROR_INPUT_MISSING",
-				missing: "data"
+				missing: "data",
 			});
 			return;
 		}
@@ -456,7 +455,7 @@ exports.initServer = (state, cb) => {
 
 		if (!validIPs) {
 			res.status(500).send({
-				msg: "INVALID_IP_SETUP"
+				msg: "INVALID_IP_SETUP",
 			});
 			return;
 		}
@@ -466,13 +465,13 @@ exports.initServer = (state, cb) => {
 		dataManager.saveServerConfig(state.server_config, err => {
 			if (err) {
 				res.status(500).send({
-					msg: "COULD_NOT_SAVE_SERVER_CONFIG"
+					msg: "COULD_NOT_SAVE_SERVER_CONFIG",
 				});
 				return;
 			}
 
 			res.send({
-				msg: "OK"
+				msg: "OK",
 			});
 		});
 	});
@@ -481,7 +480,7 @@ exports.initServer = (state, cb) => {
 		if (!req.body) {
 			res.status(400).send({
 				msg: "ERROR_INPUT_MISSING",
-				missing: "data"
+				missing: "data",
 			});
 			return;
 		}
@@ -496,7 +495,7 @@ exports.initServer = (state, cb) => {
 		const dnsValid = ipCheck.test(req.body.dns);
 		if (!dnsValid) {
 			res.status(500).send({
-				msg: "DNS_IP_INVALID"
+				msg: "DNS_IP_INVALID",
 			});
 			return;
 		}
@@ -504,7 +503,7 @@ exports.initServer = (state, cb) => {
 		const virtualIPValid = ipCheck.test(req.body.virtual_ip_address);
 		if (!virtualIPValid) {
 			res.status(500).send({
-				msg: "VIRTUAL_ADDRESS_INVALID"
+				msg: "VIRTUAL_ADDRESS_INVALID",
 			});
 			return;
 		}
@@ -512,7 +511,7 @@ exports.initServer = (state, cb) => {
 		const portValid = portCheck.test(req.body.port);
 		if (!portValid) {
 			res.status(500).send({
-				msg: "PORT_INVALID"
+				msg: "PORT_INVALID",
 			});
 			return;
 		}
@@ -520,27 +519,60 @@ exports.initServer = (state, cb) => {
 		state.server_config.ip_address = req.body.ip_address;
 		state.server_config.virtual_ip_address = req.body.virtual_ip_address;
 		state.server_config.dns = req.body.dns;
-		state.server_config.port = req.body.port;
 		state.server_config.cidr = req.body.cidr;
 		state.server_config.network_adapter = req.body.network_adapter;
 		state.server_config.config_path = req.body.config_path;
 		state.server_config.dns_over_tls = req.body.dns_over_tls;
 		state.server_config.tls_servername = req.body.tls_servername;
 
-		dataManager.saveServerConfig(state.server_config, err => {
+		// disable old wireguard port
+		wireguardHelper.disableUFW(state.server_config.port, err => {
 			if (err) {
-				console.error(
-					"PUT /api/server_settings COULD_NOT_SAVE_SERVER_CONFIG",
-					err
-				);
-				res.status(500).send({
-					msg: "COULD_NOT_SAVE_SERVER_CONFIG"
-				});
-				return;
+				if (err) {
+					console.error(
+						"PUT /api/server_settings COULD_NOT_DISABLE_UFW_RULE",
+						err
+					);
+					res.status(500).send({
+						msg: "COULD_NOT_DISABLE_UFW_RULE",
+					});
+					return;
+				}
 			}
 
-			res.send({
-				msg: "OK"
+			// enable new wireguard port
+			wireguardHelper.enableUFW(req.body.port, err => {
+				if (err) {
+					console.error(
+						"PUT /api/server_settings COULD_NOT_ENABLE_UFW_RULE",
+						err
+					);
+					res.status(500).send({
+						msg: "COULD_NOT_ENABLE_UFW_RULE",
+					});
+					return;
+				}
+
+				// set new port in state
+				state.server_config.port = req.body.port;
+
+				// save state to server config file
+				dataManager.saveServerConfig(state.server_config, err => {
+					if (err) {
+						console.error(
+							"PUT /api/server_settings COULD_NOT_SAVE_SERVER_CONFIG",
+							err
+						);
+						res.status(500).send({
+							msg: "COULD_NOT_SAVE_SERVER_CONFIG",
+						});
+						return;
+					}
+
+					res.send({
+						msg: "OK",
+					});
+				});
 			});
 		});
 	});
@@ -550,7 +582,7 @@ exports.initServer = (state, cb) => {
 
 		if (!id) {
 			res.status(400).send({
-				msg: "NO_ID_PROVIDED_OR_FOUND"
+				msg: "NO_ID_PROVIDED_OR_FOUND",
 			});
 			return;
 		}
@@ -561,7 +593,7 @@ exports.initServer = (state, cb) => {
 
 		if (!item) {
 			res.status(404).send({
-				msg: "PEER_NOT_FOUND"
+				msg: "PEER_NOT_FOUND",
 			});
 			return;
 		}
@@ -577,13 +609,13 @@ exports.initServer = (state, cb) => {
 				dns: state.server_config.dns,
 				client_private_key: item.private_key,
 				server_endpoint: state.server_config.ip_address,
-				server_virtual_ip: state.server_config.virtual_ip_address
+				server_virtual_ip: state.server_config.virtual_ip_address,
 			},
 			(err, renderedConfig) => {
 				if (err) {
 					console.error("/api/download/:id", id, item, err);
 					res.status(500).send({
-						err: "COULD_NOT_RENDER_CLIENT_CONFIG"
+						err: "COULD_NOT_RENDER_CLIENT_CONFIG",
 					});
 					return;
 				}
@@ -603,7 +635,7 @@ exports.initServer = (state, cb) => {
 		wireguardHelper.stopWireguard(err => {
 			if (err) {
 				res.status(500).send({
-					msg: "COULD_NOT_STOP_WIREGUARD"
+					msg: "COULD_NOT_STOP_WIREGUARD",
 				});
 				return;
 			}
@@ -611,7 +643,7 @@ exports.initServer = (state, cb) => {
 			dataManager.saveWireguardConfig(state.server_config, err => {
 				if (err) {
 					res.status(500).send({
-						msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG"
+						msg: "COULD_NOT_SAVE_WIREGUARD_CONFIG",
 					});
 					return;
 				}
@@ -619,13 +651,13 @@ exports.initServer = (state, cb) => {
 				wireguardHelper.startWireguard(err => {
 					if (err) {
 						res.status(500).send({
-							msg: "COULD_NOT_START_WIREGUARD"
+							msg: "COULD_NOT_START_WIREGUARD",
 						});
 						return;
 					}
 
 					res.status(201).send({
-						msg: "OK"
+						msg: "OK",
 					});
 				});
 			});
@@ -636,14 +668,14 @@ exports.initServer = (state, cb) => {
 		wireguardHelper.wireguardStatus((err, stdout) => {
 			if (err) {
 				res.status(500).send({
-					msg: err.toString()
+					msg: err.toString(),
 				});
 				return;
 			}
 
 			res.status(201).send({
 				msg: "OK",
-				data: stdout
+				data: stdout,
 			});
 		});
 	});
@@ -652,7 +684,7 @@ exports.initServer = (state, cb) => {
 		wireguardHelper.generateKeyPair((err, newPair) => {
 			if (err) {
 				res.status(500).send({
-					msg: err.toString()
+					msg: err.toString(),
 				});
 				return;
 			}
@@ -663,14 +695,14 @@ exports.initServer = (state, cb) => {
 			dataManager.saveServerConfig(state.server_config, err => {
 				if (err) {
 					res.status(500).send({
-						msg: err
+						msg: err,
 					});
 					return;
 				}
 
 				res.status(200).send({
 					msg: "OK",
-					public_key: newPair.public_key
+					public_key: newPair.public_key,
 				});
 			});
 		});
@@ -681,7 +713,7 @@ exports.initServer = (state, cb) => {
 
 		if (!id) {
 			res.status(400).send({
-				msg: "NO_ID_PROVIDED_OR_FOUND"
+				msg: "NO_ID_PROVIDED_OR_FOUND",
 			});
 			return;
 		}
@@ -700,7 +732,7 @@ exports.initServer = (state, cb) => {
 				bcrypt.hash(pass, 10, (err, hash) => {
 					if (err) {
 						res.status(500).send({
-							msg: err
+							msg: err,
 						});
 						return;
 					}
@@ -710,13 +742,13 @@ exports.initServer = (state, cb) => {
 					dataManager.saveServerConfig(state.server_config, err => {
 						if (err) {
 							res.status(500).send({
-								msg: err
+								msg: err,
 							});
 							return;
 						}
 
 						res.status(200).send({
-							msg: "OK"
+							msg: "OK",
 						});
 					});
 				});
@@ -724,19 +756,19 @@ exports.initServer = (state, cb) => {
 				dataManager.saveServerConfig(state.server_config, err => {
 					if (err) {
 						res.status(500).send({
-							msg: err
+							msg: err,
 						});
 						return;
 					}
 
 					res.status(200).send({
-						msg: "OK"
+						msg: "OK",
 					});
 				});
 			}
 		} else {
 			res.status(404).send({
-				msg: "USER_NOT_FOUND"
+				msg: "USER_NOT_FOUND",
 			});
 		}
 	});
@@ -746,7 +778,7 @@ exports.initServer = (state, cb) => {
 
 		if (!id) {
 			res.status(400).send({
-				msg: "NO_ID_PROVIDED_OR_FOUND"
+				msg: "NO_ID_PROVIDED_OR_FOUND",
 			});
 			return;
 		}
@@ -762,23 +794,23 @@ exports.initServer = (state, cb) => {
 				dataManager.saveServerConfig(state.server_config, err => {
 					if (err) {
 						res.status(500).send({
-							msg: err
+							msg: err,
 						});
 						return;
 					}
 
 					res.status(200).send({
-						msg: "OK"
+						msg: "OK",
 					});
 				});
 			} else {
 				res.status(500).send({
-					msg: "CANNOT_DELETE_LAST_USER"
+					msg: "CANNOT_DELETE_LAST_USER",
 				});
 			}
 		} else {
 			res.status(404).send({
-				msg: "USER_NOT_FOUND"
+				msg: "USER_NOT_FOUND",
 			});
 		}
 	});
@@ -788,28 +820,28 @@ exports.initServer = (state, cb) => {
 			wireguardHelper.makeDashboardPublic(state, err => {
 				if (err) {
 					res.status(500).send({
-						msg: err.toString()
+						msg: err.toString(),
 					});
 					return;
 				}
 
 				state.server_config.private_traffic = false;
 				res.status(200).send({
-					msg: "OK"
+					msg: "OK",
 				});
 			});
 		} else {
 			wireguardHelper.makeDashboardPrivate(state, err => {
 				if (err) {
 					res.status(500).send({
-						msg: err.toString()
+						msg: err.toString(),
 					});
 					return;
 				}
 
 				state.server_config.private_traffic = true;
 				res.status(200).send({
-					msg: "OK"
+					msg: "OK",
 				});
 			});
 		}
