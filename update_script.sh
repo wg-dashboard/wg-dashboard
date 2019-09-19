@@ -4,7 +4,7 @@ set -e
 if [[ "$EUID" -ne 0 ]]; then
 	echo "Sorry, this script must be ran as root"
 	echo "Maybe try this:"
-	echo "curl https://raw.githubusercontent.com/wg-dashboard/wg-dashboard/master/install_script.sh | sudo bash"
+	echo "curl https://raw.githubusercontent.com/wg-dashboard/wg-dashboard/master/update_script.sh | sudo bash"
 	exit
 fi
 
