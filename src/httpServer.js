@@ -847,5 +847,5 @@ exports.initServer = (state, cb) => {
 		}
 	});
 
-	app.listen(state.config.port, cb);
+	app.listen(state.config.port, state.config.bind_ip);
 };
