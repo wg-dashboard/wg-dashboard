@@ -1,10 +1,10 @@
 {
 	"compilerOptions": {
-		"outDir": "./dist/",
-		"sourceMap": true,
-		"allowJs": true,
-		"jsx": "react",
+		"module": "commonjs",
+		"target": "es6",
 		"moduleResolution": "node",
+		"jsx": "react",
+		"sourceMap": false,
 		"forceConsistentCasingInFileNames": true,
 		"noImplicitReturns": true,
 		"noImplicitThis": true,
@@ -13,17 +13,14 @@
 		"strictNullChecks": true,
 		"suppressImplicitAnyIndexErrors": true,
 		"noUnusedLocals": false,
-		"target": "es6",
 		"experimentalDecorators": true,
-		"lib": ["es5", "es2015", "es2017", "dom", "esnext", "scripthost"],
-		"noEmit": true,
 		"skipLibCheck": false,
-		"esModuleInterop": false,
+		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"strict": true,
-		"module": "esnext",
 		"resolveJsonModule": true,
-		"isolatedModules": true
+		"isolatedModules": true,
+		"outDir": "./dist"
 	},
-	"include": ["./src"]
+	"include": ["./src/**/*"]
 }

@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "node-dev --respawn --no-notify ./dist/server.js",
+		"start": "node-dev --respawn --no-notify ./dist/index.js",
+		"build": "tsc",
 		"watch": "tsc -w"
 	},
 	"repository": {
