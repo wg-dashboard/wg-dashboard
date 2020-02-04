@@ -1,33 +1,39 @@
 {
-  "name": "wireguard-dashboard",
-  "version": "0.21.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "server": "node-dev --respawn --no-notify ./src/server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/daluf/wireguard-dashboard.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/daluf/wireguard-dashboard/issues"
-  },
-  "homepage": "https://github.com/daluf/wireguard-dashboard#readme",
-  "dependencies": {
-    "bcrypt": "^3.0.6",
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "express-rate-limit": "^5.0.0",
-    "express-session": "^1.16.2",
-    "morgan": "^1.9.1",
-    "node-cidr": "^1.0.0",
-    "nunjucks": "^3.2.0"
-  },
-  "devDependencies": {
-    "node-dev": "^4.0.0"
-  }
+	"name": "wireguard-dashboard",
+	"version": "0.21.1",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "node-dev --respawn --no-notify ./dist/server.js",
+		"watch": "tsc -w"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/daluf/wireguard-dashboard.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/daluf/wireguard-dashboard/issues"
+	},
+	"homepage": "https://github.com/daluf/wireguard-dashboard#readme",
+	"dependencies": {
+		"bcrypt": "^3.0.6",
+		"body-parser": "^1.19.0",
+		"express": "^4.17.1",
+		"express-rate-limit": "^5.0.0",
+		"express-session": "^1.16.2",
+		"morgan": "^1.9.1",
+		"node-cidr": "^1.0.0",
+		"nunjucks": "^3.2.0",
+		"tslint": "^6.0.0",
+		"typescript": "^3.7.5"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.2",
+		"@types/morgan": "^1.7.37",
+		"@types/node": "^13.7.0",
+		"node-dev": "^4.0.0"
+	}
 }
