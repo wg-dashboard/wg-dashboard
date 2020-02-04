@@ -1,6 +1,5 @@
 import express, {Express} from "express";
 import next from "next";
-import {parse} from "url";
 import nextServer from "next/dist/next-server/server/next-server";
 import morgan from "morgan";
 

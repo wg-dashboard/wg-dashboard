@@ -23,6 +23,7 @@
 	},
 	"homepage": "https://github.com/daluf/wireguard-dashboard#readme",
 	"dependencies": {
+		"@material-ui/core": "^4.9.1",
 		"bcrypt": "^3.0.6",
 		"body-parser": "^1.19.0",
 		"express": "^4.17.1",
