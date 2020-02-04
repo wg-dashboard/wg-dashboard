@@ -1,7 +1,7 @@
 import express, {Express} from "express";
 import morgan from "morgan";
 
-class webServer {
+class WebServer {
 	private app: Express;
 	private initialized = false;
 
@@ -32,4 +32,4 @@ class webServer {
 	};
 }
 
-export default new webServer();
+export default new WebServer();
