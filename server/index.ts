@@ -1,7 +1,7 @@
 import webServer from "./modules/http";
 
 const main = async () => {
-	console.log("Hello!");
+	console.log("Hello! Initializing webserver..");
 	webServer.init();
 };
 

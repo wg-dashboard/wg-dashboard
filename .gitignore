@@ -2,3 +2,4 @@
 wireguard/
 dist/
 server_config.json
+.next
