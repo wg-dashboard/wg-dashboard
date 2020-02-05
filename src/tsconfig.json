@@ -10,6 +10,7 @@
 		"allowJs": true,
 		"noEmit": true,
 		"allowSyntheticDefaultImports": true,
+		"noFallthroughCasesInSwitch": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"noUnusedLocals": true,
@@ -17,10 +18,12 @@
 		"isolatedModules": true,
 		"removeComments": false,
 		"preserveConstEnums": true,
+		"experimentalDecorators": true,
 		"sourceMap": true,
 		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true
+		"resolveJsonModule": true,
+		"outDir": ".next"
 	},
-	"exclude": ["dist", ".next", "out", "next.config.js"],
+	"exclude": ["dist", ".next", "out", "next.config.js", "node_modules"],
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

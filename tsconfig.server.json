@@ -1,11 +1,11 @@
 {
-	"extends": "./tsconfig.json",
+	"extends": "./src/tsconfig.json",
 	"compilerOptions": {
-		"module": "CommonJS",
-		"outDir": "dist",
+		"module": "commonjs",
+		"outDir": ".next/server",
 		"target": "es2017",
 		"isolatedModules": false,
 		"noEmit": false
 	},
-	"include": ["server/**/*.ts"]
+	"include": ["src/server/**/*.ts"]
 }
