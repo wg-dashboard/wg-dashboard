@@ -1,0 +1,11 @@
+{
+	"type": "sqlite",
+	"host": "localhost",
+	"port": 3306,
+	"database": "wgdash.db",
+	"synchronize": true,
+	"logging": false,
+	"entities": ["src/server/orm/entity/**/*.ts"],
+	"migrations": ["src/server/orm/migration/**/*.ts"],
+	"subscribers": ["src/server/orm/subscriber/**/*.ts"]
+}

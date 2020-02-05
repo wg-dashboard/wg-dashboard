@@ -1,25 +1,29 @@
 import {Input, Button} from "@material-ui/core";
 import {useForm} from "react-hook-form";
-// import {signIn} from "../pages/api";
+import {loginRegisterUser} from "./api";
 
 interface IProps {
 	loggingIn: boolean;
 }
 
 export default (props: IProps) => {
-	const {handleSubmit, register} = useForm();
-	const onSubmit = (data: any) => console.log(data);
+	const {handleSubmit, register, watch, errors} = useForm();
+	const onSubmit = (data: any) => loginRegisterUser(data);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<Input type="text" name={"username"} placeholder="Username.." inputRef={register({required: true})} />
-			<Input type="password" name={"password"} placeholder="Password.." inputRef={register({required: true})} />
+			<Input type="text" name={"name"} placeholder="Username.." error={errors.username ? true : false} inputRef={register({required: true})} />
+			<Input type="password" name={"password"} placeholder="Password.." error={errors.password ? true : false} inputRef={register({required: true})} />
 			{!props.loggingIn && (
 				<Input
 					type="password"
-					name="passwordconfirm"
+					name="passwordConfirm"
 					placeholder="Password confirmation.."
-					inputRef={register({required: true})}
+					error={errors.passwordConfirm ? true : false}
+					inputRef={register({
+						required: true,
+						validate: value => value === watch("password") || "Passwords do not match",
+					})}
 				/>
 			)}
 

@@ -21,7 +21,7 @@
 	"homepage": "https://github.com/daluf/wireguard-dashboard#readme",
 	"dependencies": {
 		"@material-ui/core": "^4.9.1",
-		"bcrypt": "^3.0.6",
+		"bcrypt": "^3.0.7",
 		"body-parser": "^1.19.0",
 		"convict": "^5.2.0",
 		"cross-env": "^7.0.0",
@@ -34,10 +34,14 @@
 		"react": "^16.12.0",
 		"react-dom": "^16.12.0",
 		"react-hook-form": "^4.8.2",
+		"reflect-metadata": "^0.1.13",
+		"sqlite3": "^4.1.1",
 		"tslint": "^6.0.0",
-		"typeface-roboto": "0.0.75"
+		"typeface-roboto": "0.0.75",
+		"typeorm": "^0.2.22"
 	},
 	"devDependencies": {
+		"@types/bcrypt": "^3.0.0",
 		"@types/convict": "^4.2.1",
 		"@types/express": "^4.17.2",
 		"@types/morgan": "^1.7.37",

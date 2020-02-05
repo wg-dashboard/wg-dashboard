@@ -5,7 +5,9 @@
 		"outDir": ".next/server",
 		"target": "es2017",
 		"isolatedModules": false,
-		"noEmit": false
+		"noEmit": false,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true
 	},
 	"include": ["src/server/**/*.ts"]
 }

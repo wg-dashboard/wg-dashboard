@@ -2,7 +2,7 @@ trailingComma: "es5"
 useTabs: true
 tabWidth: 4
 semi: true
-printWidth: 120
+printWidth: 160
 singleQuote: false
 proseWrap: "never"
 bracketSpacing: false
