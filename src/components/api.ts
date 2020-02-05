@@ -21,7 +21,6 @@ const makeAPIRequest = async (url: string, data: any) => {
 };
 
 export const loginRegisterUser = async (data: IUser) => {
-	console.log(JSON.stringify(data));
 	const result = await makeAPIRequest("/api/login", data);
 	console.log(result);
 };

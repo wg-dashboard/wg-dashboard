@@ -15,18 +15,58 @@ class WebServer {
 	constructor() {
 		this.app = next({dev: this.dev, ...(this.dev ? {dir: "./src"} : {})});
 		this.server = express();
-
-		this.server.use(morgan("dev"));
-		this.server.use(express.json());
 	}
 
+	public init = () => {
+		return new Promise((resolve, reject) => {
+			if (this.initialized) {
+				return reject("WebServer already initialized!");
+			}
+
+			this.server.use(morgan("dev"));
+			this.server.use(express.json());
+			this.server.use(data.expressSession());
+
+			this.app
+				.prepare()
+				.then(async () => {
+					const handle = this.app.getRequestHandler();
+
+					this.server.get("*", (req: Request, res: Response) => {
+						return handle(req, res);
+					});
+
+					// the loginHandler handles both login and register
+					this.server.post("/api/login", this.isUserNotAuthenticated, this.loginHandler);
+
+					this.server.use(this.genericErrorHandler);
+
+					this.server.listen(this.port, () => {
+						console.log(`WG-Dashboard webserver now listening on port ${this.port}!`);
+						this.initialized = true;
+						resolve(true);
+					});
+				})
+				.catch(err => {
+					reject(err);
+				});
+		});
+	};
+
 	private genericErrorHandler = (err: Error, req: Request, res: Response, _next: NextFunction) => {
+		if (req.path.includes("/api/")) {
+			return res.status(500).send({
+				status: 500,
+				message: err.message,
+			});
+		}
+
 		this.app.renderError(err, req, res, "/index");
 	};
 
-	private isUserAuthed = (req: Request, _res: Response, next: NextFunction) => {
-		if (!req.authed) {
-			return next(new Error("User not authenticated"));
+	private isUserNotAuthenticated = (req: Request, _res: Response, next: NextFunction) => {
+		if (!req.session!.authed) {
+			return next(new Error("User already authenticated"));
 		}
 
 		next();
@@ -90,45 +130,15 @@ class WebServer {
 			});
 		}
 
+		req.session!.authed = true;
+		req.session!.user = {
+			id: user.id,
+			admin: user.admin,
+		};
+
 		return res.send({
 			status: 200,
 			message: "Everything good!",
-		});
-	};
-
-	public init = () => {
-		return new Promise((resolve, reject) => {
-			if (this.initialized) {
-				return reject("WebServer already initialized!");
-			}
-
-			this.app
-				.prepare()
-				.then(() => {
-					const handle = this.app.getRequestHandler();
-
-					this.server.get("/authedendpoint", this.isUserAuthed, (_req, res) => {
-						res.send("You are authed!");
-					});
-
-					this.server.get("*", (req: Request, res: Response) => {
-						return handle(req, res);
-					});
-
-					// the loginHandler handles both login and register
-					this.server.post("/api/login", this.loginHandler);
-
-					this.server.use(this.genericErrorHandler);
-
-					this.server.listen(this.port, () => {
-						console.log(`WG-Dashboard webserver now listening on port ${this.port}!`);
-						this.initialized = true;
-						resolve(true);
-					});
-				})
-				.catch(err => {
-					reject(err);
-				});
 		});
 	};
 }

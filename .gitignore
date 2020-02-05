@@ -4,4 +4,5 @@ dist/
 server_config.json
 .next
 
-wgdash.db
+.db
+.db-journal

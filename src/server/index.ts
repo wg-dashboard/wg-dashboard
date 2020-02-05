@@ -3,10 +3,10 @@ import data from "./modules/data";
 import "reflect-metadata";
 
 const main = async () => {
-	console.log("Hello! Initializing webserver..");
+	console.log("Hello! Initializing..");
 
-	await webServer.init();
 	await data.init();
+	await webServer.init();
 };
 
 main().catch(err => {

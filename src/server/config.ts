@@ -7,6 +7,13 @@ const config = convict({
 		env: "PORT",
 		default: 3000,
 	},
+
+	sessionSecret: {
+		doc: "Secret that is being used for sessions",
+		format: String,
+		env: "SESSIONSECRET",
+		default: "mysecret",
+	},
 });
 
 config.validate({allowed: "strict"});
