@@ -7,7 +7,7 @@ const makeAPIRequest = async (url: string, data: any) => {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify(data),
+		...(data ? {body: JSON.stringify(data)} : {}),
 	});
 
 	return await request.json();
@@ -19,6 +19,16 @@ export const loginRegisterUser = async (data: IUser) => {
 	if (result.status === 200 || result.message === "User already authenticated") {
 		Router.push("/dashboard");
 	} else {
-		alert("Login Error: " + result.message);
+		alert("Login error: " + result.message);
+	}
+};
+
+export const logout = async () => {
+	const result = await makeAPIRequest("/api/logout", null);
+
+	if (result.status !== 200) {
+		alert("Logout error: " + result.message);
+	} else {
+		Router.push("/");
 	}
 };
