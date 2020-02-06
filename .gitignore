@@ -6,3 +6,5 @@ server_config.json
 
 .db
 .db-journal
+wgdash.db
+wgdash.db-journal
