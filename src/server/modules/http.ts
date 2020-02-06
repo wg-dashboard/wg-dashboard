@@ -32,12 +32,20 @@ class WebServer {
 				.then(async () => {
 					const handle = this.app.getRequestHandler();
 
+					this.server.get("/", (req: Request, res: Response, next: NextFunction) => {
+						if (req.session?.authed) {
+							return this.app.render(req, res, "/dashboard", req.query);
+						}
+
+						next();
+					});
+
 					this.server.get("*", (req: Request, res: Response) => {
 						return handle(req, res);
 					});
 
 					// the loginHandler handles both login and register
-					this.server.post("/api/login", this.isUserNotAuthenticated, this.loginHandler);
+					this.server.post("/api/login", this.loginHandler);
 
 					this.server.use(this.genericErrorHandler);
 
@@ -62,14 +70,6 @@ class WebServer {
 		}
 
 		this.app.renderError(err, req, res, "/index");
-	};
-
-	private isUserNotAuthenticated = (req: Request, _res: Response, next: NextFunction) => {
-		if (!req.session!.authed) {
-			return next(new Error("User already authenticated"));
-		}
-
-		next();
 	};
 
 	private loginHandler = async (req: Request, res: Response) => {
@@ -130,11 +130,15 @@ class WebServer {
 			});
 		}
 
-		req.session!.authed = true;
-		req.session!.user = {
-			id: user.id,
-			admin: user.admin,
-		};
+		if (req.session) {
+			req.session.authed = true;
+			req.session.user = {
+				id: user.id,
+				admin: user.admin,
+			};
+		} else {
+			console.log("no session for this user :(");
+		}
 
 		return res.send({
 			status: 200,

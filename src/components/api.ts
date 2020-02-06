@@ -1,4 +1,5 @@
 import {IUser} from "../server/interfaces";
+import Router from "next/router";
 
 const makeAPIRequest = async (url: string, data: any) => {
 	const request = await fetch(url, {
@@ -9,18 +10,15 @@ const makeAPIRequest = async (url: string, data: any) => {
 		body: JSON.stringify(data),
 	});
 
-	const resp = await request.json();
-
-	if (resp.status === 200) {
-		alert(resp.message);
-	} else {
-		alert("ERROR: " + resp.message);
-	}
-
-	return resp;
+	return await request.json();
 };
 
 export const loginRegisterUser = async (data: IUser) => {
 	const result = await makeAPIRequest("/api/login", data);
-	console.log(result);
+
+	if (result.status === 200 || result.message === "User already authenticated") {
+		Router.push("/dashboard");
+	} else {
+		alert("Login Error: " + result.message);
+	}
 };

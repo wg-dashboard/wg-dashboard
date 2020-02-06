@@ -1,7 +1,7 @@
 import "reflect-metadata";
-import {createConnection, Connection, Repository} from "typeorm";
+import {createConnection, Connection} from "typeorm";
 import ExpressSession from "express-session";
-import {TypeormStore} from "connect-typeorm/out";
+import {TypeormStore} from "typeorm-store";
 
 import {User} from "../orm/entity/User";
 import {Session} from "../orm/entity/Session";
@@ -29,16 +29,15 @@ class Data {
 	};
 
 	public expressSession = () => {
-		const sessionRepository: Repository<Session> = this.connection!.getRepository("Session");
+		const repository = this.connection!.getRepository(Session);
 
 		return ExpressSession({
 			resave: false,
 			saveUninitialized: false,
 			secret: config.get("sessionSecret"),
 			store: new TypeormStore({
-				cleanupLimit: 2,
-				ttl: 86400,
-			}).connect(sessionRepository),
+				repository,
+			}),
 		});
 	};
 }
