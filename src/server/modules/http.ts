@@ -44,18 +44,18 @@ class WebServer {
 						this.app.render(req, res, "/dashboard", req.query);
 					});
 
-					this.server.get("*", (req: Request, res: Response) => {
-						return handle(req, res);
-					});
-
 					// the loginHandler handles both login and register
 					this.server.post("/api/login", this.loginHandler);
 					this.server.post("/api/logout", this.logoutHandler);
 
 					/* Private endpoints */
-					this.server.use(this.isUserAuthed);
+					this.server.get("/api/settings", this.isUserAuthed, this.getSettingsHandler);
 
-					this.server.put("/api/peer", this.createPeer);
+					// this.server.put("/api/peer", this.createPeer);
+
+					this.server.get("*", (req: Request, res: Response) => {
+						return handle(req, res);
+					});
 
 					this.server.use(this.genericErrorHandler);
 					this.server.listen(this.port, () => {
@@ -68,6 +68,22 @@ class WebServer {
 					reject(err);
 				});
 		});
+	};
+
+	public getSettingsHandler = async (_req: Request, res: Response) => {
+		try {
+			const settings = await data.getAllSettings();
+
+			return res.send({
+				status: 200,
+				settings,
+			});
+		} catch (err) {
+			return res.send({
+				status: 400,
+				message: err,
+			});
+		}
 	};
 
 	private createPeer = async (req: Request, res: Response) => {
@@ -98,10 +114,18 @@ class WebServer {
 	};
 
 	private isUserAuthed = (req: Request, _res: Response, next: NextFunction) => {
+		console.log(req.rawHeaders);
+
+		if (req.ip === "::1" || req.ip === "127.0.0.1" || req.ip === "::ffff:127.0.0.1") {
+			return next();
+		}
+
 		if (!req.session?.authed) {
+			console.log("user not authed, problemo");
 			return next(new Error("User not authenticated"));
 		}
 
+		console.log("user authed, no problemo");
 		next();
 	};
 

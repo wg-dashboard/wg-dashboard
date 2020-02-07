@@ -1,10 +1,12 @@
 import {IUser} from "../server/interfaces";
 import Router from "next/router";
+import fetch from "isomorphic-unfetch";
 
-const makeAPIRequest = async (url: string, data: any) => {
+const makeAPIRequest = async (url: string, method: string, data: any) => {
+	console.log("making request to", url);
 	try {
 		const request = await fetch(url, {
-			method: "POST",
+			method,
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -22,7 +24,7 @@ const makeAPIRequest = async (url: string, data: any) => {
 };
 
 export const loginRegisterUser = async (data: IUser) => {
-	const result = await makeAPIRequest("/api/login", data);
+	const result = await makeAPIRequest("/api/login", "POST", data);
 
 	if (result.status === 200 || result.message === "User already authenticated") {
 		Router.push("/dashboard");
@@ -32,11 +34,22 @@ export const loginRegisterUser = async (data: IUser) => {
 };
 
 export const logout = async () => {
-	const result = await makeAPIRequest("/api/logout", null);
+	const result = await makeAPIRequest("/api/logout", "POST", null);
 
 	if (result.status !== 200) {
 		alert("Logout error: " + result.message);
 	} else {
 		Router.push("/");
+	}
+};
+
+export const getSettings = async (basePath: string) => {
+	const result = await makeAPIRequest(basePath + "/api/settings", "GET", null);
+
+	if (result.status === 200) {
+		return result.settings;
+	} else {
+		console.error("GET settings error: " + result.message);
+		return [];
 	}
 };

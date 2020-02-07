@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import Document, {Main, NextScript} from "next/document";
 import {ServerStyleSheets} from "@material-ui/core/styles";
 
@@ -55,6 +56,10 @@ export default class RenderedDocument extends Document {
 	public render(): JSX.Element {
 		return (
 			<html lang="en">
+				<Head>
+					<title>WG-Dashboard</title>
+					<meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+				</Head>
 				<body>
 					<Main />
 					<NextScript />

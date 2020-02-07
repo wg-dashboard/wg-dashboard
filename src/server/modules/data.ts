@@ -71,6 +71,10 @@ class Data {
 		}
 	};
 
+	public getAllSettings = async () => {
+		return await this.connection!.manager.find(Settings);
+	};
+
 	public getSetting = async (key: string) => {
 		return await this.connection!.manager.findOne(Settings, {key});
 	};
