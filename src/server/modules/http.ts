@@ -55,7 +55,7 @@ class WebServer {
 					/* Private endpoints */
 					this.server.use(this.isUserAuthed);
 
-					// this.server.post("/api/settings");
+					this.server.put("/api/peer", this.createPeer);
 
 					this.server.use(this.genericErrorHandler);
 					this.server.listen(this.port, () => {
@@ -68,6 +68,22 @@ class WebServer {
 					reject(err);
 				});
 		});
+	};
+
+	private createPeer = async (req: Request, res: Response) => {
+		try {
+			const peer = await data.createUpdatePeer(req.body.peer);
+
+			res.send({
+				status: 200,
+				peer,
+			});
+		} catch (err) {
+			res.send({
+				status: 400,
+				message: err,
+			});
+		}
 	};
 
 	private genericErrorHandler = (err: Error, req: Request, res: Response, _next: NextFunction) => {
