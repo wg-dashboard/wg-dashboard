@@ -1,6 +1,8 @@
 import {Input, Button} from "@material-ui/core";
 import {useForm} from "react-hook-form";
 import {loginRegisterUser} from "./api";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
 
 interface IProps {
 	loggingIn: boolean;
@@ -12,24 +14,46 @@ export default (props: IProps) => {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<Input type="text" name={"name"} placeholder="Username.." error={errors.username ? true : false} inputRef={register({required: true})} />
-			<Input type="password" name={"password"} placeholder="Password.." error={errors.password ? true : false} inputRef={register({required: true})} />
-			{!props.loggingIn && (
-				<Input
-					type="password"
-					name="passwordConfirm"
-					placeholder="Password confirmation.."
-					error={errors.passwordConfirm ? true : false}
-					inputRef={register({
-						required: true,
-						validate: value => value === watch("password") || "Passwords do not match",
-					})}
+			<Grid container direction="row" justify="center" alignItems="center">
+				<TextField
+					fullWidth
+					margin="dense"
+					label="Username"
+					type="text"
+					name={"name"}
+					error={errors.username ? true : false}
+					inputRef={register({required: true})}
 				/>
-			)}
+				<TextField
+					fullWidth
+					margin="dense"
+					label="Password"
+					type="password"
+					name={"password"}
+					error={errors.password ? true : false}
+					inputRef={register({required: true})}
+				/>
+				{!props.loggingIn && (
+					<TextField
+						fullWidth
+						margin="dense"
+						label="Confirm password"
+						type="password"
+						name={"passwordConfirm"}
+						error={errors.passwordConfirm ? true : false}
+						inputRef={register({
+							required: true,
+							validate: value => value === watch("password") || "Passwords do not match",
+						})}
+					/>
+				)}
+			</Grid>
 
-			<Button variant="text" type="submit">
-				{props.loggingIn ? "Login" : "Register"}
-			</Button>
+			<Grid container direction="row" justify="flex-end" alignItems="center" style={{marginTop: "40px"}}>
+				<Button variant="contained" type="submit" size="large" color="primary">
+					{props.loggingIn ? "Login" : "Register"}
+				</Button>
+			</Grid>
 		</form>
 	);
 };
