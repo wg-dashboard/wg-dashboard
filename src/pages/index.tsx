@@ -1,16 +1,13 @@
 import {useState} from "react";
 import Grid from "@material-ui/core/Grid";
-
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-
 import Login from "../components/loginForm";
 
 export default () => {
@@ -24,8 +21,16 @@ export default () => {
 	return (
 		<Grid container direction="row" justify="center" alignItems="center" style={{minHeight: "100vh"}}>
 			<Card style={{maxWidth: "340px"}}>
-				<CardMedia component="img" alt="wg-dashboard" image="../../dev/wg-dashboard-logo-no-text.png" title="wg-dashboard" />
-				<CardActionArea style={{backgroundColor: "#3f50b5", padding: "0 16px", color: "#fff"}}>
+				<Grid container direction="row" justify="center" alignItems="center">
+					<CardMedia
+						component="img"
+						style={{width: "150px"}}
+						alt="wg-dashboard"
+						src="/_next/static/wg-dashboard-logo-no-text.png"
+						title="wg-dashboard"
+					/>
+				</Grid>
+				<CardActionArea style={{backgroundColor: "#2d619b", padding: "0 16px", color: "#fff"}}>
 					<Typography gutterBottom variant="h4" color="inherit" component="h1" style={{textAlign: "center", paddingTop: "14px"}}>
 						wg-dashboard
 					</Typography>
