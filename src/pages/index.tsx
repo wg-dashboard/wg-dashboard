@@ -10,6 +10,8 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Login from "../components/loginForm";
 
+import logo from "../images/wg-dashboard-logo-no-text.png";
+
 export default () => {
 	const [loggingIn, setLoggingIn] = useState(true);
 	const [tab, setTab] = useState(0);
@@ -22,13 +24,7 @@ export default () => {
 		<Grid container direction="row" justify="center" alignItems="center" style={{minHeight: "100vh"}}>
 			<Card style={{maxWidth: "340px"}}>
 				<Grid container direction="row" justify="center" alignItems="center">
-					<CardMedia
-						component="img"
-						style={{width: "150px"}}
-						alt="wg-dashboard"
-						src="/_next/static/wg-dashboard-logo-no-text.png"
-						title="wg-dashboard"
-					/>
+					<CardMedia component="img" style={{width: "150px"}} alt="wg-dashboard" src={logo} title="wg-dashboard" />
 				</Grid>
 				<CardActionArea style={{backgroundColor: "#2d619b", padding: "0 16px", color: "#fff"}}>
 					<Typography gutterBottom variant="h4" color="inherit" component="h1" style={{textAlign: "center", paddingTop: "14px"}}>

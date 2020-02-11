@@ -1,18 +1,17 @@
-import LogoutButton from "../components/logoutButton";
 import SettingsForm from "../components/settingsForm";
 import {getSettings} from "../components/api";
-import {BaseContext} from "next/dist/next-server/lib/utils";
+import Layout from "../components/layout";
 
 const dashboard = (props: any) => {
 	return (
-		<div>
-			Welcome to the dashboard.. <LogoutButton /> <SettingsForm settings={props.settings} />
-		</div>
+		<Layout>
+			Welcome to the dashboard.. <SettingsForm settings={props.settings} />
+		</Layout>
 	);
 };
 
-dashboard.getInitialProps = async (ctx: BaseContext) => {
-	const settings = await getSettings(ctx?.req ? ctx.req.protocol + "://" + ctx.req.get("host") : window.location.origin);
+dashboard.getInitialProps = async (ctx: any) => {
+	const settings = await getSettings(ctx);
 
 	return {
 		settings,

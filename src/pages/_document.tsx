@@ -3,6 +3,8 @@ import Head from "next/head";
 import Document, {Main, NextScript} from "next/document";
 import {ServerStyleSheets} from "@material-ui/core/styles";
 
+import sideNav from "../components/sideNav";
+
 /**
  * Shamelessly ripped from the official next.js repository for integrating styled components
  * https://github.com/zeit/next.js/blob/master/examples/with-styled-components/pages/_app.js

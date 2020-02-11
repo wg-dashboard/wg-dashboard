@@ -1,19 +1,30 @@
 import {IUser} from "../server/interfaces";
 import Router from "next/router";
 import fetch from "isomorphic-unfetch";
+import nextCookie from "next-cookies";
 
-const makeAPIRequest = async (url: string, method: string, data: any) => {
+const makeAPIRequest = async (url: string, method: string, data: any, ctx?: any) => {
+	let token = "";
+	let apiUrl = "";
+
+	if (ctx) {
+		token = nextCookie(ctx)["connect.sid"] || "";
+		apiUrl = (ctx?.req ? ctx.req.protocol + "://" + ctx.req.get("host") : window.location.origin) + url;
+	}
+
 	console.log("making request to", url);
 	try {
-		const request = await fetch(url, {
+		const response = await fetch(ctx ? apiUrl : url, {
 			method,
 			headers: {
 				"Content-Type": "application/json",
+				...(ctx ? {cookie: `connect.sid=${token}`} : {}),
 			},
 			...(data ? {body: JSON.stringify(data)} : {}),
+			...(ctx ? {credentials: "include"} : {}),
 		});
 
-		return await request.json();
+		return await response.json();
 	} catch (err) {
 		console.error(err);
 		return {
@@ -43,13 +54,35 @@ export const logout = async () => {
 	}
 };
 
-export const getSettings = async (basePath: string) => {
-	const result = await makeAPIRequest(basePath + "/api/settings", "GET", null);
+export const getSettings = async (ctx: any) => {
+	const result = await makeAPIRequest("/api/settings", "GET", null, ctx);
 
 	if (result.status === 200) {
 		return result.settings;
 	} else {
 		console.error("GET settings error: " + result.message);
+		return [];
+	}
+};
+
+export const getPeers = async (ctx: any) => {
+	const result = await makeAPIRequest("/api/peers", "GET", null, ctx);
+
+	if (result.status === 200) {
+		return result.peers;
+	} else {
+		console.error("GET peers error: " + result.message);
+		return [];
+	}
+};
+
+export const getUsers = async (ctx: any) => {
+	const result = await makeAPIRequest("/api/users", "GET", null, ctx);
+
+	if (result.status === 200) {
+		return result.users;
+	} else {
+		console.error("GET users error: " + result.message);
 		return [];
 	}
 };
