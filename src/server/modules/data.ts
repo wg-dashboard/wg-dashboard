@@ -71,6 +71,10 @@ class Data {
 		}
 	};
 
+	public getAllUsers = async () => {
+		return await this.connection!.manager.find(User);
+	};
+
 	public getAllSettings = async () => {
 		return await this.connection!.manager.find(Settings);
 	};

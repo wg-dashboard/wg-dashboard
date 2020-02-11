@@ -50,6 +50,8 @@ class WebServer {
 
 					/* Private endpoints */
 					this.server.get("/api/settings", this.isUserAuthed, this.getSettingsHandler);
+					this.server.get("/api/users", this.isUserAuthed, this.getUsersHandler);
+					// this.server.get("/api/peers", this.isUserAuthed);
 
 					// this.server.put("/api/peer", this.createPeer);
 
@@ -68,6 +70,21 @@ class WebServer {
 					reject(err);
 				});
 		});
+	};
+	public getUsersHandler = async (_req: Request, res: Response) => {
+		try {
+			const users = await data.getAllUsers();
+
+			return res.send({
+				status: 200,
+				users,
+			});
+		} catch (err) {
+			return res.send({
+				status: 400,
+				message: err,
+			});
+		}
 	};
 
 	public getSettingsHandler = async (_req: Request, res: Response) => {
@@ -114,18 +131,10 @@ class WebServer {
 	};
 
 	private isUserAuthed = (req: Request, _res: Response, next: NextFunction) => {
-		console.log(req.rawHeaders);
-
-		if (req.ip === "::1" || req.ip === "127.0.0.1" || req.ip === "::ffff:127.0.0.1") {
-			return next();
-		}
-
 		if (!req.session?.authed) {
-			console.log("user not authed, problemo");
 			return next(new Error("User not authenticated"));
 		}
 
-		console.log("user authed, no problemo");
 		next();
 	};
 
