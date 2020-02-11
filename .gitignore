@@ -1,10 +1,11 @@
+.db
+.db-journal
+wgdash.db
+wgdash.db-journal
+wgdash
+
 /node_modules
 wireguard/
 dist/
 server_config.json
 .next
-
-.db
-.db-journal
-wgdash.db
-wgdash.db-journal
