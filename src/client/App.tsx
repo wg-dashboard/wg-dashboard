@@ -28,9 +28,12 @@ class App extends Component {
 						states.user.setAdmin(true);
 					}
 				}
+
+				console.log(data);
 			} catch (e) {
 				console.error(e);
 				console.log("No valid existing userData found..");
+				states.user.setLoggedIn(false);
 			}
 		}
 	}
@@ -41,13 +44,23 @@ class App extends Component {
 				<CssBaseline />
 				<Backdrop />
 				<Switch>
-					<Layout>
-						<Route path="/users">
-							<Users />
-						</Route>
-						<Route path="/peers"></Route>
-					</Layout>
-					<Route path="/">{states.user.loggedIn ? <Dashboard /> : <Login />}</Route>
+					<Route path="/">
+						{states.user.loggedIn ? (
+							<Layout>
+								<Route path="/peers">
+									<div>Peers!</div>
+								</Route>
+								<Route path="/users">
+									<div>Users!</div>
+								</Route>
+								<Route path="\/(dashboard)?">
+									<Dashboard />
+								</Route>
+							</Layout>
+						) : (
+							<Login />
+						)}
+					</Route>
 				</Switch>
 			</Router>
 		);
