@@ -4,7 +4,6 @@ import {observable, action} from "mobx";
 import {observer} from "mobx-react";
 
 import {getUsers} from "../api";
-import Layout from "../components/layout";
 
 class UsersState {
 	@observable users: any[] = [];
@@ -24,7 +23,7 @@ export default observer(() => {
 	}, []);
 
 	return (
-		<Layout>
+		<>
 			Welcome to the users page..
 			{usersState.users.length > 0 && (
 				<div>
@@ -33,6 +32,6 @@ export default observer(() => {
 					))}
 				</div>
 			)}
-		</Layout>
+		</>
 	);
 });

@@ -7,7 +7,7 @@ import {getCookie} from "./utils";
 import Backdrop from "./components/backdrop";
 import Login from "./pages/login";
 import Dashboard from "./pages/dashboard";
-// import Peers from "./pages/peers";
+import Peers from "./pages/peers";
 import Users from "./pages/users";
 import states from "./states/index";
 import Layout from "./components/layout";
@@ -48,10 +48,10 @@ class App extends Component {
 						{states.user.loggedIn ? (
 							<Layout>
 								<Route path="/peers">
-									<div>Peers!</div>
+									<Peers />
 								</Route>
 								<Route path="/users">
-									<div>Users!</div>
+									<Users />
 								</Route>
 								<Route path="\/(dashboard)?">
 									<Dashboard />
