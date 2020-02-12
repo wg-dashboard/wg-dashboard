@@ -1,18 +1,15 @@
 import express, {Express, Request, Response, NextFunction} from "express";
-import next from "next";
-import nextServer from "next/dist/next-server/server/next-server";
 import morgan from "morgan";
 import data from "../modules/data";
+import path from "path";
 
 class WebServer {
 	private dev = process.env.NODE_ENV !== "production";
 	private initialized = false;
 	private port = 3000;
-	private app: nextServer;
 	private server: Express;
 
 	constructor() {
-		this.app = next({dev: this.dev, ...(this.dev ? {dir: "./src"} : {})});
 		this.server = express();
 	}
 
@@ -22,53 +19,31 @@ class WebServer {
 				return reject("WebServer already initialized!");
 			}
 
+			this.server.use(express.static(path.resolve(__dirname, "../../public/static")));
 			this.server.use(morgan("dev"));
 			this.server.use(express.json());
 			this.server.use(data.expressSession());
 
-			this.app
-				.prepare()
-				.then(async () => {
-					const handle = this.app.getRequestHandler();
+			// the loginHandler handles both login and register
+			this.server.post("/api/login", this.loginHandler);
+			this.server.post("/api/logout", this.logoutHandler);
 
-					/* Public endpoints */
-					this.server.get("/", (req: Request, res: Response, next: NextFunction) => {
-						if (req.session?.authed) {
-							return this.app.render(req, res, "/dashboard", req.query);
-						}
+			/* Private endpoints */
+			this.server.get("/api/settings", this.isUserAuthed, this.getSettingsHandler);
+			this.server.get("/api/users", this.isUserAuthed, this.getUsersHandler);
+			// this.server.get("/api/peers", this.isUserAuthed);
 
-						next();
-					});
+			// this.server.put("/api/peer", this.createPeer);
 
-					this.server.get("/dashboard", this.isUserAuthed, (req: Request, res: Response) => {
-						this.app.render(req, res, "/dashboard", req.query);
-					});
+			this.server.get("*", (req: Request, res: Response) => {
+				res.sendFile(path.resolve(__dirname, "../../public/index.html"));
+			});
 
-					// the loginHandler handles both login and register
-					this.server.post("/api/login", this.loginHandler);
-					this.server.post("/api/logout", this.logoutHandler);
-
-					/* Private endpoints */
-					this.server.get("/api/settings", this.isUserAuthed, this.getSettingsHandler);
-					this.server.get("/api/users", this.isUserAuthed, this.getUsersHandler);
-					// this.server.get("/api/peers", this.isUserAuthed);
-
-					// this.server.put("/api/peer", this.createPeer);
-
-					this.server.get("*", (req: Request, res: Response) => {
-						return handle(req, res);
-					});
-
-					this.server.use(this.genericErrorHandler);
-					this.server.listen(this.port, () => {
-						console.log(`WG-Dashboard webserver now listening on port ${this.port}!`);
-						this.initialized = true;
-						resolve(true);
-					});
-				})
-				.catch(err => {
-					reject(err);
-				});
+			this.server.listen(this.port, () => {
+				console.log(`WG-Dashboard webserver now listening on port ${this.port}!`);
+				this.initialized = true;
+				resolve(true);
+			});
 		});
 	};
 	public getUsersHandler = async (_req: Request, res: Response) => {
@@ -119,19 +94,9 @@ class WebServer {
 		}
 	};
 
-	private genericErrorHandler = (err: Error, req: Request, res: Response, _next: NextFunction) => {
-		if (req.path.includes("/api/")) {
-			return res.status(500).send({
-				status: 500,
-				message: err.message,
-			});
-		}
-
-		this.app.renderError(err, req, res, "/index");
-	};
-
-	private isUserAuthed = (req: Request, _res: Response, next: NextFunction) => {
+	private isUserAuthed = (req: Request, res: Response, next: NextFunction) => {
 		if (!req.session?.authed) {
+			res.cookie("userData", null); // reset cookie on clientside - he might think he's still authed
 			return next(new Error("User not authenticated"));
 		}
 
@@ -147,6 +112,7 @@ class WebServer {
 				});
 			}
 
+			res.cookie("userData", null);
 			return res.send({
 				status: 200,
 			});
@@ -163,6 +129,7 @@ class WebServer {
 				admin: user.admin,
 			};
 
+			res.cookie("userData", JSON.stringify({id: user.id, admin: user.admin, loggedIn: true}));
 			return res.send({
 				status: 200,
 			});

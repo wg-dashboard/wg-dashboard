@@ -5,7 +5,7 @@
 	"database": "wgdash.db",
 	"synchronize": true,
 	"logging": false,
-	"entities": ["src/server/orm/entity/**/*.ts"],
-	"migrations": ["src/server/orm/migration/**/*.ts"],
-	"subscribers": ["src/server/orm/subscriber/**/*.ts"]
+	"entities": ["dist/orm/entity/**/*.js"],
+	"migrations": ["dist/orm/migration/**/*.js"],
+	"subscribers": ["dist/orm/subscriber/**/*.js"]
 }

@@ -1,7 +1,7 @@
-import util from "util";
-import child_process from "child_process";
-import os from "os";
-import {Peer} from "server/orm/entity/Peer";
+import * as util from "util";
+import * as child_process from "child_process";
+import * as os from "os";
+import {Peer} from "../orm/entity/Peer";
 
 const exec = util.promisify(child_process.exec);
 

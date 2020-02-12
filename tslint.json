@@ -23,15 +23,8 @@
 			}
 		],
 		"variable-name": [true, "ban-keywords"],
-		"whitespace": [
-			true,
-			"check-branch",
-			"check-decl",
-			"check-operator",
-			"check-separator",
-			"check-type"
-		],
-		"member-access": [true, "check-accessor"],
+		"whitespace": [true, "check-branch", "check-decl", "check-operator", "check-separator", "check-type"],
+		"member-access": [true, "no-public"],
 		"jsdoc-format": true,
 		"import-spacing": true,
 		"interface-name": [true, "always-prefix"],

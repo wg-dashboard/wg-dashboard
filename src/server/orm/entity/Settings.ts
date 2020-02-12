@@ -1,8 +1,9 @@
-import {Column, PrimaryColumn, Entity} from "typeorm";
+import {Column, PrimaryColumn, Index, Entity} from "typeorm";
 
 @Entity()
 export class Settings {
 	@PrimaryColumn()
+	@Index({unique: true})
 	key!: string;
 
 	@Column()

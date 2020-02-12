@@ -1,13 +1,17 @@
 {
-	"extends": "./src/tsconfig.json",
 	"compilerOptions": {
 		"module": "commonjs",
-		"outDir": ".next/server",
-		"target": "es2017",
-		"isolatedModules": false,
-		"noEmit": false,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"target": "es6",
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"sourceMap": false,
+		"outDir": "dist",
+		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true
+		"esModuleInterop": true
 	},
-	"include": ["src/server/**/*.ts"]
+	"include": ["src/server/**/*.ts"],
+	"exclude": ["node_modules"]
 }

@@ -4,9 +4,14 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"dev": "nodemon",
+		"dev": "npm-run-all --parallel watch:*",
 		"build": "next build && tsc && tsc --project tsconfig.server.json",
-		"start": "cross-env NODE_ENV=production node .next/server"
+		"start": "cross-env NODE_ENV=production node .next/server",
+		"watch:client": "webpack --watch",
+		"watch:server": "tsc -w --project tsconfig.server.json",
+		"watch:nodemon": "nodemon",
+		"build:client": "webpack",
+		"build:server": "tsc --project tsconfig.server.json"
 	},
 	"repository": {
 		"type": "git",
@@ -21,6 +26,7 @@
 	"homepage": "https://github.com/daluf/wireguard-dashboard#readme",
 	"dependencies": {
 		"@material-ui/core": "^4.9.1",
+		"@material-ui/lab": "^4.0.0-alpha.42",
 		"bcrypt": "^3.0.7",
 		"body-parser": "^1.19.0",
 		"convict": "^5.2.0",
@@ -28,21 +34,21 @@
 		"express": "^4.17.1",
 		"express-rate-limit": "^5.0.0",
 		"express-session": "^1.17.0",
-		"isomorphic-unfetch": "^3.0.0",
+		"mobx": "^5.15.4",
+		"mobx-react": "^6.1.7",
 		"morgan": "^1.9.1",
-		"next": "^9.2.1",
-		"next-cookies": "^2.0.3",
-		"next-images": "^1.3.0",
 		"node-cidr": "^1.0.0",
 		"react": "^16.12.0",
 		"react-dom": "^16.12.0",
 		"react-hook-form": "^4.8.2",
+		"react-router-dom": "^5.1.2",
 		"reflect-metadata": "^0.1.13",
 		"sqlite3": "^4.1.1",
 		"tslint": "^6.0.0",
 		"typeface-roboto": "0.0.75",
 		"typeorm": "^0.2.22",
-		"typeorm-store": "^1.2.0"
+		"typeorm-store": "^1.2.0",
+		"webpack": "^4.41.6"
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^3.0.0",
@@ -53,8 +59,14 @@
 		"@types/node": "^13.7.0",
 		"@types/react": "^16.9.19",
 		"@types/react-dom": "^16.9.5",
+		"@types/react-router-dom": "^5.1.3",
+		"css-loader": "^3.4.2",
 		"nodemon": "^2.0.2",
+		"npm-run-all": "^4.1.5",
+		"style-loader": "^1.1.3",
+		"ts-loader": "^6.2.1",
 		"ts-node": "^8.6.2",
-		"typescript": "^3.7.5"
+		"typescript": "^3.7.5",
+		"webpack-cli": "^3.3.11"
 	}
 }
