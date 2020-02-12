@@ -9,3 +9,5 @@ wireguard/
 dist/
 server_config.json
 .next
+
+public/static/js/app.js
