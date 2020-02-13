@@ -31,7 +31,6 @@ export default observer(() => {
 	useEffect(() => {
 		const initializeSettings = async () => {
 			const initialSettings = await getSettings();
-			console.log(initialSettings);
 			settingsState.setSettings(initialSettings);
 		};
 

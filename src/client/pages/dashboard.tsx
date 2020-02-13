@@ -5,7 +5,7 @@ import SettingsForm from "../components/settingsForm";
 const dashboard = () => {
 	return (
 		<div>
-			Welcome to the dashboard.. <SettingsForm />
+			<SettingsForm />
 		</div>
 	);
 };

@@ -62,7 +62,7 @@ export default observer(() => {
 						title={"Users"}
 						columns={[
 							{title: "Name", field: "name"},
-							{title: "Password", field: "new_password"},
+							{title: "Password", emptyValue: <div style={{opacity: 0.5}}>Hidden</div>, filtering: false, sorting: false, field: "new_password"},
 							{title: "Admin", field: "admin", type: "boolean"},
 						]}
 						data={usersState.users}
