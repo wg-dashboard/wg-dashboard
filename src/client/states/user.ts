@@ -4,6 +4,7 @@ class User {
 	@observable loggedIn = false;
 	@observable admin = false;
 	@observable pageIsLoading = false;
+	@observable id = 0;
 
 	@action setLoggedIn = (newState: boolean) => {
 		this.loggedIn = newState;
@@ -11,6 +12,10 @@ class User {
 
 	@action setAdmin = (newState: boolean) => {
 		this.admin = newState;
+	};
+
+	@action setId = (id: number) => {
+		this.id = id;
 	};
 
 	@action setPageIsLoading = (newState: boolean) => {

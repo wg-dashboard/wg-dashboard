@@ -17,22 +17,21 @@ class App extends Component {
 	componentDidMount() {
 		const existingUserData = getCookie("userData");
 
-		if (existingUserData) {
+		// ugly check for j:null because we're setting it serverside to "null" if cookie is expired
+		if (existingUserData && existingUserData !== "j:null") {
 			try {
 				const data = JSON.parse(existingUserData);
 
 				if (data.loggedIn) {
 					states.user.setLoggedIn(true);
+					states.user.setId(data.id);
 
+					// we only need to set admin if we're logged in
 					if (data.admin) {
 						states.user.setAdmin(true);
 					}
 				}
-
-				console.log(data);
 			} catch (e) {
-				console.error(e);
-				console.log("No valid existing userData found..");
 				states.user.setLoggedIn(false);
 			}
 		}

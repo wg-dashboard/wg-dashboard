@@ -71,6 +71,22 @@ class Data {
 		}
 	};
 
+	public deleteUser = async (id: number) => {
+		if (!id) {
+			return new Error("No id provided");
+		}
+
+		if (typeof id !== "number") {
+			return new Error("Provided id is not a number");
+		}
+
+		return await this.connection!.manager.delete(User, {id});
+	};
+
+	public getAllPeers = async () => {
+		return await this.connection!.manager.find(Peer);
+	};
+
 	public getAllUsers = async () => {
 		return await this.connection!.manager.find(User);
 	};

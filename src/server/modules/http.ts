@@ -29,11 +29,13 @@ class WebServer {
 			this.server.post("/api/logout", this.logoutHandler);
 
 			/* Private endpoints */
-			this.server.get("/api/settings", this.isUserAuthed, this.getSettingsHandler);
-			this.server.get("/api/users", this.isUserAuthed, this.getUsersHandler);
-			// this.server.get("/api/peers", this.isUserAuthed);
-
+			this.server.get("/api/settings", this.isUserAuthenticated, this.getSettingsHandler);
+			this.server.get("/api/peers", this.isUserAuthenticated, this.getPeersHandler);
 			// this.server.put("/api/peer", this.createPeer);
+
+			this.server.get("/api/users", this.isUserAuthenticated, this.getUsersHandler);
+			this.server.put("/api/users", this.isUserAuthenticated, this.isUserAdmin, this.createUserHandler);
+			this.server.delete("/api/users", this.isUserAuthenticated, this.isUserAdmin, this.deleteUserHandler);
 
 			this.server.get("*", (req: Request, res: Response) => {
 				res.sendFile(path.resolve(__dirname, "../../public/index.html"));
@@ -46,6 +48,47 @@ class WebServer {
 			});
 		});
 	};
+
+	public getPeersHandler = async (_req: Request, res: Response) => {
+		try {
+			const peers = await data.getAllPeers();
+
+			return res.send({
+				status: 200,
+				peers,
+			});
+		} catch (err) {
+			return res.send({
+				status: 400,
+				message: err,
+			});
+		}
+	};
+
+	public createUserHandler = async (req: Request, res: Response) => {
+		try {
+			const _data = req.body;
+			_data.password = _data.new_password;
+			_data.passwordConfirm = _data.new_password;
+
+			const user = await data.createRegisterUser(_data);
+
+			return res.send({
+				status: 201,
+				user: {
+					id: user.id,
+					admin: user.admin,
+				},
+			});
+		} catch (err) {
+			console.log(err);
+			return res.send({
+				status: 400,
+				message: err,
+			});
+		}
+	};
+
 	public getUsersHandler = async (_req: Request, res: Response) => {
 		try {
 			const users = await data.getAllUsers();
@@ -53,6 +96,21 @@ class WebServer {
 			return res.send({
 				status: 200,
 				users,
+			});
+		} catch (err) {
+			return res.send({
+				status: 400,
+				message: err,
+			});
+		}
+	};
+
+	public deleteUserHandler = async (req: Request, res: Response) => {
+		try {
+			await data.deleteUser(req.body.id);
+
+			return res.send({
+				status: 200,
 			});
 		} catch (err) {
 			return res.send({
@@ -94,10 +152,24 @@ class WebServer {
 		}
 	};
 
-	private isUserAuthed = (req: Request, res: Response, next: NextFunction) => {
+	private isUserAdmin = (req: Request, res: Response, next: NextFunction) => {
+		if (!req.session?.user?.admin) {
+			return res.send({
+				status: 403,
+				message: "User not authorized",
+			});
+		}
+
+		next();
+	};
+
+	private isUserAuthenticated = (req: Request, res: Response, next: NextFunction) => {
 		if (!req.session?.authed) {
-			res.cookie("userData", null); // reset cookie on clientside - he might think he's still authed
-			return next(new Error("User not authenticated"));
+			res.cookie("userData", "null", {maxAge: 100}); // reset cookie on clientside - he might think he's still authed
+			return res.send({
+				status: 401,
+				message: "User not authenticated",
+			});
 		}
 
 		next();
@@ -132,6 +204,10 @@ class WebServer {
 			res.cookie("userData", JSON.stringify({id: user.id, admin: user.admin, loggedIn: true}));
 			return res.send({
 				status: 200,
+				user: {
+					id: user.id,
+					admin: user.admin,
+				},
 			});
 		} catch (err) {
 			return res.send(err);

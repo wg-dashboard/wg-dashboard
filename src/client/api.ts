@@ -33,6 +33,8 @@ export const loginRegisterUser = async (data: IUser) => {
 
 	if (result.status === 200 || result.message === "User already authenticated") {
 		states.user.setLoggedIn(true);
+		states.user.setAdmin(result.user.admin);
+		states.user.setId(result.user.id);
 		// Router.push("/dashboard");
 	} else {
 		alert("Login error: " + result.message);
@@ -44,9 +46,8 @@ export const logout = async () => {
 
 	if (result.status !== 200) {
 		alert("Logout error: " + result.message);
-		states.user.setLoggedIn(false);
 	} else {
-		// Router.push("/");
+		states.user.setLoggedIn(false);
 	}
 };
 
@@ -80,5 +81,26 @@ export const getUsers = async () => {
 	} else {
 		console.error("GET users error: " + result.message);
 		return [];
+	}
+};
+
+/* ADMIN ENDPOINTS */
+export const createUser = async (data: IUser) => {
+	const result = await makeAPIRequest("/api/users", "PUT", data);
+
+	if (result.status !== 201) {
+		throw new Error(result.message);
+	} else {
+		return result.user;
+	}
+};
+
+export const deleteUser = async (id: number) => {
+	const result = await makeAPIRequest("/api/users", "DELETE", {id});
+
+	if (result.status !== 200) {
+		throw new Error(result.message);
+	} else {
+		return id;
 	}
 };
