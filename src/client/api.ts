@@ -1,4 +1,4 @@
-import {IUser} from "../server/interfaces";
+import {IUser, ISetting, IPeer} from "../server/interfaces";
 
 import states from "./states/index";
 
@@ -108,6 +108,15 @@ export const deleteUser = async (id: number) => {
 export const updateUser = async (user: IUser) => {
 	const result = await makeAPIRequest("/api/users", "PUT", {user});
 
+	if (result.status !== 200) {
+		throw new Error(result.message);
+	}
+};
+
+export const updateSettings = async (settings: ISetting[]) => {
+	const result = await makeAPIRequest("/api/settings", "PUT", {settings});
+
+	console.log("---- result", result);
 	if (result.status !== 200) {
 		throw new Error(result.message);
 	}

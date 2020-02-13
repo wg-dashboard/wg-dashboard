@@ -18,7 +18,7 @@ class Peers {
 			});
 		} catch (err) {
 			return res.send({
-				status: 400,
+				status: 500,
 				message: err,
 			});
 		}

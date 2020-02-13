@@ -8,7 +8,7 @@ import {User} from "../orm/entity/User";
 import {Peer} from "../orm/entity/Peer";
 import {Settings} from "../orm/entity/Settings";
 import {Session} from "../orm/entity/Session";
-import {IUser, IPeer} from "../interfaces";
+import {IUser, IPeer, ISetting} from "../interfaces";
 import config from "../config";
 import {generateKeyPair, getNetworkAdapter, getNetworkIP} from "./sh";
 // import {cidr} from "node-cidr";
@@ -71,8 +71,18 @@ class Data {
 		}
 	};
 
+	public overwriteSettings = async (settings: string) => {
+		for (let [key, value] of Object.entries(settings)) {
+			await this.setSetting(key, value);
+		}
+	};
+
 	public getAllPeers = async () => {
 		return await this.connection!.manager.find(Peer);
+	};
+
+	public getPeer = async (data: IPeer) => {
+		return this.connection!.manager.findOne(Peer, {device: data.device});
 	};
 
 	public getAllSettings = async () => {
@@ -112,6 +122,10 @@ class Data {
 
 	public getAllUsers = async () => {
 		return await this.connection!.manager.find(User);
+	};
+
+	public getUser = async (data: IUser) => {
+		return this.connection!.manager.findOne(User, {name: data.name});
 	};
 
 	public deleteUser = async (id: number) => {
@@ -259,14 +273,6 @@ class Data {
 
 			resolve(user);
 		});
-	};
-
-	public getPeer = async (data: IPeer) => {
-		return this.connection!.manager.findOne(Peer, {device: data.device});
-	};
-
-	public getUser = async (data: IUser) => {
-		return this.connection!.manager.findOne(User, {name: data.name});
 	};
 
 	public expressSession = () => {

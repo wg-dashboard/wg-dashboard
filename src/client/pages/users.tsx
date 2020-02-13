@@ -22,6 +22,8 @@ class UsersState {
 	@action setUsers = (users: IUser[]) => (this.users = users);
 
 	@action addUser = (user: IUser) => {
+		delete user["new_password"]; // we only need this property for the server
+
 		this.users.push(user);
 	};
 
@@ -31,6 +33,8 @@ class UsersState {
 	};
 
 	@action updateUser = (id: number, newUser: IUser) => {
+		delete newUser["new_password"]; // we only need this property for the server
+
 		const userIndex = this.users.findIndex(el => el.id === id);
 
 		if (userIndex > -1) {
@@ -66,12 +70,11 @@ export default observer(() => {
 							states.user.admin
 								? {
 										isEditable: (rowData: IUser) => rowData.id !== states.user.id,
-										isDeletable: (rowData: IUser) => rowData.id !== states.user.id,s
+										isDeletable: (rowData: IUser) => rowData.id !== states.user.id,
 										onRowAdd: (newData: IUser) =>
 											new Promise(async (resolve, reject) => {
 												try {
 													const user = await createUser(newData);
-													delete newData["new_password"];
 													usersState.addUser(Object.assign(newData, user));
 													resolve();
 												} catch (e) {
@@ -82,7 +85,6 @@ export default observer(() => {
 											new Promise(async (resolve, reject) => {
 												try {
 													await updateUser(newData);
-													delete newData["new_password"];
 													usersState.updateUser(newData.id, newData);
 													resolve();
 												} catch (e) {
