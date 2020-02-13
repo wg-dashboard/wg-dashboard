@@ -71,24 +71,8 @@ class Data {
 		}
 	};
 
-	public deleteUser = async (id: number) => {
-		if (!id) {
-			return new Error("No id provided");
-		}
-
-		if (typeof id !== "number") {
-			return new Error("Provided id is not a number");
-		}
-
-		return await this.connection!.manager.delete(User, {id});
-	};
-
 	public getAllPeers = async () => {
 		return await this.connection!.manager.find(Peer);
-	};
-
-	public getAllUsers = async () => {
-		return await this.connection!.manager.find(User);
 	};
 
 	public getAllSettings = async () => {
@@ -124,6 +108,34 @@ class Data {
 		const ipCheck = new RegExp(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/);
 
 		return ipCheck.test(ip);
+	};
+
+	public getAllUsers = async () => {
+		return await this.connection!.manager.find(User);
+	};
+
+	public deleteUser = async (id: number) => {
+		if (!id) {
+			return new Error("No id provided");
+		}
+
+		if (typeof id !== "number") {
+			return new Error("Provided id is not a number");
+		}
+
+		return await this.connection!.manager.delete(User, {id});
+	};
+
+	public updateUser = async (data: IUser) => {
+		if (data.new_password) {
+			data.password = await bcrypt.hash(data.new_password, 10);
+			delete data["new_password"]; // new_password doesnt belong in the DB
+		} else {
+			delete data["password"];
+			delete data["passwordConfirm"];
+		}
+
+		return await this.connection!.manager.update(User, {id: data.id}, data);
 	};
 
 	public createUpdatePeer = async (data: IPeer) => {

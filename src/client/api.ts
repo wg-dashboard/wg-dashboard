@@ -86,7 +86,7 @@ export const getUsers = async () => {
 
 /* ADMIN ENDPOINTS */
 export const createUser = async (data: IUser) => {
-	const result = await makeAPIRequest("/api/users", "PUT", data);
+	const result = await makeAPIRequest("/api/users", "POST", data);
 
 	if (result.status !== 201) {
 		throw new Error(result.message);
@@ -102,5 +102,13 @@ export const deleteUser = async (id: number) => {
 		throw new Error(result.message);
 	} else {
 		return id;
+	}
+};
+
+export const updateUser = async (user: IUser) => {
+	const result = await makeAPIRequest("/api/users", "PUT", {user});
+
+	if (result.status !== 200) {
+		throw new Error(result.message);
 	}
 };

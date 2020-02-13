@@ -4,7 +4,7 @@ import {observable, action} from "mobx";
 import {observer} from "mobx-react";
 
 import Table from "../components/table";
-import {getUsers, deleteUser, createUser} from "../api";
+import {getUsers, deleteUser, createUser, updateUser} from "../api";
 
 import states from "../states/index";
 
@@ -28,6 +28,14 @@ class UsersState {
 	@action deleteUser = (id: number) => {
 		const index = this.users.findIndex(el => el.id === id);
 		this.users.splice(index, 1);
+	};
+
+	@action updateUser = (id: number, newUser: IUser) => {
+		const userIndex = this.users.findIndex(el => el.id === id);
+
+		if (userIndex > -1) {
+			this.users[userIndex] = newUser;
+		}
 	};
 }
 const usersState = new UsersState();
@@ -58,11 +66,10 @@ export default observer(() => {
 							states.user.admin
 								? {
 										isEditable: (rowData: IUser) => rowData.id !== states.user.id,
-										isDeletable: (rowData: IUser) => rowData.id !== states.user.id, // only name(a) rows would be deletable
+										isDeletable: (rowData: IUser) => rowData.id !== states.user.id,s
 										onRowAdd: (newData: IUser) =>
 											new Promise(async (resolve, reject) => {
 												try {
-													console.log(newData);
 													const user = await createUser(newData);
 													delete newData["new_password"];
 													usersState.addUser(Object.assign(newData, user));
@@ -71,9 +78,17 @@ export default observer(() => {
 													reject(e);
 												}
 											}),
-										onRowUpdate: (newData: IUser, oldData: IUser) =>
-											new Promise((resolve, reject) => {
-												resolve();
+										onRowUpdate: (newData: IUser) =>
+											new Promise(async (resolve, reject) => {
+												try {
+													await updateUser(newData);
+													delete newData["new_password"];
+													usersState.updateUser(newData.id, newData);
+													resolve();
+												} catch (e) {
+													console.error(JSON.stringify(e));
+													reject(e);
+												}
 											}),
 										onRowDelete: (oldData: IUser) =>
 											new Promise(async (resolve, reject) => {

@@ -3,6 +3,7 @@ export interface IUser {
 	name: string;
 	password: string;
 	passwordConfirm?: string;
+	new_password?: string;
 	admin: boolean;
 }
 
