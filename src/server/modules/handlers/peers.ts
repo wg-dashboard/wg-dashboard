@@ -5,7 +5,8 @@ import auth from "./auth";
 class Peers {
 	createRoutes(express: Express) {
 		express.get("/api/peers", this.getPeersHandler);
-		express.put("/api/peer", auth.isUserAdmin, this.createPeer);
+		express.put("/api/peers", auth.isUserAdmin, this.createPeerHandler);
+		express.delete("/api/peers", auth.isUserAdmin, this.deletePeerHandler);
 	}
 
 	public getPeersHandler = async (_req: Request, res: Response) => {
@@ -24,17 +25,35 @@ class Peers {
 		}
 	};
 
-	private createPeer = async (req: Request, res: Response) => {
+	private createPeerHandler = async (req: Request, res: Response) => {
 		try {
 			const peer = await data.createUpdatePeer(req.body.peer);
 
+			console.log(peer);
 			res.send({
-				status: 200,
+				status: 201,
 				peer,
 			});
 		} catch (err) {
+			console.log(err);
 			res.send({
-				status: 400,
+				status: 500,
+				message: err,
+			});
+		}
+	};
+
+	public deletePeerHandler = async (req: Request, res: Response) => {
+		try {
+			await data.deletePeer(req.body.id);
+
+			res.send({
+				status: 200,
+			});
+		} catch (err) {
+			console.log(err);
+			res.send({
+				status: 500,
 				message: err,
 			});
 		}

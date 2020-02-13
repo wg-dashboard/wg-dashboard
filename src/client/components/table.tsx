@@ -1,4 +1,4 @@
-import {forwardRef} from "react";
+import React, {forwardRef} from "react";
 import MaterialTable from "material-table";
 
 import AddBox from "@material-ui/icons/AddBox";
@@ -15,8 +15,6 @@ import LastPage from "@material-ui/icons/LastPage";
 import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
-import React from "react";
-
 import ViewColumn from "@material-ui/icons/ViewColumn";
 
 const tableIcons = {
@@ -40,5 +38,5 @@ const tableIcons = {
 };
 
 export default (props: any) => {
-	return <MaterialTable title={props.title} icons={tableIcons} columns={props.columns} data={props.data} editable={props.editable} />;
+	return <MaterialTable title={props.title} icons={tableIcons} columns={props.columns} data={props.data} editable={props.editable} actions={props.actions} />;
 };

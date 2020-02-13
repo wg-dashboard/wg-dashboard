@@ -126,12 +126,8 @@ class Data {
 	};
 
 	public deleteUser = async (id: number) => {
-		if (!id) {
-			return new Error("No id provided");
-		}
-
-		if (typeof id !== "number") {
-			return new Error("Provided id is not a number");
+		if (!this.isValidID) {
+			throw new Error("Invalid id provided");
 		}
 
 		return await this.connection!.manager.delete(User, {id});
@@ -149,18 +145,22 @@ class Data {
 		return await this.connection!.manager.update(User, {id: data.id}, data);
 	};
 
-	public createUpdatePeer = async (data: IPeer) => {
-		const peer = await this.getPeer(data);
+	public createUpdatePeer = async (data: IPeer, update = false) => {
+		let peer = await this.getPeer(data);
 
-		if (peer) {
+		if (peer && !update) {
 			throw new Error("Peer with given device already exists");
+		}
+
+		if (update && !peer) {
+			throw new Error("Peer does not exist");
 		}
 
 		if (!data) {
 			throw new Error("No peer data provided");
 		}
 
-		if (!data.device.length) {
+		if (!data.device || !data.device.length) {
 			throw new Error("Device name is mandatory");
 		}
 
@@ -175,14 +175,19 @@ class Data {
 		}
 
 		try {
-			const peer = new Peer();
+			if (!peer) {
+				peer = new Peer();
+			}
+
 			peer.active = data.active;
 			peer.device = data.device;
 			peer.virtual_ip = data.virtual_ip || (await this.getAvailableIP());
 
-			const {public_key, private_key} = await generateKeyPair();
-			peer.public_key = public_key;
-			peer.private_key = private_key;
+			if (!update) {
+				const {public_key, private_key} = await generateKeyPair();
+				peer.public_key = public_key;
+				peer.private_key = private_key;
+			}
 
 			await this.connection!.manager.save(peer);
 
@@ -190,6 +195,14 @@ class Data {
 		} catch (err) {
 			throw err;
 		}
+	};
+
+	public deletePeer = async (id: number) => {
+		if (!this.isValidID) {
+			throw new Error("Invalid id provided");
+		}
+
+		return await this.connection!.manager.delete(Peer, {id});
 	};
 
 	public createUser = async (data: IUser) => {
@@ -283,6 +296,18 @@ class Data {
 				repository,
 			}),
 		});
+	};
+
+	public isValidID = (id: number) => {
+		if (!id) {
+			return false;
+		}
+
+		if (typeof id !== "number") {
+			return false;
+		}
+
+		return true;
 	};
 }
 

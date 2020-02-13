@@ -1,4 +1,4 @@
-trailingComma: "es6"
+trailingComma: "es5"
 useTabs: true
 tabWidth: 4
 semi: true

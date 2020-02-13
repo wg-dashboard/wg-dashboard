@@ -28,8 +28,11 @@ class UsersState {
 	};
 
 	@action deleteUser = (id: number) => {
-		const index = this.users.findIndex(el => el.id === id);
-		this.users.splice(index, 1);
+		const userIndex = this.users.findIndex(el => el.id === id);
+
+		if (userIndex > -1) {
+			this.users.splice(userIndex, 1);
+		}
 	};
 
 	@action updateUser = (id: number, newUser: IUser) => {
@@ -56,58 +59,54 @@ export default observer(() => {
 
 	return (
 		<>
-			{usersState.users.length > 0 && (
-				<div>
-					<Table
-						title={"Users"}
-						columns={[
-							{title: "Name", field: "name"},
-							{title: "Password", emptyValue: <div style={{opacity: 0.5}}>Hidden</div>, filtering: false, sorting: false, field: "new_password"},
-							{title: "Admin", field: "admin", type: "boolean"},
-						]}
-						data={usersState.users}
-						editable={
-							states.user.admin
-								? {
-										isEditable: (rowData: IUser) => rowData.id !== states.user.id,
-										isDeletable: (rowData: IUser) => rowData.id !== states.user.id,
-										onRowAdd: (newData: IUser) =>
-											new Promise(async (resolve, reject) => {
-												try {
-													const user = await createUser(newData);
-													usersState.addUser(Object.assign(newData, user));
-													resolve();
-												} catch (e) {
-													reject(e);
-												}
-											}),
-										onRowUpdate: (newData: IUser) =>
-											new Promise(async (resolve, reject) => {
-												try {
-													await updateUser(newData);
-													usersState.updateUser(newData.id, newData);
-													resolve();
-												} catch (e) {
-													console.error(JSON.stringify(e));
-													reject(e);
-												}
-											}),
-										onRowDelete: (oldData: IUser) =>
-											new Promise(async (resolve, reject) => {
-												try {
-													await deleteUser(oldData.id);
-													usersState.deleteUser(oldData.id);
-													resolve();
-												} catch (e) {
-													reject(e);
-												}
-											}),
-								  }
-								: {}
-						}
-					/>
-				</div>
-			)}
+			<Table
+				title={"Users"}
+				columns={[
+					{title: "Name", field: "name"},
+					{title: "Password", emptyValue: <div style={{opacity: 0.5}}>Hidden</div>, filtering: false, sorting: false, field: "new_password"},
+					{title: "Admin", field: "admin", type: "boolean"},
+				]}
+				data={usersState.users}
+				editable={
+					states.user.admin
+						? {
+								isEditable: (rowData: IUser) => rowData.id !== states.user.id,
+								isDeletable: (rowData: IUser) => rowData.id !== states.user.id,
+								onRowAdd: (newData: IUser) =>
+									new Promise(async (resolve, reject) => {
+										try {
+											const user = await createUser(newData);
+											usersState.addUser(Object.assign(newData, user));
+											resolve();
+										} catch (e) {
+											reject(e);
+										}
+									}),
+								onRowUpdate: (newData: IUser) =>
+									new Promise(async (resolve, reject) => {
+										try {
+											await updateUser(newData);
+											usersState.updateUser(newData.id, newData);
+											resolve();
+										} catch (e) {
+											console.error(JSON.stringify(e));
+											reject(e);
+										}
+									}),
+								onRowDelete: (oldData: IUser) =>
+									new Promise(async (resolve, reject) => {
+										try {
+											await deleteUser(oldData.id);
+											usersState.deleteUser(oldData.id);
+											resolve();
+										} catch (e) {
+											reject(e);
+										}
+									}),
+						  }
+						: {}
+				}
+			/>
 		</>
 	);
 });

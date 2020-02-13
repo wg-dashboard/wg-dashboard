@@ -1,37 +1,109 @@
 import React, {useEffect} from "react";
 
+import {IPeer} from "../../server/interfaces";
 import {observable, action} from "mobx";
 import {observer} from "mobx-react";
+import CropFree from "@material-ui/icons/CropFree";
+import GetApp from "@material-ui/icons/GetApp";
 
-import {getPeers} from "../api";
+import Table from "../components/table";
+import {getPeers, createPeer, deletePeer} from "../api";
+import states from "../states/index";
 
 class PeersState {
-	@observable peers: any[] = [];
+	@observable peers: IPeer[] = [];
 
-	@action setPeers = (peers: any[]) => (this.peers = peers);
+	@action setPeers = (peers: IPeer[]) => (this.peers = peers);
+
+	@action addPeer = (peer: IPeer) => {
+		console.log("adding peer", peer);
+		this.peers.push(peer);
+	};
+
+	@action deletePeer = (id: number) => {
+		const peerIndex = this.peers.findIndex(el => el.id === id);
+
+		if (peerIndex > -1) {
+			this.peers.splice(peerIndex, 1);
+		}
+	};
 }
 const peersState = new PeersState();
 
 export default observer(() => {
 	useEffect(() => {
-		const initializeUsers = async () => {
-			const initialUsers = await getPeers();
-			peersState.setPeers(initialUsers);
+		const initializePeers = async () => {
+			const initialPeers = await getPeers();
+			peersState.setPeers(initialPeers);
 		};
 
-		initializeUsers();
+		initializePeers();
 	}, []);
+
+	console.log("view update");
 
 	return (
 		<>
-			Welcome to the peers page..
-			{peersState.peers.length > 0 && (
-				<div>
-					{peersState.peers.map((el: any) => (
-						<div key={el.id}>{JSON.stringify(el)}</div>
-					))}
-				</div>
-			)}
+			<Table
+				title={"Peers"}
+				actions={[
+					{
+						icon: () => <GetApp />,
+						tooltip: "Download config",
+						onClick: (event: any, rowData: any) => {
+							// todo
+						},
+					},
+					{
+						icon: () => <CropFree />,
+						tooltip: "Generate QR Code",
+						onClick: (event: any, rowData: any) => {
+							// todo
+						},
+					},
+				]}
+				columns={[
+					{title: "Active", field: "active", type: "boolean"},
+					{title: "Device", field: "device"},
+					{title: "Virtual IP", field: "virtual_ip"},
+					{title: "Public Key", editable: "never", field: "public_key"},
+				]}
+				data={peersState.peers}
+				editable={
+					states.user.admin
+						? {
+								onRowAdd: (newData: IPeer) =>
+									new Promise(async (resolve, reject) => {
+										try {
+											const peer = await createPeer(newData);
+											peersState.addPeer(peer);
+											resolve();
+										} catch (e) {
+											reject(e);
+										}
+									}),
+								onRowUpdate: (newData: IPeer) =>
+									new Promise(async (resolve, reject) => {
+										try {
+											resolve();
+										} catch (e) {
+											reject(e);
+										}
+									}),
+								onRowDelete: (oldData: IPeer) =>
+									new Promise(async (resolve, reject) => {
+										try {
+											await deletePeer(oldData.id);
+											peersState.deletePeer(oldData.id);
+											resolve();
+										} catch (e) {
+											reject(e);
+										}
+									}),
+						  }
+						: {}
+				}
+			/>
 		</>
 	);
 });

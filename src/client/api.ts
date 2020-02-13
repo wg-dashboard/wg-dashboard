@@ -121,3 +121,23 @@ export const updateSettings = async (settings: ISetting[]) => {
 		throw new Error(result.message);
 	}
 };
+
+export const createPeer = async (peer: IPeer) => {
+	const result = await makeAPIRequest("/api/peers", "PUT", {peer});
+
+	if (result.status !== 201) {
+		throw new Error(result.message);
+	} else {
+		return result.peer;
+	}
+};
+
+export const deletePeer = async (id: number) => {
+	const result = await makeAPIRequest("/api/peers", "DELETE", {id});
+
+	if (result.status !== 200) {
+		throw new Error(result.message);
+	} else {
+		return id;
+	}
+};
