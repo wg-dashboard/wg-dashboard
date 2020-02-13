@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import {createConnection, Connection} from "typeorm";
+import {createConnection, Connection, Not} from "typeorm";
 import ExpressSession from "express-session";
 import {TypeormStore} from "typeorm-store";
 import bcrypt from "bcrypt";
@@ -37,9 +37,6 @@ class Data {
 			network_adapter: networkAdapter,
 			config_path: "/etc/wireguard/wg0.conf",
 			allowed_ips: "0.0.0.0/0",
-			private_traffic: false,
-			dns_over_tls: true,
-			tls_servername: "tls.cloudflare-dns.com",
 		};
 
 		for await (let [key, value] of Object.entries(defaultSettings)) {
@@ -86,7 +83,7 @@ class Data {
 	};
 
 	public getAllSettings = async () => {
-		return await this.connection!.manager.find(Settings);
+		return await this.connection!.manager.find(Settings, {key: Not("private_key")});
 	};
 
 	public getSetting = async (key: string) => {
