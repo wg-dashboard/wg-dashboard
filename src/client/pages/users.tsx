@@ -66,7 +66,7 @@ export default observer(() => {
 					{title: "Password", emptyValue: <div style={{opacity: 0.5}}>Hidden</div>, filtering: false, sorting: false, field: "new_password"},
 					{title: "Admin", field: "admin", type: "boolean"},
 				]}
-				data={JSON.parse(JSON.stringify(usersState.users))} // ugly hack to convert the mobx proxy to a normal array
+				data={usersState.users.slice()} // ugly hack to convert the mobx proxy to a normal array
 				editable={
 					states.user.admin
 						? {
