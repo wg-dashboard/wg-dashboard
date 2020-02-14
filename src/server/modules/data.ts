@@ -165,7 +165,7 @@ class Data {
 		}
 
 		if (data.active == null) {
-			throw new Error("Active status is mandatory");
+			data.active = false;
 		}
 
 		if (data.virtual_ip != null) {
