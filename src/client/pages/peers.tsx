@@ -68,7 +68,7 @@ export default observer(() => {
 					{title: "Virtual IP", field: "virtual_ip"},
 					{title: "Public Key", editable: "never", field: "public_key"},
 				]}
-				data={peersState.peers}
+				data={JSON.parse(JSON.stringify(peersState.peers))} // ugly hack to convert the mobx proxy to a normal array
 				editable={
 					states.user.admin
 						? {
