@@ -115,7 +115,6 @@ export const updateUser = async (user: IUser) => {
 export const updateSettings = async (settings: ISetting[]) => {
 	const result = await makeAPIRequest("/api/settings", "PUT", {settings});
 
-	console.log("---- result", result);
 	if (result.status !== 200) {
 		throw new Error(result.message);
 	}
