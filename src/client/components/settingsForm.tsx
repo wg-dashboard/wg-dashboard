@@ -37,8 +37,6 @@ export default observer(() => {
 		initializeSettings();
 	}, []);
 
-	console.log(JSON.stringify(settingsState.settings));
-
 	return (
 		<Paper style={{paddingTop: "10px", paddingBottom: "16px"}}>
 			<Container>
