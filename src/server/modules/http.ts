@@ -32,15 +32,15 @@ class WebServer {
 			// public endpoints
 			auth.createRoutes(this.server);
 
+			this.server.get(["/", "/dashboard"], (req: Request, res: Response) => {
+				res.sendFile(path.resolve(__dirname, "../../public/index.html"));
+			});
+
 			// private endpoints
 			this.server.use(auth.isUserAuthenticated);
 			settings.createRoutes(this.server);
 			peers.createRoutes(this.server);
 			users.createRoutes(this.server);
-
-			this.server.get("*", (req: Request, res: Response) => {
-				res.sendFile(path.resolve(__dirname, "../../public/index.html"));
-			});
 
 			this.server.listen(this.port, () => {
 				console.log(`WG-Dashboard webserver now listening on port ${this.port}!`);
