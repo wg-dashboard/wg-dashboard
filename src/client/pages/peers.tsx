@@ -7,7 +7,7 @@ import CropFree from "@material-ui/icons/CropFree";
 import GetApp from "@material-ui/icons/GetApp";
 
 import Table from "../components/table";
-import {getPeers, createPeer, deletePeer, updatePeer} from "../api";
+import {getPeers, createPeer, deletePeer, updatePeer, downloadPeerConfig} from "../api";
 import states from "../states/index";
 
 class PeersState {
@@ -58,16 +58,14 @@ export default observer(() => {
 					{
 						icon: () => <GetApp />,
 						tooltip: "Download config",
-						onClick: (event: any, rowData: any) => {
-							// todo
+						onClick: (event: any, rowData: IPeer) => {
+							downloadPeerConfig(rowData.id, rowData.device);
 						},
 					},
 					{
 						icon: () => <CropFree />,
 						tooltip: "Generate QR Code",
-						onClick: (event: any, rowData: any) => {
-							// todo
-						},
+						onClick: (event: any, rowData: IPeer) => {},
 					},
 				]}
 				columns={[

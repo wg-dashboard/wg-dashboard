@@ -23,7 +23,7 @@ export default observer(() => {
 			return {
 				key,
 				value: JSON.stringify(value),
-			};
+			} as ISetting;
 		});
 		settingsState.setSettings(_data);
 	};

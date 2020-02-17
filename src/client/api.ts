@@ -1,5 +1,4 @@
 import {IUser, ISetting, IPeer} from "../server/interfaces";
-
 import states from "./states/index";
 
 const makeAPIRequest = async (url: string, method: string, data: any) => {
@@ -147,5 +146,31 @@ export const updatePeer = async (peer: IPeer) => {
 
 	if (result.status !== 200) {
 		throw new Error(result.message);
+	}
+};
+
+// THIS IS VERY HACKY!
+export const downloadPeerConfig = async (id: number, deviceName: string) => {
+	try {
+		const result = await fetch(`/api/peers/download/${id}`, {
+			method: "GET",
+		});
+
+		// 2. Create blob link to download
+		const url = window.URL.createObjectURL(await result.blob());
+		const link = document.createElement("a");
+		link.href = url;
+		link.setAttribute("download", `${deviceName}.conf`);
+
+		// 3. Append to html page
+		document.body.appendChild(link);
+
+		// 4. Force download
+		link.click();
+
+		// 5. Clean up and remove the link
+		link.parentNode.removeChild(link);
+	} catch (err) {
+		console.error(err);
 	}
 };

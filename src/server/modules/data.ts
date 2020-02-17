@@ -78,7 +78,11 @@ class Data {
 		return await this.connection!.manager.find(Peer);
 	};
 
-	public getPeer = async (data: IPeer) => {
+	public getPeerByID = async (id: number) => {
+		return this.connection!.manager.findOne(Peer, {id});
+	};
+
+	public getPeerByDevice = async (data: IPeer) => {
 		return this.connection!.manager.findOne(Peer, {device: data.device});
 	};
 
@@ -147,7 +151,7 @@ class Data {
 	};
 
 	public createUpdatePeer = async (data: IPeer, update = false) => {
-		let peer = await this.getPeer(data);
+		let peer = await this.getPeerByDevice(data);
 
 		if (peer && !update) {
 			throw new Error("Peer with given device already exists");
@@ -203,7 +207,10 @@ class Data {
 			throw new Error("Invalid id provided");
 		}
 
-		return await this.connection!.manager.delete(Peer, {id});
+		const peer = await this.getPeerByID(id);
+		await this.connection!.manager.delete(Peer, {id});
+
+		return peer;
 	};
 
 	public createUser = async (data: IUser) => {

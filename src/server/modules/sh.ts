@@ -1,7 +1,7 @@
 import * as util from "util";
 import * as child_process from "child_process";
 import * as os from "os";
-import {Peer} from "../orm/entity/Peer";
+import {IPeer} from "../interfaces";
 
 const exec = util.promisify(child_process.exec);
 
@@ -114,7 +114,7 @@ export const getNetworkIP = async (networkadapter?: string) => {
 };
 
 // enable a peer without restarting wireguard
-export const enablePeer = async (peer: Peer) => {
+export const enablePeer = async (peer: IPeer) => {
 	try {
 		const {stdout, stderr} = await exec(`wg set wg0 peer ${peer.public_key} allowed-ips ${peer.virtual_ip}/32`);
 
@@ -131,7 +131,7 @@ export const enablePeer = async (peer: Peer) => {
 };
 
 // disable a peer without restarting wireguard
-exports.disablePeer = async (peer: Peer) => {
+export const disablePeer = async (peer: IPeer) => {
 	try {
 		const {stdout, stderr} = await exec(`wg set wg0 peer ${peer.public_key} remove`);
 
