@@ -8,8 +8,6 @@ import users from "./handlers/users";
 import settings from "./handlers/settings";
 import peers from "./handlers/peers";
 
-import server from "./templates/server";
-
 class WebServer {
 	private dev = process.env.NODE_ENV !== "production";
 	private initialized = false;
