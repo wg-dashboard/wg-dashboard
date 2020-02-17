@@ -8,6 +8,8 @@ import users from "./handlers/users";
 import settings from "./handlers/settings";
 import peers from "./handlers/peers";
 
+import server from "./templates/server";
+
 class WebServer {
 	private dev = process.env.NODE_ENV !== "production";
 	private initialized = false;
@@ -32,7 +34,7 @@ class WebServer {
 			// public endpoints
 			auth.createRoutes(this.server);
 
-			this.server.get(["/", "/dashboard"], (req: Request, res: Response) => {
+			this.server.get(["/", "/dashboard", "/peers", "/users"], (req: Request, res: Response) => {
 				res.sendFile(path.resolve(__dirname, "../../public/index.html"));
 			});
 

@@ -7,7 +7,7 @@ import CropFree from "@material-ui/icons/CropFree";
 import GetApp from "@material-ui/icons/GetApp";
 
 import Table from "../components/table";
-import {getPeers, createPeer, deletePeer} from "../api";
+import {getPeers, createPeer, deletePeer, updatePeer} from "../api";
 import states from "../states/index";
 
 class PeersState {
@@ -25,6 +25,14 @@ class PeersState {
 
 		if (peerIndex > -1) {
 			this.peers.splice(peerIndex, 1);
+		}
+	};
+
+	@action updatePeer = (id: number, newPeer: IPeer) => {
+		const peerIndex = this.peers.findIndex(el => el.id === id);
+
+		if (peerIndex > -1) {
+			this.peers[peerIndex] = newPeer;
 		}
 	};
 }
@@ -85,6 +93,8 @@ export default observer(() => {
 								onRowUpdate: (newData: IPeer) =>
 									new Promise(async (resolve, reject) => {
 										try {
+											await updatePeer(newData);
+											peersState.updatePeer(newData.id, newData);
 											resolve();
 										} catch (e) {
 											reject(e);

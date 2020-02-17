@@ -16,7 +16,20 @@ export interface IPeer {
 	virtual_ip: string;
 }
 
+export type ISettingKey =
+	| "webserver_port"
+	| "public_key"
+	| "private_key"
+	| "ip_address"
+	| "virtual_ip_address"
+	| "cidr"
+	| "port"
+	| "dns"
+	| "network_adapter"
+	| "config_path"
+	| "allowed_ips";
+
 export interface ISetting {
-	key: string;
+	key: ISettingKey;
 	value: string;
 }
