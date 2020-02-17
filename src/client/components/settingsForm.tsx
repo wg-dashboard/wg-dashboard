@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {observable, action} from "mobx";
 import {observer} from "mobx-react";
-import {Input, Button, InputLabel, Paper, Typography, Container, TextField, Grid} from "@material-ui/core";
+import {Button, Paper, Typography, Container, TextField, Grid} from "@material-ui/core";
 import {useForm, Controller} from "react-hook-form";
 import {ISetting} from "../../server/interfaces";
 
@@ -9,7 +9,6 @@ import {getSettings, updateSettings} from "../api";
 
 class SettingsState {
 	@observable settings: ISetting[] = [];
-
 	@action setSettings = (settings: ISetting[]) => (this.settings = settings);
 }
 const settingsState = new SettingsState();
