@@ -32,7 +32,7 @@ class WebServer {
 			// public endpoints
 			auth.createRoutes(this.server);
 
-			this.server.get(["/", "/dashboard"], (req: Request, res: Response) => {
+			this.server.get(["/", "/dashboard", "/peers", "/users"], (req: Request, res: Response) => {
 				res.sendFile(path.resolve(__dirname, "../../public/index.html"));
 			});
 

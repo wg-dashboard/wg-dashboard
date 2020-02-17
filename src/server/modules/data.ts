@@ -82,8 +82,9 @@ class Data {
 		return this.connection!.manager.findOne(Peer, {device: data.device});
 	};
 
-	public getAllSettings = async () => {
-		return await this.connection!.manager.find(Settings, {key: Not("private_key")});
+	// param private_key = emit private key? (don't emit private key to dashboard users but to server internal functions)
+	public getAllSettings = async (private_key = false) => {
+		return await this.connection!.manager.find(Settings, {key: Not(private_key ? "" : "private_key")});
 	};
 
 	public getSetting = async (key: string) => {
