@@ -2,7 +2,6 @@
 	"rules": {
 		"class-name": true,
 		"comment-format": [true, "check-space"],
-		"indent": [true, "tabs"],
 		"no-eval": true,
 		"no-internal-module": true,
 		"no-trailing-whitespace": true,
