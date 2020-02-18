@@ -46,9 +46,8 @@ export default observer(() => {
 		};
 
 		initializePeers();
+		states.user.setCurrLocation(window.location.pathname);
 	}, []);
-
-	console.log("view update");
 
 	return (
 		<>

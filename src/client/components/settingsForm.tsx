@@ -6,6 +6,7 @@ import {useForm, Controller} from "react-hook-form";
 import {ISetting} from "../../server/interfaces";
 
 import {getSettings, updateSettings} from "../api";
+import states from "../states";
 
 class SettingsState {
 	@observable settings: ISetting[] = [];
@@ -34,12 +35,13 @@ export default observer(() => {
 		};
 
 		initializeSettings();
+		states.user.setCurrLocation(window.location.pathname);
 	}, []);
 
 	return (
-		<Paper style={{paddingTop: "10px", paddingBottom: "16px"}}>
+		<Paper style={{paddingTop: "12px", paddingBottom: "18px"}}>
 			<Container>
-				<Typography variant="h3" gutterBottom>
+				<Typography variant="h6" gutterBottom style={{paddingBottom: "18px"}}>
 					Settings
 				</Typography>
 				<form onSubmit={handleSubmit(onSubmit)}>

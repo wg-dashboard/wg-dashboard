@@ -1,10 +1,13 @@
 import React from "react";
 
-import {AppBar, Toolbar, Typography} from "@material-ui/core";
-import {Drawer, Divider, List, ListItem, ListItemText, ListSubheader, makeStyles} from "@material-ui/core";
-
+import {AppBar, Toolbar, Typography, Button} from "@material-ui/core";
+import {Drawer, Divider, List, ListSubheader, makeStyles} from "@material-ui/core";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ActiveLink from "./activeLink";
 import {logout} from "../api";
+
+import {observer} from "mobx-react";
+import states from "../states";
 
 const drawerWidth = 240;
 
@@ -40,13 +43,31 @@ const useStyles = makeStyles(theme => ({
 const Layout = (props: any) => {
 	const classes = useStyles();
 
+	states.user.setCurrLocation(
+		window.location.pathname
+			.substring(1)
+			.charAt(0)
+			.toUpperCase() + window.location.pathname.substring(2)
+	);
+
 	return (
 		<div className={classes.root}>
 			<AppBar position="fixed" className={classes.appBar}>
 				<Toolbar>
 					<Typography variant="h6" noWrap>
-						something something
+						{states.user.currLocation}
 					</Typography>
+
+					<Button
+						endIcon={<ExitToAppIcon />}
+						variant="contained"
+						onClick={() => logout()}
+						title="Logout"
+						style={{marginLeft: "auto", color: "#f44336"}}
+						size="small"
+					>
+						Logout
+					</Button>
 				</Toolbar>
 			</AppBar>
 			<Drawer
@@ -68,10 +89,6 @@ const Layout = (props: any) => {
 					<ActiveLink href="/dashboard">Dashboard</ActiveLink>
 					<ActiveLink href="/peers">Peers</ActiveLink>
 					<ActiveLink href="/users">Users</ActiveLink>
-					<ListSubheader>Actions</ListSubheader>
-					<ListItem button onClick={() => logout()}>
-						<ListItemText>Logout</ListItemText>
-					</ListItem>
 				</List>
 			</Drawer>
 			<main className={classes.content}>
@@ -82,4 +99,4 @@ const Layout = (props: any) => {
 	);
 };
 
-export default Layout;
+export default observer(Layout);
