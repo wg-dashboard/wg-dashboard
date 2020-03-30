@@ -173,3 +173,13 @@ export const downloadPeerConfig = async (id: number, deviceName: string) => {
 		console.error(err);
 	}
 };
+
+export const getLogs = async () => {
+	const result = await makeAPIRequest(`/api/logs`, "GET", null);
+
+	if (result.status !== 200) {
+		throw new Error(result.message);
+	}
+
+	return result.logs;
+};

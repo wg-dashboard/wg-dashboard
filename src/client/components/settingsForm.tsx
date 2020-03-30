@@ -5,12 +5,14 @@ import {Input, Button, InputLabel, Paper, Typography, Container, TextField, Grid
 import {useForm, Controller} from "react-hook-form";
 import {ISetting} from "../../server/interfaces";
 
-import {getSettings, updateSettings} from "../api";
+import {getSettings, updateSettings, getLogs} from "../api";
 
 class SettingsState {
 	@observable settings: ISetting[] = [];
+	@observable logs: string = "";
 
 	@action setSettings = (settings: ISetting[]) => (this.settings = settings);
+	@action setLogs = (logs: string) => (this.logs = logs);
 }
 const settingsState = new SettingsState();
 
@@ -43,6 +45,19 @@ export default observer(() => {
 				<Typography variant="h3" gutterBottom>
 					Settings
 				</Typography>
+				<Button
+					variant="contained"
+					onClick={async () => {
+						settingsState.setLogs(await getLogs());
+					}}
+				>
+					Get logs
+				</Button>
+				<div>
+					Logs:
+					<br />
+					{settingsState.logs}
+				</div>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<Grid container spacing={3}>
 						<Grid container item md={12} lg={4}>
