@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {observable, action} from "mobx";
 import {observer} from "mobx-react";
-import {Input, Button, InputLabel, Paper, Typography, Container, TextField, Grid} from "@material-ui/core";
+import {Button, Paper, Typography, Container, TextField, Grid} from "@material-ui/core";
 import {useForm, Controller} from "react-hook-form";
 import {ISetting} from "../../server/interfaces";
 
@@ -37,12 +37,13 @@ export default observer(() => {
 		};
 
 		initializeSettings();
+		states.user.setCurrLocation(window.location.pathname);
 	}, []);
 
 	return (
-		<Paper style={{paddingTop: "10px", paddingBottom: "16px"}}>
+		<Paper style={{paddingTop: "12px", paddingBottom: "18px"}}>
 			<Container>
-				<Typography variant="h3" gutterBottom>
+				<Typography variant="h6" gutterBottom style={{paddingBottom: "18px"}}>
 					Settings
 				</Typography>
 				<Button

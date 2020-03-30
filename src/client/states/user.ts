@@ -1,10 +1,15 @@
 import {observable, action} from "mobx";
 
 class User {
+	@observable currLocation = "";
 	@observable loggedIn = false;
 	@observable admin = false;
 	@observable pageIsLoading = false;
 	@observable id = 0;
+
+	@action setCurrLocation = (newState: string) => {
+		this.currLocation = newState;
+	};
 
 	@action setLoggedIn = (newState: boolean) => {
 		this.loggedIn = newState;

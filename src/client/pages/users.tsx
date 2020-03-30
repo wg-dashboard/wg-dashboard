@@ -55,6 +55,7 @@ export default observer(() => {
 		};
 
 		initializeUsers();
+		states.user.setCurrLocation(window.location.pathname);
 	}, []);
 
 	return (
