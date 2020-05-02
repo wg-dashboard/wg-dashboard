@@ -43,8 +43,14 @@ class Stats {
 	latestHandshake() {
 		let handshake = this.command('latest-handshakes')
 		handshake = this.clean(handshake.split(/\n/));
+		let items = this.format(handshake)
+		let date = Date.now()
 
-		return this.format(handshake)
+		Object.keys(items).forEach(function (item, i) {
+			items[item][1] = Math.floor((date - (items[item][1] * 1000)) / 1000);
+		});
+
+		return items
 	}
 
 	command(command) {
