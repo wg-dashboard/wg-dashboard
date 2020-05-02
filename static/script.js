@@ -447,49 +447,6 @@ $(document).ready(() => {
 
 		checkToast();
 	});
-
-
-	Chart.defaults.global.hover.mode = 'nearest';
-	Chart.defaults.global.elements.line.borderColor = '#ff0000';
-	Chart.defaults.global.elements.line.tension = 0;
-	Chart.defaults.global.elements.line.fill = false;
-	Chart.defaults.global.elements.point.borderColor = '#ff0000';
-
-
-	var data = {
-		"January": 65,
-		"February": 59,
-		"March": 80,
-		"April": 81,
-		"May": 56,
-		"June": 55
-	}
-
-	var data2 = {
-		"January": 25,
-		"February": 159,
-		"March": 70,
-		"April": 71,
-		"May": 156,
-		"June": 20
-	}
-
-	const CHART = document.getElementById('myChart');
-
-	var lineChart = new Chart(CHART, {
-		type: 'line',
-		data: {
-			labels: Object.keys(data),
-			datasets: [{
-				label: 'My first dataset',
-				data: Object.values(data)
-			}, {
-				label: 'Hooray',
-				data: Object.values(data2)
-			}]
-		}
-	})
-
 });
 
 // check if we need to show toast that settings need to be saved

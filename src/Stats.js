@@ -3,7 +3,12 @@ const fs = require('fs');
 
 class Stats {
 	constructor() {
+		this.json = {};
 		this.scrape();
+	}
+
+	get() {
+		return this.json;
 	}
 
 	scrape() {
@@ -23,7 +28,7 @@ class Stats {
 		let content = {}
 		content[Date.now()] = json;
 
-		this.writeFile(content);
+		this.json = content;
 	}
 
 	peers() {

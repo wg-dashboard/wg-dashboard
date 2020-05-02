@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const rateLimit = require("express-rate-limit");
 const {cidr} = require("node-cidr");
 const crypto = require("crypto");
+const Stats = require('./Stats.js')
 
 const dataManager = require("./dataManager");
 const wireguardHelper = require("./wgHelper");
@@ -846,6 +847,13 @@ exports.initServer = (state, cb) => {
 				});
 			});
 		}
+	});
+
+	app.get('/api/stats/live', (req, res) => {
+
+		let stats = new Stats().get()
+
+		res.status(200).send(stats);
 	});
 
 	app.listen(state.config.port, cb);

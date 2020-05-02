@@ -34,6 +34,7 @@ function main() {
 		if(server_config.stats_interval > 0) {
 			setInterval(function () {
 				let stats = new Stats();
+				stats.writeFile(stats.get());
 			}, server_config.stats_interval);
 		}
 	});
