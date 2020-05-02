@@ -81,15 +81,8 @@ class Stats {
 		fs.readFile(path, 'utf8', function (err, data) {
 			if (err) throw err;
 
-			let updated;
-
-			if (data === '') {
-				updated = JSON.parse('[]');
-			} else {
-				updated = JSON.parse(data);
-			}
-
-			updated.push(content)
+			let updated = data === '' ? JSON.parse('{}') : JSON.parse(data);
+			updated[Object.keys(content)[0]] = content[Object.keys(content)[0]];
 
 			fs.writeFile (path, JSON.stringify(updated, null, 2), function(err) {
 				if (err) throw err;
