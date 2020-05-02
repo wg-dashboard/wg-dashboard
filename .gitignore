@@ -1,3 +1,4 @@
 /node_modules
 wireguard/
 server_config.json
+stats/*
