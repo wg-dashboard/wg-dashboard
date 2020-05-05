@@ -19,8 +19,8 @@ class Stats {
 
 		peers.forEach(peer => {
 			json[peer] = {
-				sent: transfer[peer][1],
-				received: transfer[peer][2],
+				sent: (transfer[peer][1] / (1024*1024)).toFixed(2),
+				received: (transfer[peer][2] / (1024*1024)).toFixed(2),
 				handshake: handshake[peer][1]
 			}
 		})

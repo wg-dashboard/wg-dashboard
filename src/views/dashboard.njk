@@ -350,8 +350,30 @@
 					</div>
 
 					<div id="stats-tab" class="tab-pane fade">
+						<div class="d-flex justify-content-between">
+							<h1 class="titleContent">Statistics</h1>
+							<div class="text-right">
+								<label>View recent</label>
+								<select id="statsSelect">
+									<option value="live">Live</option>
+									{% for date in dates %}
+										<option value="{{ date }}">{{ date }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+
 						<div class="col-12 content-tab">
-							<canvas id="myChart" width="400" height="150"></canvas>
+							<h3>Latest Handshake</h3>
+							<canvas id="handshakeChart" width="400" height="150"></canvas>
+						</div>
+						<div class="col-12 content-tab">
+							<h3>Megabytes received</h3>
+							<canvas id="receivedChart" width="400" height="150"></canvas>
+						</div>
+						<div class="col-12 content-tab">
+							<h3>Megabytes sent</h3>
+							<canvas id="sentChart" width="400" height="150"></canvas>
 						</div>
 					</div>
 				</div>
