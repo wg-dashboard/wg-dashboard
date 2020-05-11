@@ -56,6 +56,8 @@ function createChart(dataSets) {
 			}
 		})
 	})
+
+	$('#loading').removeClass('active');
 }
 
 function updateChart (dataSets) {
@@ -142,12 +144,13 @@ function clearChart() {
 }
 
 $(document).ready(function () {
-
 	statsSelect.on('change', function (option) {
 		clearChart();
+		$('#loading').addClass('active');
 
 		if(statsSelect.val() === 'live') {
 			triggerInterval();
+			$('#loading').removeClass('active');
 		} else {
 			$.getJSON('/api/stats/' + statsSelect.val(), function (data) {
 				let chartData = prepareChartData(data);
