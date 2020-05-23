@@ -58,6 +58,7 @@ exports.loadServerConfig = cb => {
 						dns: "1.1.1.1",
 						network_adapter: network_adapter,
 						config_path: "/etc/wireguard/wg0.conf",
+						stats_interval: "60000",
 						allowed_ips: ["0.0.0.0/0"],
 						peers: [],
 						private_traffic: false,

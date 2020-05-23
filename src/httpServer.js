@@ -7,6 +7,9 @@ const bcrypt = require("bcrypt");
 const rateLimit = require("express-rate-limit");
 const {cidr} = require("node-cidr");
 const crypto = require("crypto");
+const Stats = require('./Stats.js');
+const path = require('path');
+const fs = require('fs');
 
 const dataManager = require("./dataManager");
 const wireguardHelper = require("./wgHelper");
@@ -182,8 +185,18 @@ exports.initServer = (state, cb) => {
 	});
 
 	app.get("/", (req, res) => {
+		const directoryPath = path.join(__dirname, '../stats');
+		let files = fs.readdirSync(directoryPath).filter(item => (/\.json$/g).test(item));
+
+		let dates = []
+		files.forEach(function (item, index) {
+			let name = item.replace('.json', '');
+			dates[index] = name
+		});
+
 		res.render("dashboard.njk", {
 			config: state.server_config,
+			dates: dates.reverse(),
 		});
 	});
 
@@ -522,6 +535,7 @@ exports.initServer = (state, cb) => {
 		state.server_config.cidr = req.body.cidr;
 		state.server_config.network_adapter = req.body.network_adapter;
 		state.server_config.config_path = req.body.config_path;
+		state.server_config.stats_interval = req.body.stats_interval;
 		state.server_config.dns_over_tls = req.body.dns_over_tls;
 		state.server_config.tls_servername = req.body.tls_servername;
 
@@ -845,6 +859,17 @@ exports.initServer = (state, cb) => {
 				});
 			});
 		}
+	});
+
+	app.get('/api/stats/live', (req, res) => {
+		let stats = new Stats().get()
+		res.status(200).send(stats);
+	});
+
+	app.get('/api/stats/:date', (req, res) => {
+		let statsFile = path.join(__dirname, '../stats', req.params.date + '.json')
+		res.setHeader('Content-Type', 'application/json');
+		res.status(200).send(JSON.parse(fs.readFileSync(statsFile, 'utf8')))
 	});
 
 	app.listen(state.config.port, cb);

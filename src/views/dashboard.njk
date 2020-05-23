@@ -6,8 +6,7 @@
 	<div class="leftMenu">
 		<div class="leftMenuHeader">
 			<div class="leftMenuHeaderLink">
-				<span class="projectName">
-					wg-dashboard
+				<span class="projectName">wg-dashboard
 				</span>
 			</div>
 		</div>
@@ -23,6 +22,9 @@
 					</li>
 					<li class="item">
 						<span class="link" id="v-users-tab" data-toggle="tab" href="#users-tab" role="tab" aria-controls="users-tab" aria-selected="false">Users</span>
+					</li>
+					<li class="item">
+						<span class="link" id="v-stats-tab" data-toggle="tab" href="#stats-tab" role="tab" aria-controls="stats-tab" aria-selected="false">Statistics</span>
 					</li>
 				</ul>
 			</div>
@@ -297,6 +299,13 @@
 												data-toggle="tooltip" data-placement="top"
 												title="Path to the WireGuard config."></i></label>
 									</div>
+									<div class="col-md-4 col-sm-12">
+										<input type="text" id="stats_interval" class="form-control"
+											value="{{ config.stats_interval }}" disabled>
+										<label for="stats_interval">Statistics interval (ms) <i class="fas fa-info-circle fa-sm"
+												data-toggle="tooltip" data-placement="top"
+												title="Set '0' to disable or number in milliseconds to enable stats"></i></label>
+									</div>
 								</div>
 
 								<div class="row mb-3">
@@ -326,10 +335,50 @@
 												data-toggle="tooltip" data-placement="top"
 												title="DNS over TLS requires that a TLS hostname is sent"></i></label>
 									</div>
+									<div class="col-md-4 col-sm-12" style="visibility: {{ 'visible' if config.dns_over_tls else 'hidden' }}" id="tls_servername_input">
+										<input type="text" id="tls_servername" class="form-control"
+											value="{{ config.tls_servername }}" value="{{ config.tls_servername }}" disabled>
+										<label for="tls_servername">TLS Servername <i class="fas fa-info-circle fa-sm"
+												data-toggle="tooltip" data-placement="top"
+												title="DNS over TLS requires that a TLS hostname is sent"></i></label>
+									</div>
 								</div>
 							</div>
 
 							<button class="primaryBtn saveAndRestartBtn" onclick="saveAndRestart();">Save and restart</button>
+						</div>
+					</div>
+
+					<div id="stats-tab" class="tab-pane fade">
+						<div class="d-flex justify-content-between">
+							<h1 class="titleContent">Statistics</h1>
+							<div class="text-right">
+								<label>View recent</label>
+								<select id="statsSelect">
+									<option value="live">Live</option>
+									{% for date in dates %}
+										<option value="{{ date }}">{{ date }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+
+						<div class="col-12 content-tab">
+							<h3>Latest Handshake</h3>
+							<canvas id="handshakeChart" width="400" height="150"></canvas>
+						</div>
+						<div class="col-12 content-tab">
+							<h3>Megabytes received</h3>
+							<canvas id="receivedChart" width="400" height="150"></canvas>
+						</div>
+						<div class="col-12 content-tab">
+							<h3>Megabytes sent</h3>
+							<canvas id="sentChart" width="400" height="150"></canvas>
+						</div>
+
+						<div id="loading" class="loading">
+							<img src="static/img/wg-dashboard-logo-no-text.png" width="128">
+							<div>Crunching data ...</div>
 						</div>
 					</div>
 				</div>

@@ -1,6 +1,8 @@
 const dataManager = require("./dataManager");
 const httpServer = require("./httpServer");
 const wireguardHelper = require("./wgHelper");
+const Stats = require('./Stats.js')
+
 
 function main() {
 	dataManager.loadServerConfig((err, server_config) => {
@@ -28,6 +30,13 @@ function main() {
 				);
 			});
 		});
+
+		if(server_config.stats_interval > 0) {
+			setInterval(function () {
+				let stats = new Stats();
+				stats.writeFile(stats.get());
+			}, server_config.stats_interval);
+		}
 	});
 }
 

@@ -179,6 +179,9 @@ $(document).ready(() => {
 			$("#config_path")
 				.attr("disabled", false)
 				.css("color", "#4285F4");
+			$("#stats_interval")
+				.attr("disabled", false)
+				.css("color", "#4285F4");
 			$("#tls_servername")
 				.attr("disabled", false)
 				.css("color", "#4285F4");
@@ -196,6 +199,7 @@ $(document).ready(() => {
 			const public_key = $("#public_key").val();
 			const network_adapter = $("#network_adapter").val();
 			const config_path = $("#config_path").val();
+			const stats_interval = $("#stats_interval").val();
 			const dns_over_tls = $("#dns_over_tls").is(":checked");
 			const tls_servername = $("#tls_servername").val();
 
@@ -211,6 +215,7 @@ $(document).ready(() => {
 					public_key: public_key,
 					network_adapter: network_adapter,
 					config_path: config_path,
+					stats_interval: stats_interval,
 					dns_over_tls: dns_over_tls,
 					tls_servername: tls_servername
 				}),
@@ -246,6 +251,9 @@ $(document).ready(() => {
 					.attr("disabled", true)
 					.css("color", "#495057");
 				$("#config_path")
+					.attr("disabled", true)
+					.css("color", "#495057");
+				$("#stats_interval")
 					.attr("disabled", true)
 					.css("color", "#495057");
 				$("#tls_servername")
