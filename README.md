@@ -6,6 +6,15 @@
 
 ![Dashboard](dev/dashboard.png)
 
+
+**THIS PROJECT IS UNMAINTAINED**
+
+If you want to take over development please contact us. In the meantime we recommend having a look at:
+
+- https://github.com/subspacecommunity/subspace
+- https://github.com/EmbarkStudios/wg-ui
+
+
 ## Description
 
 #### What is this?
