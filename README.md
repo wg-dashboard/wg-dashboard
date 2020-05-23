@@ -2,14 +2,14 @@
 	<img src="/dev/wg-dashboard-logo.png" />
 </p>
 
-# wg-dashboard
-
 **THIS PROJECT IS UNMAINTAINED**
 
 If you want to take over development please contact us. In the meantime we recommend having a look at:
 
 - https://github.com/subspacecommunity/subspace
 - https://github.com/EmbarkStudios/wg-ui
+
+# wg-dashboard
 
 ![Dashboard](dev/dashboard.png)
 
